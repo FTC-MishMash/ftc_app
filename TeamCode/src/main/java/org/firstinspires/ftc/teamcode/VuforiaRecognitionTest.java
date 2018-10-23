@@ -121,18 +121,16 @@ public class VuforiaRecognitionTest extends LinearOpMode {
         Vuforia.setHint(HINT.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, 4);
 
         //TODO: put the name of the database file and the targets name.
-        VuforiaTrackables elements = vuforia.loadTrackablesFromAsset("");
-        elements.get(0).setName("");
+        VuforiaTrackables elements = vuforia.loadTrackablesFromAsset("FTC_Rover_Rukus_OT");
+        elements.get(0).setName("gold_miniral");
 
 
         waitForStart();
 
         elements.activate();
-
         while (opModeIsActive()) {
             for (VuforiaTrackable part : elements) {
                 OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) part.getListener()).getPose();
-
                 if (pose != null) {
                     VectorF translation = pose.getTranslation();
 
