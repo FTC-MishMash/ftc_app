@@ -73,10 +73,10 @@ public class DriveTrain extends OpMode {
     @Override
     public void loop() {
 
-        sticks[0][0] = gamepad1.left_stick_x;
-        sticks[1][0] = gamepad1.left_stick_y;
-        sticks[0][1] = gamepad1.right_stick_x;
-        sticks[1][1] = gamepad1.right_stick_y;
+        sticks[0][0] = -gamepad1.left_stick_x;
+        sticks[1][0] = -gamepad1.left_stick_y;
+        sticks[0][1] = -gamepad1.right_stick_x;
+        sticks[1][1] = -gamepad1.right_stick_y;
 
 
         tankDriveTrainSetPower(1);

@@ -31,28 +31,44 @@ package org.firstinspires.ftc.teamcode;
 
 import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
-import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
-import com.disnodeteam.dogecv.detectors.roverrukus.SilverDetector;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.opencv.core.Size;
 
+@TeleOp(name = "Yellow detector", group = "DogeCV")
 
-@TeleOp(name="Silver Example", group="DogeCV")
-
-public class SilverExample extends OpMode
-{
-    private SilverDetector detector;
+public class Goldmineraldetectortest extends OpMode {
+    private ElapsedTime runtime = new ElapsedTime();
+    DcMotor[][] drivetrainDC = new DcMotor[3][3];
+    double[][] sticks = new double[4][4];
+    int pos[][] = new int[2][2];
+    private Goldmineraldetector detector;
 
 
     @Override
     public void init() {
+        drivetrainDC[1][1] = hardwareMap.get(DcMotor.class, "rightFront");
+        drivetrainDC[0][1] = hardwareMap.get(DcMotor.class, "rightBack");
+        drivetrainDC[1][0] = hardwareMap.get(DcMotor.class, "leftFront");
+        drivetrainDC[0][0] = hardwareMap.get(DcMotor.class, "leftBack");
 
-        telemetry.addData("Status", "DogeCV 2018.0 - Gold SilverDetector Example");
 
-        detector = new SilverDetector();
-        detector.setAdjustedSize(new Size(480, 270));
+        drivetrainDC[0][0].setDirection(DcMotorSimple.Direction.FORWARD);
+        drivetrainDC[0][1].setDirection(DcMotorSimple.Direction.REVERSE);
+        drivetrainDC[1][0].setDirection(DcMotorSimple.Direction.FORWARD);
+        drivetrainDC[1][1].setDirection(DcMotorSimple.Direction.REVERSE);
+
+        drivetrainDC[1][1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        drivetrainDC[0][1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        drivetrainDC[1][0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        drivetrainDC[0][0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        telemetry.addData("Status", "DogeCV 2018.0 - Gold Align Example");
+
+        detector = new Goldmineraldetector();
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance());
         detector.useDefaults();
         // Optional Tuning
@@ -65,6 +81,7 @@ public class SilverExample extends OpMode
 
         detector.ratioScorer.weight = 5;
         detector.ratioScorer.perfectRatio = 1.0;
+
         detector.enable();
 
 
@@ -72,6 +89,8 @@ public class SilverExample extends OpMode
 
     @Override
     public void init_loop() {
+
+
     }
 
     /*
@@ -79,13 +98,31 @@ public class SilverExample extends OpMode
      */
     @Override
     public void start() {
-
+        drivetrainDC[1][1].setPower(0.18);
+        drivetrainDC[0][1].setPower(0.18);
+        drivetrainDC[1][0].setPower(0.18);
+        drivetrainDC[0][0].setPower(0.18);
     }
 
 
     @Override
     public void loop() {
+        if (!detector.isFound()) {
+            telemetry.addLine("false!!!!!!!!!!!!!");
+        }
 
+
+        if (detector.getScreenPosition().x < 350 && detector.getScreenPosition().x > 265)
+        {
+            drivetrainDC[1][1].setPower(0);
+            drivetrainDC[0][1].setPower(0);
+            drivetrainDC[1][0].setPower(0);
+            drivetrainDC[0][0].setPower(0);
+        }
+        telemetry.addData("X Pos", detector.getScreenPosition().x); // Gold X pos.
+        telemetry.addData("Y Pos", detector.getScreenPosition().y); // Gold y pos.
+
+        telemetry.update();
     }
 
     /*
@@ -97,3 +134,4 @@ public class SilverExample extends OpMode
     }
 
 }
+
