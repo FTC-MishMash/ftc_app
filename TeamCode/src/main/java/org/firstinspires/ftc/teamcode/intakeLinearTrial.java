@@ -52,7 +52,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="intakeLinearTrial", group="Iterative Opmode")
-@Disabled
+//@Disabled
 public class intakeLinearTrial extends OpMode
 {
     // Declare OpMode members.
