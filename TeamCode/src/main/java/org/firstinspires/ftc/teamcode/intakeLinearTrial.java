@@ -27,12 +27,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -72,6 +73,9 @@ public class intakeLinearTrial extends OpMode
         linear1  = hardwareMap.get(DcMotor.class, "linear1");
         linear2 = hardwareMap.get(DcMotor.class, "linear2");
         intake = hardwareMap.get(DcMotor.class, "intake");
+        linear1.setDirection(DcMotorSimple.Direction.FORWARD);
+        linear2.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
 
 
@@ -104,7 +108,28 @@ public class intakeLinearTrial extends OpMode
      */
     @Override
     public void loop() {
-        if(gamepad1)
+        if(gamepad1.a)
+            intake.setPower(0.4);
+        else if(gamepad1.b)
+            intake.setPower(-0.4);
+        else
+            intake.setPower(0);
+
+        if(gamepad1.right_bumper)
+        {
+            linear1.setPower(0.5);
+            linear2.setPower(0.5);
+        }
+        else if(gamepad1.left_bumper)
+        {
+            linear1.setPower(-0.5);
+            linear2.setPower(-0.5);
+        }
+        else
+        {
+            linear1.setPower(0);
+            linear2.setPower(0);
+        }
         // Setup a variable for each drive wheel to save power level for telemetry
 
 
@@ -126,6 +151,12 @@ public class intakeLinearTrial extends OpMode
      */
     @Override
     public void stop() {
+
+        linear2.setPower(0);
+        linear1.setPower(0);
+        intake.setPower(0);
+
+
     }
 
 }
