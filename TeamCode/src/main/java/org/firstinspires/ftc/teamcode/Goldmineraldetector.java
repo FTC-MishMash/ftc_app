@@ -1,3 +1,4 @@
+/*
 package org.firstinspires.ftc.teamcode;
 
 import com.disnodeteam.dogecv.DogeCV;
@@ -19,9 +20,11 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
 
+*/
 /**
  * Created by Victo on 9/10/2018.
- */
+ *//*
+
 
 public class Goldmineraldetector extends DogeCVDetector {
 
@@ -45,9 +48,11 @@ public class Goldmineraldetector extends DogeCVDetector {
     public MaxAreaScorer     maxAreaScorer     = new MaxAreaScorer( 0.01);                    // Used to find largest objects
     public PerfectAreaScorer perfectAreaScorer = new PerfectAreaScorer(5000,0.05); // Used to find objects near a tuned area value
 
-    /**
+    */
+/**
      * Simple constructor
-     */
+     *//*
+
     public Goldmineraldetector() {
         super();
         detectorName = "Generic Detector"; // Set the detector name
@@ -128,27 +133,34 @@ public class Goldmineraldetector extends DogeCVDetector {
 
     }
 
-    /**
+    */
+/**
      * Returns the element's last position in screen pixels
      * @return position in screen pixels
-     */
+     *//*
+
     public Point getScreenPosition(){
         return screenPosition;
     }
 
-    /**
+    */
+/**
      * Returns the element's found rectangle
      * @return gold element rect
-     */
+     *//*
+
     public Rect getFoundRect() {
         return foundRect;
     }
 
-    /**
+    */
+/**
      * Returns if a mineral is being tracked/detected
      * @return if a mineral is being tracked/detected
-     */
+     *//*
+
     public boolean isFound() {
         return found;
     }
 }
+*/
