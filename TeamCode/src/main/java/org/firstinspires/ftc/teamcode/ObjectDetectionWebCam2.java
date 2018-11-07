@@ -33,8 +33,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
@@ -43,20 +43,20 @@ import java.util.List;
 /**
  * This 2018-2019 OpMode illustrates the basics of using the TensorFlow Object Detection API to
  * determine the position of the gold and silver minerals.
- *
+ * <p>
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
- *
+ * <p>
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@TeleOp(name = "2 Object Detection", group = "Concept")
+@TeleOp(name = "Object Detection Webcam inbar", group = "Concept")
 //@Disabled
-public class ObjectDetection extends LinearOpMode {
+public class ObjectDetectionWebCam2 extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
-
+    public int cubePlace = 0;// 0 = NOT HERE, 1 = RIGHT (in camera), 2 = LEFT (in camera)
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
      * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
@@ -69,7 +69,8 @@ public class ObjectDetection extends LinearOpMode {
      * Once you've obtained a license key, copy the string from the Vuforia web site
      * and paste it in to your code on the next line, between the double quotes.
      */
-    private static final String VUFORIA_KEY = "ATgDONj/////AAABmW0G/nQirUMiumnzPc6Pl8oJhBOCC2qoUq0BWhir9YWcBFDlhZUfSwATcQArcyyLxIOV21sHaYJeeQEJZfIJ+4spBn3oJ/DfycsbPaNs87+TRpM46/vbUkj1Ok+NtZ/eqMhmMXjFC8dgdCfbCt0aMxoBNzDw4+v28abG+hjUCjVYf86Jq1m7R942XCjw0yhOZqTXWIp3WAZDXY/PdWGQGY/zWae0l6TAZ6Z27t1xYJdkkpLqEsbKM3ZprvtgIs8AsWS9Tri2892OHq2CnCL+1ZHHXKPdxON3fiC1Gd3oihwPhTUReNw0VAg9yeVsVa1UQg7ea9K6WpmVto0FG+T2/LV8uq/3Mp/NHWiNizw2DM4h";
+    private static final String VUFORIA_KEY = " ATgDONj/////AAABmW0G/nQirUMiumnzPc6Pl8oJhBOCC2qoUq0BWhir9YWcBFDlhZUfSwATcQArcyyLxIOV21sHaYJeeQEJZfIJ+4spBn3oJ/DfycsbPaNs87+TRpM46/vbUkj1Ok+NtZ/eqMhmMXjFC8dgdCfbCt0aMxoBNzDw4+v28abG+hjUCjVYf86Jq1m7R942XCjw0yhOZqTXWIp3WAZDXY/PdWGQGY/zWae0l6TAZ6Z27t1xYJdkkpLqEsbKM3ZprvtgIs8AsWS9Tri2892OHq2CnCL+1ZHHXKPdxON3fiC1Gd3oihwPhTUReNw0VAg9yeVsVa1UQg7ea9K6WpmVto0FG+T2/LV8uq/3Mp/NHWiNizw2DM4h";
+    ;
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -107,6 +108,7 @@ public class ObjectDetection extends LinearOpMode {
             }
 
             while (opModeIsActive()) {
+                int goldIndex = 0;
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
@@ -118,33 +120,44 @@ public class ObjectDetection extends LinearOpMode {
                             int silverMineral1X = -1;
                             for (Recognition recognition : updatedRecognitions) {
                                 if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                    goldIndex = updatedRecognitions.indexOf(recognition);
                                     goldMineralX = (int) recognition.getLeft();
                                 } else //if (silverMineral1X == -1) {
                                     silverMineral1X = (int) recognition.getLeft();
 
-                                }
-                                if (goldMineralX != -1 && silverMineral1X != -1) {
-                                    if (goldMineralX < silverMineral1X) {
-                                        telemetry.addData("Gold Mineral Position", "Left");
-                                    } else if (goldMineralX > silverMineral1X) {
-                                        telemetry.addData("Gold Mineral Position", "Right");
-                                    }
-
-                                }
-                                else {
-                                    telemetry.addData("Gold Mineral Position", "NOT HERE");
-                                }
                             }
-                            telemetry.update();
+                            if (goldMineralX != -1 && silverMineral1X != -1) {
+                                if (goldMineralX < silverMineral1X) {
+                                    telemetry.addData("Gold Mineral Position", "Left");
+                                    cubePlace = 2;//LEFT in camera
+                                } else if (goldMineralX > silverMineral1X) {
+                                    telemetry.addData("Gold Mineral Position", "Right");
+                                    cubePlace = 1;//RIGHT in camera
+                                }
+
+                            } else {
+                                telemetry.addData("Gold Mineral Position", "NOT HERE");
+                                cubePlace = 0;//NOT in the camera
+                            }
                         }
+                        if(!updatedRecognitions.isEmpty()) {
+                            telemetry.addData("width: ", updatedRecognitions.get(goldIndex).getWidth());
+                            telemetry.addData("height: ", updatedRecognitions.get(goldIndex).getHeight());
+                            telemetry.addData("top: ", updatedRecognitions.get(goldIndex).getTop());
+                            telemetry.addData("buttom: ", updatedRecognitions.get(goldIndex).getBottom());
+                            telemetry.addData("left: ", updatedRecognitions.get(goldIndex).getLeft());
+                            telemetry.addData("right: ", updatedRecognitions.get(goldIndex).getRight());
+                        }
+                        telemetry.update();
                     }
                 }
             }
-
-            if (tfod != null) {
-                tfod.shutdown();
-            }
         }
+
+        if (tfod != null) {
+            tfod.shutdown();
+        }
+    }
 
     /**
      * Initialize the Vuforia localization engine.
@@ -156,7 +169,7 @@ public class ObjectDetection extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = CameraDirection.BACK;
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -169,7 +182,7 @@ public class ObjectDetection extends LinearOpMode {
      */
     private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-            "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);

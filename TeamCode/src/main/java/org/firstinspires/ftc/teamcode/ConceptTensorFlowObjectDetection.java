@@ -105,7 +105,6 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
             if (tfod != null) {
                 tfod.activate();
             }
-
             while (opModeIsActive()) {
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
