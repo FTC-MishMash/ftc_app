@@ -12,13 +12,16 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.List;
 
 public class Sampling extends LinearOpMode {
+    int goldIndex = 0;
+    DcMotor[] drivetrainDC = new DcMotor[4];
+    //drivetrainDC[0] = RIGHT
+    //drivetrainDC[1] = LEFT
+
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
     public int cubePlace = 0;// 0 = NOT HERE, 1 = RIGHT (in camera), 2 = LEFT (in camera)
-    Robot robot;
-    DcMotor[][] motors;
-    List<Recognition> updatedRecognitions;
+
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
      * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
@@ -49,7 +52,11 @@ public class Sampling extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        robot = new Robot(hardwareMap);
+        drivetrainDC[0]  = hardwareMap.get(DcMotor.class, "rightFront");
+        drivetrainDC[1] = hardwareMap.get(DcMotor.class, "rightBack");
+        drivetrainDC[2]  = hardwareMap.get(DcMotor.class, "leftBack");
+        drivetrainDC[3] = hardwareMap.get(DcMotor.class, "leftFront");
+        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
         if (getCube() == 0) {
 
         } else if (getCube() == 1) {
@@ -59,9 +66,43 @@ public class Sampling extends LinearOpMode {
         }
     }
 
+    private double[] getPowerMotor() {
+
+        double k = 0.0007; //EDEN
+        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+        double middleCubeX = (updatedRecognitions.get(goldIndex).getLeft() + updatedRecognitions.get(goldIndex).getRight()) / 2;
+
+        double distanceFromRight = 700-middleCubeX;
+        double distanceFromLeft =  middleCubeX;
+
+        double[] addToMotors = new double[2];
+        addToMotors[0] = k *distanceFromRight;  //RIGHT
+        addToMotors[1] = k * distanceFromLeft; //LEFT
+
+        return addToMotors;
+    }
+
+    private void followCube(double power) {
+        double[] powerAddToMotors = new double[2];
+        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+
+        if (!updatedRecognitions.isEmpty())
+        while (updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL) ){//add condition
+            powerAddToMotors[0] = getPowerMotor()[0];//RIGHT
+            powerAddToMotors[1] = getPowerMotor()[1];//LEFT
+            drivetrainDC[0].setPower( powerAddToMotors[0] + power);//RIGHT Front
+            drivetrainDC[1].setPower(powerAddToMotors[0] + power);//Right Back
+            drivetrainDC[2].setPower( powerAddToMotors[1] + power);//Left Back
+            drivetrainDC[3].setPower(powerAddToMotors[1] + power);//LEFT Front
+        }
+        }
+
+
+
+
     private int getCube() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
-        // first.
+        // first..
         initVuforia();
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
@@ -85,8 +126,7 @@ public class Sampling extends LinearOpMode {
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
-                 updatedRecognitions = tfod.getUpdatedRecognitions();
-
+                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
 
@@ -134,15 +174,6 @@ public class Sampling extends LinearOpMode {
             tfod.shutdown();
         }
         return (cubePlace);
-    }
-
-    public void driveToGoldMineral() {
-        motors = robot.getDriveTrain();
-
-Turning.setMotorPower(motors,new double[][]{{0.5,0.5},{0.5,0.5}});
-while(updatedRecognitions.isEmpty()||!updatedRecognitions.contains(LABEL_GOLD_MINERAL));
-
-
     }
 
     private void initVuforia() {
