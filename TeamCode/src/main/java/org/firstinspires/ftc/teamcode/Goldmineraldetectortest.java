@@ -45,7 +45,7 @@
 //    DcMotor[][] drivetrainDC = new DcMotor[3][3];
 //    double[][] sticks = new double[4][4];
 //    int pos[][] = new int[2][2];
-//  //  private Goldmineraldetector detector;
+//    private Goldmineraldetector detector;
 //
 //
 //    @Override
