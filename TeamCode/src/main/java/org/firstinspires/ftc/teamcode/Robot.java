@@ -19,4 +19,8 @@ public class Robot
         driveTrain[1][1]=hardwareMap.get(DcMotor.class,"rightBack");
 
     }
+
+    public DcMotor[][] getDriveTrain() {
+        return driveTrain;
+    }
 }
