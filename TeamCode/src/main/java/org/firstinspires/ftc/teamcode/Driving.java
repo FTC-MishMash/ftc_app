@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
  * Created by user on 30/10/2018.
  */
 
-public class Turning {
+public class Driving {
     public static void ScaledTurn(double goalAngle, DcMotor[][] driveMotors, BNO055IMU imu, double power, Telemetry telemetry) {
         boolean sideOfTurn = true;
         double deltaAngle = 0;
@@ -68,7 +68,7 @@ public class Turning {
         setMotorPower(driveMotors, new double[][]{{0, 0}, {0, 0}});
     }
 
-    public static void setMotorPower(DcMotor[][] motors, double[][] powers) {
+    public static void setMotorPower(DcMotor[][] motors, Double[][] powers) {
         for (int i = 0; i < motors.length; i++)
             for (int j = 0; j < motors[i].length; j++)
                 motors[i][j].setPower(powers[i][j]);
