@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
+@TeleOp(name = "follow cube")
 public class Sampling extends LinearOpMode {
     int goldIndex = 0;
     DcMotor[] drivetrainDC = new DcMotor[4];
@@ -51,19 +53,28 @@ public class Sampling extends LinearOpMode {
 
 
     @Override
+
     public void runOpMode() {
-        drivetrainDC[0]  = hardwareMap.get(DcMotor.class, "rightFront");
+        List<Recognition> updatedRecognitions;
+        drivetrainDC[0] = hardwareMap.get(DcMotor.class, "rightFront");
         drivetrainDC[1] = hardwareMap.get(DcMotor.class, "rightBack");
-        drivetrainDC[2]  = hardwareMap.get(DcMotor.class, "leftBack");
+        drivetrainDC[2] = hardwareMap.get(DcMotor.class, "leftBack");
         drivetrainDC[3] = hardwareMap.get(DcMotor.class, "leftFront");
-        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-        if (getCube() == 0) {
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
-        } else if (getCube() == 1) {
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
-        } else if (getCube() == 2) {
-
-        }
+        if (tfod != null)
+            updatedRecognitions = tfod.getUpdatedRecognitions();
+        followCube(0.2);
+//        if (getCube() == 0) {
+//
+//        } else if (getCube() == 1) {
+//
+//        } else if (getCube() == 2) {
+//
+//        }
     }
 
     private double[] getPowerMotor() {
@@ -72,32 +83,38 @@ public class Sampling extends LinearOpMode {
         List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
         double middleCubeX = (updatedRecognitions.get(goldIndex).getLeft() + updatedRecognitions.get(goldIndex).getRight()) / 2;
 
-        double distanceFromRight = 700-middleCubeX;
-        double distanceFromLeft =  middleCubeX;
+        double distanceFromRight = 700 - middleCubeX;
+        double distanceFromLeft = middleCubeX;
 
         double[] addToMotors = new double[2];
-        addToMotors[0] = k *distanceFromRight;  //RIGHT
+        addToMotors[0] = k * distanceFromRight;  //RIGHT
         addToMotors[1] = k * distanceFromLeft; //LEFT
-
+        telemetry.addData("distance From Right:", addToMotors[0]);
+        telemetry.addData("distance From Left:", addToMotors[1]);
+        telemetry.update();
         return addToMotors;
     }
 
     private void followCube(double power) {
+
         double[] powerAddToMotors = new double[2];
         List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-
+        if (updatedRecognitions != null) {
         if (!updatedRecognitions.isEmpty())
-        while (updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL) ){//add condition
-            powerAddToMotors[0] = getPowerMotor()[0];//RIGHT
-            powerAddToMotors[1] = getPowerMotor()[1];//LEFT
-            drivetrainDC[0].setPower( powerAddToMotors[0] + power);//RIGHT Front
-            drivetrainDC[1].setPower(powerAddToMotors[0] + power);//Right Back
-            drivetrainDC[2].setPower( powerAddToMotors[1] + power);//Left Back
-            drivetrainDC[3].setPower(powerAddToMotors[1] + power);//LEFT Front
-        }
-        }
-
-
+            while (updatedRecognitions.get(1).getLabel().equals(LABEL_GOLD_MINERAL)) {//add condition
+                powerAddToMotors[0] = getPowerMotor()[0];//RIGHT
+                powerAddToMotors[1] = getPowerMotor()[1];//LEFT
+                drivetrainDC[0].setPower(powerAddToMotors[0] + power);//RIGHT Front
+                drivetrainDC[1].setPower(powerAddToMotors[0] + power);//Right Back
+                drivetrainDC[2].setPower(powerAddToMotors[1] + power);//Left Back
+                drivetrainDC[3].setPower(powerAddToMotors[1] + power);//LEFT Front
+            }
+        drivetrainDC[0].setPower(0);//RIGHT Front
+        drivetrainDC[1].setPower(0);//Right Back
+        drivetrainDC[2].setPower(0);//Left Back
+        drivetrainDC[3].setPower(0);//LEFT Front
+    }
+    }
 
 
     private int getCube() {
@@ -180,6 +197,7 @@ public class Sampling extends LinearOpMode {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          */
+
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
