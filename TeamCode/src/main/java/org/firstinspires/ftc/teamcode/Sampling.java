@@ -23,7 +23,7 @@ public class Sampling extends LinearOpMode {
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
     public int cubePlace = 0;// 0 = NOT HERE, 1 = RIGHT (in camera), 2 = LEFT (in camera)
-
+    public boolean noMotor = true;
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
      * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
@@ -55,18 +55,30 @@ public class Sampling extends LinearOpMode {
     @Override
 
     public void runOpMode() {
-        List<Recognition> updatedRecognitions;
-        drivetrainDC[0] = hardwareMap.get(DcMotor.class, "rightFront");
-        drivetrainDC[1] = hardwareMap.get(DcMotor.class, "rightBack");
-        drivetrainDC[2] = hardwareMap.get(DcMotor.class, "leftBack");
-        drivetrainDC[3] = hardwareMap.get(DcMotor.class, "leftFront");
+        initVuforia();
+
+        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+            initTfod();
+        } else {
+            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+        }
+        if (!noMotor) {
+            drivetrainDC[0] = hardwareMap.get(DcMotor.class, "rightFront");
+            drivetrainDC[1] = hardwareMap.get(DcMotor.class, "rightBack");
+            drivetrainDC[2] = hardwareMap.get(DcMotor.class, "leftBack");
+            drivetrainDC[3] = hardwareMap.get(DcMotor.class, "leftFront");
+        }
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        waitForStart();
+        telemetry.addLine("follow cube 0:");
+        telemetry.update();
 
-        if (tfod != null)
-            updatedRecognitions = tfod.getUpdatedRecognitions();
+        if (tfod != null) {
+            tfod.activate();
+        }
         followCube(0.2);
 //        if (getCube() == 0) {
 //
@@ -75,45 +87,100 @@ public class Sampling extends LinearOpMode {
 //        } else if (getCube() == 2) {
 //
 //        }
+        if (tfod != null) {
+            tfod.shutdown();
+        }
     }
 
-    private double[] getPowerMotor() {
-
-        double k = 0.0007; //EDEN
-        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-        double middleCubeX = (updatedRecognitions.get(goldIndex).getLeft() + updatedRecognitions.get(goldIndex).getRight()) / 2;
-
-        double distanceFromRight = 700 - middleCubeX;
-        double distanceFromLeft = middleCubeX;
-
-        double[] addToMotors = new double[2];
-        addToMotors[0] = k * distanceFromRight;  //RIGHT
-        addToMotors[1] = k * distanceFromLeft; //LEFT
-        telemetry.addData("distance From Right:", addToMotors[0]);
-        telemetry.addData("distance From Left:", addToMotors[1]);
-        telemetry.update();
-        return addToMotors;
-    }
+//    private double[] getPowerMotor() {
+//
+//        double k = 0.0007; //EDEN
+//
+//        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+//        updatedRecognitions = tfod.getUpdatedRecognitions();
+//        double middleCubeX = (updatedRecognitions.get(goldIndex).getLeft() + updatedRecognitions.get(goldIndex).getRight()) / 2;
+//
+//        double distanceFromRight = 700 - middleCubeX;
+//        double distanceFromLeft = middleCubeX;
+//
+//        double[] addToMotors = new double[2];
+//        addToMotors[0] = k * distanceFromRight;  //RIGHT
+//        addToMotors[1] = k * distanceFromLeft; //LEFT
+//        telemetry.addData("distance From Right:", addToMotors[0]);
+//        telemetry.addData("distance From Left:", addToMotors[1]);
+//        telemetry.update();
+//        return addToMotors;
+//    }
 
     private void followCube(double power) {
+        telemetry.addLine("follow cube 1:");
+        telemetry.update();
 
-        double[] powerAddToMotors = new double[2];
-        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-        if (updatedRecognitions != null) {
-        if (!updatedRecognitions.isEmpty())
-            while (updatedRecognitions.get(1).getLabel().equals(LABEL_GOLD_MINERAL)) {//add condition
-                powerAddToMotors[0] = getPowerMotor()[0];//RIGHT
-                powerAddToMotors[1] = getPowerMotor()[1];//LEFT
-                drivetrainDC[0].setPower(powerAddToMotors[0] + power);//RIGHT Front
-                drivetrainDC[1].setPower(powerAddToMotors[0] + power);//Right Back
-                drivetrainDC[2].setPower(powerAddToMotors[1] + power);//Left Back
-                drivetrainDC[3].setPower(powerAddToMotors[1] + power);//LEFT Front
-            }
-        drivetrainDC[0].setPower(0);//RIGHT Front
-        drivetrainDC[1].setPower(0);//Right Back
-        drivetrainDC[2].setPower(0);//Left Back
-        drivetrainDC[3].setPower(0);//LEFT Front
-    }
+        double middleCubeX = 0;
+        double k = 0.01; //EDEN
+        double[] addToMotors = new double[2];
+
+        boolean flagGold = true;
+//        double[] powerAddToMotors = new double[2];
+        List<Recognition> updatedRecognitions1 = tfod.getUpdatedRecognitions();
+        while (opModeIsActive()) {//TO ADD CONDITION
+            updatedRecognitions1 = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions1 != null)
+                if (!updatedRecognitions1.isEmpty())
+                    break;
+        }
+
+        int i = 0;
+        if (updatedRecognitions1 != null) {
+            if (!updatedRecognitions1.isEmpty())
+                while (i < 200) {//add condition
+                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+
+
+                    flagGold = true;
+                    double distanceFromRight = 0;
+                    double distanceFromLeft = 0;
+                    if (updatedRecognitions != null)
+                        if (!updatedRecognitions.isEmpty())
+                            for (Recognition recognition : updatedRecognitions)
+                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                    middleCubeX = (recognition.getLeft() + recognition.getRight()) / 2;
+                                    distanceFromRight = 700 - middleCubeX;
+                                    distanceFromLeft = middleCubeX;
+                                    flagGold = true;
+                                    telemetry.addLine("follow cube 4:");
+                                    telemetry.update();
+                                    i++;
+                                    break;
+                                }
+
+
+                    addToMotors[0] = k * distanceFromRight;  //RIGHT
+                    addToMotors[1] = k * distanceFromLeft; //LEFT
+                    telemetry.addData("distance From Right:", addToMotors[0]);
+                    telemetry.addData("distance From Left:", addToMotors[1]);
+                    telemetry.update();
+
+
+//            powerAddToMotors[0] = getPowerMotor()[0];//RIGHT
+//            powerAddToMotors[1] = getPowerMotor()[1];//LEFT
+                    if (!noMotor) {
+
+                        drivetrainDC[0].setPower(addToMotors[0] + power);//RIGHT Front
+                        drivetrainDC[1].setPower(addToMotors[0] + power);//Right Back
+                        drivetrainDC[2].setPower(addToMotors[1] + power);//Left Back
+                        drivetrainDC[3].setPower(addToMotors[1] + power);//LEFT Front
+                    }
+                }
+
+        }
+        if (!noMotor) {
+
+            drivetrainDC[0].setPower(0);//RIGHT Front
+            drivetrainDC[1].setPower(0);//Right Back
+            drivetrainDC[2].setPower(0);//Left Back
+            drivetrainDC[3].setPower(0);//LEFT Front
+        }
     }
 
 
