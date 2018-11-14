@@ -23,6 +23,6 @@ Robot robot;
 
 
     private void driveToImage() {
-        Driving.setMotorPower(motors,new Double[][]{{0.5,0.5},{0.5,0.5}});
+        Driving.setMotorPower(motors,new double[][]{{0.5,0.5},{0.5,0.5}});
     }
 }

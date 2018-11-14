@@ -68,7 +68,7 @@ public class Driving {
         setMotorPower(driveMotors, new double[][]{{0, 0}, {0, 0}});
     }
 
-    public static void setMotorPower(DcMotor[][] motors, Double[][] powers) {
+    public static void setMotorPower(DcMotor[][] motors, double[][] powers) {
         for (int i = 0; i < motors.length; i++)
             for (int j = 0; j < motors[i].length; j++)
                 motors[i][j].setPower(powers[i][j]);
