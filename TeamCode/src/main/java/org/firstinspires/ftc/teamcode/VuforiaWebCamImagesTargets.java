@@ -289,6 +289,13 @@ public class VuforiaWebCamImagesTargets {
             VectorF translation = lastLocation.getTranslation();
 
             Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+            /*
+            *0- x
+            *1- y
+            *2- z
+            *3-roll
+            *4-pitch
+            *5-heading*/
             return new float[]{translation.get(0) / mmPerInch, 5, mmPerInch, translation.get(1), translation.get(2) / mmPerInch, rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle};
             // express the rotation of the robot in degrees.
         }

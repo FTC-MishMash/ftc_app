@@ -123,7 +123,7 @@ public class Sampling extends LinearOpMode {
         boolean flagGold = true;
 //        double[] powerAddToMotors = new double[2];
         List<Recognition> updatedRecognitions1 = tfod.getUpdatedRecognitions();
-        while (opModeIsActive()) {//TO ADD CONDITION
+        while (opModeIsActive()) {//TODO: ADD CONDITION
             updatedRecognitions1 = tfod.getUpdatedRecognitions();
             if (updatedRecognitions1 != null)
                 if (!updatedRecognitions1.isEmpty())
@@ -133,7 +133,7 @@ public class Sampling extends LinearOpMode {
         int i = 0;
         if (updatedRecognitions1 != null) {
             if (!updatedRecognitions1.isEmpty())
-                while (i < 200) {//add condition
+                while (i < 200 && opModeIsActive()) {//add condition
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
 
 
@@ -144,7 +144,7 @@ public class Sampling extends LinearOpMode {
                         if (!updatedRecognitions.isEmpty())
                             for (Recognition recognition : updatedRecognitions)
                                 if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                    middleCubeX = (recognition.getLeft() + recognition.getRight()) / 2;
+                                    middleCubeX = ((recognition.getLeft() + recognition.getRight()) / 2);
                                     distanceFromRight = 700 - middleCubeX;
                                     distanceFromLeft = middleCubeX;
                                     flagGold = true;
