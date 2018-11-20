@@ -113,44 +113,51 @@ public class Sampling extends LinearOpMode {
             if (tfod != null)
                 updatedRecognitions = tfod.getUpdatedRecognitions();
 
-            if (updatedRecognitions != null)
-                if (!updatedRecognitions.isEmpty())
+            if (updatedRecognitions != null
+               &&!updatedRecognitions.isEmpty()
+                        && updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL))
                     break;
         }
 
-        if (updatedRecognitions != null) {
-            if (!updatedRecognitions.isEmpty()) {
-                if (updatedRecognitions.get(0) != null)
-                    while (opModeIsActive() && updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL)) {
-                        middleCubeX = ((updatedRecognitions.get(0).getLeft() + updatedRecognitions.get(0).getRight()) / 2);
-                        distanceFromRight = 700 - middleCubeX;
-                        distanceFromLeft = middleCubeX;
-                        telemetry.addLine("follow cube 4:");
 
-                        addToMotors[0] = k * distanceFromRight;  //RIGHT
-                        addToMotors[1] = k * distanceFromLeft; //LEFT
-                        telemetry.addData("distance From Right:", addToMotors[0]);
-                        telemetry.addData("distance From Left:", addToMotors[1]);
-                        telemetry.update();
-                        if (tfod != null && tfod.getUpdatedRecognitions() != null)
-                            updatedRecognitions = tfod.getUpdatedRecognitions();
+        while (opModeIsActive()) {
+            if (tfod != null)
+                updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null
+                    && !updatedRecognitions.isEmpty()
+               //     && updatedRecognitions.get(0) != null
+                    && updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL)) {
+                middleCubeX = ((updatedRecognitions.get(0).getLeft() + updatedRecognitions.get(0).getRight()) / 2);
+                distanceFromRight = 700 - middleCubeX;
+                distanceFromLeft = middleCubeX;
+                telemetry.addLine("follow cube 4:");
 
-//            powerAddToMotors[0] = getPowerMotor()[0];//RIGHT
-//            powerAddToMotors[1] = getPowerMotor()[1];//LEFT
-                        if (!noMotor) {
+                addToMotors[0] = k * distanceFromRight;  //RIGHT
+                addToMotors[1] = k * distanceFromLeft; //LEFT
+                telemetry.addData("distance From Right:", addToMotors[0]);
+                telemetry.addData("distance From Left:", addToMotors[1]);
+                telemetry.update();
 
-                            drivetrainDC[0].setPower(addToMotors[0] + power);//RIGHT Front
-                            drivetrainDC[1].setPower(addToMotors[0] + power);//Right Back
-                            drivetrainDC[2].setPower(addToMotors[1] + power);//Left Back
-                            drivetrainDC[3].setPower(addToMotors[1] + power);//LEFT Front
-                        }
-
-                        //   break;
-                    }
-
-
+                if (!noMotor) {
+                    drivetrainDC[0].setPower(addToMotors[0] + power);//RIGHT Front
+                    drivetrainDC[1].setPower(addToMotors[0] + power);//Right Back
+                    drivetrainDC[2].setPower(addToMotors[1] + power);//Left Back
+                    drivetrainDC[3].setPower(addToMotors[1] + power);//LEFT Front
+                }
+            } else {
+                telemetry.addLine("dont see cube");
+                telemetry.update();
+                break;
             }
+
+//            powerAdd ToMotors[0] = getPowerMotor()[0];//RIGHT
+//            powerAddToMotors[1] = getPowerMotor()[1];//LEFT
+
+
+            //   break;
         }
+
+
         //    }
         if (!noMotor) {
 
@@ -207,7 +214,7 @@ public class Sampling extends LinearOpMode {
 
                         }
 
-                        if (updatedRecognitions.size() == 3) {
+                            if (updatedRecognitions.size() == 3) {
 
                         }
 

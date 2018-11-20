@@ -143,10 +143,12 @@ public class ObjectDetectionWebCam2 extends LinearOpMode {
                         if(!updatedRecognitions.isEmpty()) {
                             telemetry.addData("width: ", updatedRecognitions.get(goldIndex).getWidth());
                             telemetry.addData("height: ", updatedRecognitions.get(goldIndex).getHeight());
-                            telemetry.addData("top: ", updatedRecognitions.get(goldIndex).getTop());
-                            telemetry.addData("buttom: ", updatedRecognitions.get(goldIndex).getBottom());
+//                            telemetry.addData("top: ", updatedRecognitions.get(goldIndex).getTop());
+//                            telemetry.addData("buttom: ", updatedRecognitions.get(goldIndex).getBottom());
+                            telemetry.addData("Label: ",updatedRecognitions.get(goldIndex).getLabel());
                             telemetry.addData("left: ", updatedRecognitions.get(goldIndex).getLeft());
                             telemetry.addData("right: ", updatedRecognitions.get(goldIndex).getRight());
+                            telemetry.addData("confidence: ", updatedRecognitions.get(goldIndex).getConfidence());
                         }
                         telemetry.update();
                     }
