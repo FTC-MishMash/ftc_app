@@ -120,6 +120,7 @@ public class VuforiaWebCamImagesTargets {
     private static boolean targetVisible = false;
     static VuforiaLocalizer.Parameters parameters;
 
+
     public static void initVuforia(VuforiaLocalizer vuforia, HardwareMap hardwareMap) {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
