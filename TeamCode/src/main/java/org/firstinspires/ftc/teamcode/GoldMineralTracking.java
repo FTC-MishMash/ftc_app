@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -12,9 +12,8 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-@TeleOp(name = "follow cube")
-public class Sampling extends LinearOpMode {
-    int goldIndex = 0;
+@Autonomous(name = "gold mineral tracking")
+public class GoldMineralTracking extends LinearOpMode {
     DcMotor[] drivetrainDC = new DcMotor[4];
     //drivetrainDC[0] = RIGHT
     //drivetrainDC[1] = LEFT
@@ -24,6 +23,8 @@ public class Sampling extends LinearOpMode {
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
     public int cubePlace = 0;// 0 = NOT HERE, 1 = RIGHT (in camera), 2 = LEFT (in camera)
     public boolean noMotor = true;
+    int goldIndex = -1;
+    boolean foundGold = false;
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
      * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
@@ -55,7 +56,7 @@ public class Sampling extends LinearOpMode {
     @Override
 
     public void runOpMode() {
-        initVuforia();
+            initVuforia();
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
@@ -121,128 +122,60 @@ public class Sampling extends LinearOpMode {
 
 
         while (opModeIsActive()) {
-            if (tfod != null)
+            if (tfod != null) {
                 updatedRecognitions = tfod.getUpdatedRecognitions();
-            if (updatedRecognitions != null
-                    && !updatedRecognitions.isEmpty()
-               //     && updatedRecognitions.get(0) != null
-                    && updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL)) {
-                middleCubeX = ((updatedRecognitions.get(0).getLeft() + updatedRecognitions.get(0).getRight()) / 2);
-                distanceFromRight = 700 - middleCubeX;
-                distanceFromLeft = middleCubeX;
-                telemetry.addLine("follow cube 4:");
+                if (updatedRecognitions != null
+                        && !updatedRecognitions.isEmpty()) {
+                    telemetry.addLine("Object found");
+                    telemetry.update();
+                    for (int i = 0; i < updatedRecognitions.size(); i++)
+                        if (updatedRecognitions.get(i).getLabel().equals(LABEL_GOLD_MINERAL)) {
+                            goldIndex = i;
+                            telemetry.addData("Found gold",i);
+                            telemetry.update();
+                            sleep(200);
+                            break;
+                        } else
+                            goldIndex = -1;
+                    if (goldIndex != -1) {
+                        foundGold = true;
+                        middleCubeX = ((updatedRecognitions.get(goldIndex).getLeft() + updatedRecognitions.get(goldIndex).getRight()) / 2);
+                        distanceFromRight = 700 - middleCubeX;
+                        distanceFromLeft = middleCubeX;
+                        telemetry.addLine("follow cube 4:");
+                        addToMotors[0] = k * distanceFromRight;  //RIGHT
+                        addToMotors[1] = k * distanceFromLeft; //LEFT
+                        telemetry.addData("distance From Right:", addToMotors[0]);
+                        telemetry.addData("distance From Left:", addToMotors[1]);
+                        telemetry.update();
 
-                addToMotors[0] = k * distanceFromRight;  //RIGHT
-                addToMotors[1] = k * distanceFromLeft; //LEFT
-                telemetry.addData("distance From Right:", addToMotors[0]);
-                telemetry.addData("distance From Left:", addToMotors[1]);
-                telemetry.update();
-
-                if (!noMotor) {
-                    drivetrainDC[0].setPower(addToMotors[0] + power);//RIGHT Front
-                    drivetrainDC[1].setPower(addToMotors[0] + power);//Right Back
-                    drivetrainDC[2].setPower(addToMotors[1] + power);//Left Back
-                    drivetrainDC[3].setPower(addToMotors[1] + power);//LEFT Front
+                        if (!noMotor) {
+                            drivetrainDC[0].setPower(addToMotors[0] + power);//RIGHT Front
+                            drivetrainDC[1].setPower(addToMotors[0] + power);//Right Back
+                            drivetrainDC[2].setPower(addToMotors[1] + power);//Left Back
+                            drivetrainDC[3].setPower(addToMotors[1] + power);//LEFT Front
+                        }
+                    }
+                } else if (foundGold) {
+                    telemetry.addLine("dont see cube");
+                    telemetry.update();
+                    // break;
+                } else {
+                    foundGold = false;
+                    telemetry.addLine("Nothing detected");
+                    telemetry.update();
                 }
-            } else {
-                telemetry.addLine("dont see cube");
-                telemetry.update();
-         //       break;
             }
+
 
 //            powerAdd ToMotors[0] = getPowerMotor()[0];//RIGHT
 //            powerAddToMotors[1] = getPowerMotor()[1];//LEFT
 
 
             //   break;
-        }
-
-
-        //    }
-        if (!noMotor) {
-
-            drivetrainDC[0].setPower(0);//RIGHT Front
-            drivetrainDC[1].setPower(0);//Right Back
-            drivetrainDC[2].setPower(0);//Left Back
-            drivetrainDC[3].setPower(0);//LEFT Front
 
         }
-    }
 
-    private int getCube() {
-        // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
-        // first..
-        initVuforia();
-
-        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            initTfod();
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-        }
-
-        /** Wait for the game to begin */
-        telemetry.addData(">", "Press Play to start tracking");
-        telemetry.update();
-        waitForStart();
-
-        if (opModeIsActive()) {
-            /** Activate Tensor Flow Object Detection. */
-            if (tfod != null) {
-                tfod.activate();
-            }
-
-            if (opModeIsActive()) {//CHANGE TO IF
-                if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-
-                    }
-                    if (updatedRecognitions.size() == 1 && updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL)) {
-
-                    }
-                    if (updatedRecognitions.size() == 2) {
-                        int goldMineralX = -1;
-                        int silverMineral1X = -1;
-                        for (Recognition recognition : updatedRecognitions) {
-                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                goldMineralX = (int) recognition.getLeft();
-                            } else //if (silverMineral1X == -1) {
-                                silverMineral1X = (int) recognition.getLeft();
-
-                        }
-
-                            if (updatedRecognitions.size() == 3) {
-
-                        }
-
-
-                        if (goldMineralX != -1 && silverMineral1X != -1) {
-                            if (goldMineralX < silverMineral1X) {
-                                telemetry.addData("Gold Mineral Position", "Left");
-                                cubePlace = 2;//LEFT in camera
-                            } else if (goldMineralX > silverMineral1X) {
-                                telemetry.addData("Gold Mineral Position", "Right");
-                                cubePlace = 1;//RIGHT in camera
-                            }
-
-                        } else {
-                            telemetry.addData("Gold Mineral Position", "NOT HERE");
-                            cubePlace = 0;//NOT in the camera
-                        }
-                    }
-                    telemetry.update();
-                }
-            }
-        }
-
-
-        if (tfod != null) {
-            tfod.shutdown();
-        }
-        return (cubePlace);
     }
 
     private void initVuforia() {
