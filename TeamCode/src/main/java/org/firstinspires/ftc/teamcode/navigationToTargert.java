@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
  * Created by user on 06/11/2018.
  */
-
+@Autonomous(name = "ImageTesting")
 public class navigationToTargert extends LinearOpMode {
     Robot robot;
     DcMotor[][] motors;
@@ -24,9 +25,11 @@ public class navigationToTargert extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(hardwareMap);
+//        robot = new Robot(hardwareMap);
+//        waitForStart();
+//        motors = robot.getDriveTrain();
         waitForStart();
-        motors = robot.getDriveTrain();
+      //  VuforiaWebCamImagesTargets.initVuforia(,hardwareMap);
         if (opModeIsActive()) {
             driveToImage();
 
@@ -37,10 +40,11 @@ public class navigationToTargert extends LinearOpMode {
      * Driving the robot near the target image and turn it across the depot.
      */
     private void driveToImage() {
-        Driving.setMotorPower(motors, new double[][]{{0.5, 0.5}, {0.5, 0.5}});
+        //Driving.setMotorPower(motors, new double[][]{{0.5, 0.5}, {0.5, 0.5}});
         float[] positions = VuforiaWebCamImagesTargets.getPositions();
         while (positions[0] < XtargetPosition || positions[1] > YtargetPosition|| positions[2] > ZtargetPosition || positions[3] > PitchtargetAngleMin || positions[3] < PitchtargetAngleMax || positions[5] < HeadingtargetAngleMin|| positions[5] > HeadingtargetAngleMax)
         positions = VuforiaWebCamImagesTargets.getPositions();
-        Driving.ScaledTurn(90,motors,robot.imu,0.6,telemetry);
+      //  Driving.ScaledTurn(90,motors,robot.imu,0.6,telemetry);
+
     }
 }
