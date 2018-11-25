@@ -1,17 +1,26 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
+
 
 /**
  * Created by user on 22/11/2018.
  */
 
 public class autoMode extends LinearOpMode {
+//    private static final android.graphics.Color Color = ;
     Robot robot;
     DcMotor[][] motors;
     ElapsedTime runTime = new ElapsedTime();
+    final double SCALE_FACTOR = 255;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -21,9 +30,66 @@ public class autoMode extends LinearOpMode {
         runTime.reset();
         motors = robot.getDriveTrain();
         if (opModeIsActive()) {
-
+            getDown dow = new getDown();
+            //  TODO: add the funcition from the class
 
         }
     }
 
+
+
+    public void ResetHue(ColorSensor color, float[] hsvArr) { //Reset the sensor color to read bt hue values.
+        Color.RGBToHSV((int) (color.red() * SCALE_FACTOR),
+                (int) (color.green() * SCALE_FACTOR),
+                (int) (color.blue() * SCALE_FACTOR),
+                hsvArr);
+    }
+
+    public void setMotorPower(double[][] power) { //Stores the four drivetrain motors power in array
+        for (int row = 0; opModeIsActive() && row < 2; row++)
+            for (int col = 0; opModeIsActive() && col < 2; col++)
+                robot.driveTrain[row][col].setPower(power[row][col]);
+    }
+
+    public void straightOnLine(int color, double power) {
+
+        ResetHue(robot.colorRightFront,robot.valuesRightFront);
+        ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
+        telemetry.addData("hsvValues[0]", robot.hsvValuesRightFront[0]);
+        telemetry.update();
+        if (color == 0) {
+
+            double time = getRuntime();
+            while (opModeIsActive() && robot.hsvValuesRightFront[0] > robot.redColorRightSensor && robot.valuesLeftFront[0] > robot.redColorLeftSensor && (time + 1.5 > getRuntime())) {
+                ResetHue(robot.colorRightFront,robot.valuesRightFront);
+                ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
+                setMotorPower(new double[][]{{power, power}, {power, power}});
+                telemetry.addLine("search the First Line");
+                telemetry.addData("hsvValuesRightFront[0]", robot.hsvValuesRightFront[0]);
+                telemetry.update();
+            }
+            setMotorPower(new double[][]{{0, 0}, {0, 0}});
+
+            ResetHue(robot.colorRightFront,robot.valuesRightFront);
+            ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
+            if (robot.valuesRightFront[0] < robot.redColorRightSensor) {
+                while (robot.valuesLeftFront[0] > robot.redColorLeftSensor && opModeIsActive()) {
+                    setMotorPower(new double[][]{{0.75 * power, 0}, {0.75 * power, 0}});
+                    telemetry.addData("search the left Line", robot.valuesLeftFront[0]);
+                    telemetry.update();
+                }
+            }
+            if (robot.valuesLeftFront[0] < robot.redColorLeftSensor) {
+                while (robot.valuesRightFront[0] > robot.redColorRightSensor && opModeIsActive()) {
+                    setMotorPower(new double[][]{{0, 0.75 * power}, {0, 0.75 * power}});
+                    telemetry.addData("search the Right Line", robot.valuesRightFront[0]);
+                    telemetry.update();
+                }
+            }
+
+        }
+        if (color == 1) {
+
+        }
+    }
 }

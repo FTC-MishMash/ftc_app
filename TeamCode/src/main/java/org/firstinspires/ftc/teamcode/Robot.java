@@ -2,8 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
 
 /**
  * Created by user on 06/11/2018.
@@ -11,20 +14,39 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Robot {
     public DcMotor[][] driveTrain;
+    public DcMotor[] shaft;
+    public ColorSensor colorRightFront;
+    public ColorSensor colorLeftFront;
+    float hsvValuesLeftFront[] = {0F, 0F, 0F};
+    float hsvValuesRightFront[] = {0F, 0F, 0F};
+    public final float valuesLeftFront[] = hsvValuesRightFront;
+    public final float valuesRightFront[] = hsvValuesLeftFront;
     BNO055IMU imu;
+    public double blueColorRightSensor = 100;
+    public double redColorRightSensor = 42;
+    public double blueColorLeftSensor = 135;
+    public double redColorLeftSensor = 65;
+
 
     public Robot(HardwareMap hardwareMap) {
         driveTrain = new DcMotor[2][2];
+        shaft = new DcMotor[2];
+
+
+        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
+        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
         driveTrain[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
         driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
         driveTrain[0][1] = hardwareMap.get(DcMotor.class, "rightFront");
         driveTrain[1][1] = hardwareMap.get(DcMotor.class, "rightBack");
+        shaft[0] = hardwareMap.get(DcMotor.class, "shaft0");
+        shaft[1] = hardwareMap.get(DcMotor.class, "shaft1");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
