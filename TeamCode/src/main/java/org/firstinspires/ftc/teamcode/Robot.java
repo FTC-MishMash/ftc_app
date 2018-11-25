@@ -33,14 +33,14 @@ public class Robot {
         shaft = new DcMotor[2];
 
 
-        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
-        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
-        driveTrain[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
-        driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
-        driveTrain[0][1] = hardwareMap.get(DcMotor.class, "rightFront");
-        driveTrain[1][1] = hardwareMap.get(DcMotor.class, "rightBack");
-        shaft[0] = hardwareMap.get(DcMotor.class, "shaft0");
-        shaft[1] = hardwareMap.get(DcMotor.class, "shaft1");
+//        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
+//        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
+//        driveTrain[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
+//        driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
+//        driveTrain[0][1] = hardwareMap.get(DcMotor.class, "rightFront");
+//        driveTrain[1][1] = hardwareMap.get(DcMotor.class, "rightBack");
+//        shaft[0] = hardwareMap.get(DcMotor.class, "shaft0");
+//        shaft[1] = hardwareMap.get(DcMotor.class, "shaft1");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
