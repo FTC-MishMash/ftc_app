@@ -2,20 +2,19 @@ package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Color;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
-
 
 /**
  * Created by user on 22/11/2018.
  */
-
+@Autonomous(name = "Auto mode global")
 public class autoMode extends LinearOpMode {
-//    private static final android.graphics.Color Color = ;
+    //    private static final android.graphics.Color Color = ;
     Robot robot;
     DcMotor[][] motors;
     ElapsedTime runTime = new ElapsedTime();
@@ -37,7 +36,6 @@ public class autoMode extends LinearOpMode {
     }
 
 
-
     public void ResetHue(ColorSensor color, float[] hsvArr) { //Reset the sensor color to read bt hue values.
         Color.RGBToHSV((int) (color.red() * SCALE_FACTOR),
                 (int) (color.green() * SCALE_FACTOR),
@@ -51,9 +49,9 @@ public class autoMode extends LinearOpMode {
                 robot.driveTrain[row][col].setPower(power[row][col]);
     }
 
-    public void straightOnLine(int color, double power) {
+    public void straightOnLine(int color, double power) {//0 is red, 1 is blue
 
-        ResetHue(robot.colorRightFront,robot.valuesRightFront);
+        ResetHue(robot.colorRightFront, robot.valuesRightFront);
         ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
         telemetry.addData("hsvValues[0]", robot.hsvValuesRightFront[0]);
         telemetry.update();
@@ -61,7 +59,7 @@ public class autoMode extends LinearOpMode {
 
             double time = getRuntime();
             while (opModeIsActive() && robot.hsvValuesRightFront[0] > robot.redColorRightSensor && robot.valuesLeftFront[0] > robot.redColorLeftSensor && (time + 1.5 > getRuntime())) {
-                ResetHue(robot.colorRightFront,robot.valuesRightFront);
+                ResetHue(robot.colorRightFront, robot.valuesRightFront);
                 ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
                 setMotorPower(new double[][]{{power, power}, {power, power}});
                 telemetry.addLine("search the First Line");
@@ -70,7 +68,7 @@ public class autoMode extends LinearOpMode {
             }
             setMotorPower(new double[][]{{0, 0}, {0, 0}});
 
-            ResetHue(robot.colorRightFront,robot.valuesRightFront);
+            ResetHue(robot.colorRightFront, robot.valuesRightFront);
             ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
             if (robot.valuesRightFront[0] < robot.redColorRightSensor) {
                 while (robot.valuesLeftFront[0] > robot.redColorLeftSensor && opModeIsActive()) {
