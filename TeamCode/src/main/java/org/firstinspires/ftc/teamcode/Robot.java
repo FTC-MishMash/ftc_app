@@ -35,6 +35,10 @@ public class Robot {
 
     }
 
+    public BNO055IMU getImu() {
+        return imu;
+    }
+
     public DcMotor[][] getDriveTrain() {
         return driveTrain;
     }
