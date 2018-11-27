@@ -119,8 +119,9 @@ public class VuforiaWebCamImagesTargets {
     private static OpenGLMatrix lastLocation = null;
     private static boolean targetVisible = false;
     static VuforiaLocalizer.Parameters parameters;
+    static VuforiaLocalizer vuforia;
 
-    public static void initVuforia(VuforiaLocalizer vuforia, HardwareMap hardwareMap) {
+    public static void initVuforia( HardwareMap hardwareMap) {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          * We can pass Vuforia the handle to a camera preview resource (on the RC phone);

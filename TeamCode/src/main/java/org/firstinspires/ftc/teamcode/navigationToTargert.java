@@ -29,7 +29,7 @@ public class navigationToTargert extends LinearOpMode {
 //        waitForStart();
 //        motors = robot.getDriveTrain();
         waitForStart();
-      //  VuforiaWebCamImagesTargets.initVuforia(,hardwareMap);
+        VuforiaWebCamImagesTargets.initVuforia(hardwareMap);
         if (opModeIsActive()) {
             driveToImage();
 
@@ -40,7 +40,7 @@ public class navigationToTargert extends LinearOpMode {
      * Driving the robot near the target image and turn it across the depot.
      */
     private void driveToImage() {
-        //Driving.setMotorPower(motors, new double[][]{{0.5, 0.5}, {0.5, 0.5}});
+        Driving.setMotorPower(motors, new double[][]{{0.5, 0.5}, {0.5, 0.5}});
         float[] positions = VuforiaWebCamImagesTargets.getPositions();
         while (positions[0] < XtargetPosition || positions[1] > YtargetPosition|| positions[2] > ZtargetPosition || positions[3] > PitchtargetAngleMin || positions[3] < PitchtargetAngleMax || positions[5] < HeadingtargetAngleMin|| positions[5] > HeadingtargetAngleMax)
         positions = VuforiaWebCamImagesTargets.getPositions();
