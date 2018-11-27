@@ -17,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 @Autonomous(name = "gyroBalance")
 public class autoMode extends LinearOpMode {
     Robot robot;
-    DcMotor[][] motors;
+    DcMotor[] motorsHanging;
     ElapsedTime runTime = new ElapsedTime();
     BNO055IMU imu;
     static final int PitchtargetAngleMin = -5;
@@ -32,7 +32,10 @@ public class autoMode extends LinearOpMode {
         runTime.startTime();
         runTime.reset();
         imu = robot.getImu();
-        motors = robot.getDriveTrain();
+        motorsHanging=robot.shaft;
+        double power=0.6;
+        motorsHanging[0].setPower(power);
+        motorsHanging[1].setPower(power);
         while (opModeIsActive()) {
             if (getOffTheClimb()) {
                 telemetry.addLine("got balanced");
@@ -42,6 +45,8 @@ public class autoMode extends LinearOpMode {
                 telemetry.addLine("not balanced");
                 telemetry.update();
             }
+            motorsHanging[0].setPower(0);
+            motorsHanging[1].setPower(0);
         }
     }
 

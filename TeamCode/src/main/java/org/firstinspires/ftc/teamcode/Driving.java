@@ -51,14 +51,14 @@ public class Driving {
                 telemetry.update();
             }
         else if (goalAngle > 180 && currentAngle < 180)
-            while ((currentAngle<=180&&Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle > 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
+            while ((currentAngle <= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle > 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
                 currentAngle = getCurrentScaledAngle(imu);
                 telemetry.addData("angle case 1:", currentAngle);
                 telemetry.update();
             }
 
         else if (goalAngle < 180 && currentAngle > 180)
-            while ((currentAngle>=180&&Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle < 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
+            while ((currentAngle >= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle < 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
                 currentAngle = getCurrentScaledAngle(imu);
                 telemetry.addData("angle case 2:", currentAngle);
                 telemetry.update();
@@ -72,6 +72,11 @@ public class Driving {
         for (int i = 0; i < motors.length; i++)
             for (int j = 0; j < motors[i].length; j++)
                 motors[i][j].setPower(powers[i][j]);
+    }
+
+    public static void set2MotorPower(DcMotor[] motors, double powers) {
+        for (int i = 0; i < motors.length; i++)
+            motors[i].setPower(powers);
     }
 
     public static double getCurrentScaledAngle(BNO055IMU imu) {

@@ -61,6 +61,10 @@ public class Robot {
         return imu;
     }
 
+    public DcMotor[] getShaft() {
+        return shaft;
+    }
+
     public DcMotor[][] getDriveTrain() {
         return driveTrain;
     }
