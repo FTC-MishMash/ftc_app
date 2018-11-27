@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Color;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -18,33 +18,94 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 /**
  * Created by user on 22/11/2018.
  */
-
+@Autonomous(name = "AutoMode")
 public class autoMode extends LinearOpMode {
     //    private static final android.graphics.Color Color = ;
     Robot robot;
     DcMotor[][] motors;
     ElapsedTime runTime = new ElapsedTime();
     final double SCALE_FACTOR = 255;
-
+    BNO055IMU imuGlobal;
     static final int PitchtargetAngleMin = -5;
     static final int PitchtargetAngleMax = 5;
     static final int RolltargetAngleMin = -10;
     static final int RolltargetAngleMax = 10;
 
 
-
     @Override
     public void runOpMode() throws InterruptedException {
+
+
         robot = new Robot(hardwareMap);
         waitForStart();
         runTime.startTime();
         runTime.reset();
         motors = robot.getDriveTrain();
+
         if (opModeIsActive()) {
-            getDown dow = new getDown();
+
+            getOffTheClimb(imuGlobal, robot.shaft, 0.3);
+            straightOnLine(0, 0.3);
+            driveByColor(0,robot.colorLeftFront,imuGlobal,robot.hsvValuesLeftFront,0,0.4);
             //  TODO: add the funcition from the class
+        }
+    }
+
+    public void driveByColor(int color, ColorSensor sensorColor, BNO055IMU imu, float hsvValues[], double heading, double power)//0=red, blue=1
+    {
+        double redColorSensor = robot.redColorLeftSensor;
+        double blueColorSensor = robot.blueColorLeftSensor;
+        ResetHue(sensorColor, hsvValues);
+        double pidErr[] = {0, 0};
+        telemetry.addData("hsvValues[0]", hsvValues[0]);
+        telemetry.update();
+        if (color == 0 && opModeIsActive()) {
+            double time = getRuntime();
+            while (opModeIsActive() && hsvValues[0] > redColorSensor && (time + 2 > getRuntime())) {
+                ResetHue(sensorColor, hsvValues);
+                pidErr = GyroPID(heading, pidErr[1], imu);
+                setMotorPower(new double[][]{{power - pidErr[0], power + pidErr[0]}, {power - pidErr[0], power + pidErr[0]}});
+                telemetry.addLine("ontheGrey");
+                telemetry.addData("heading", imu.getAngularOrientation(AxesReference.INTRINSIC,
+                        AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
+                telemetry.addData("hsvValues[0]", hsvValues[0]);
+                telemetry.update();
+
+            }
+
 
         }
+        if (color == 1 && opModeIsActive()) {
+            double time1 = getRuntime();
+
+            while (opModeIsActive() && hsvValues[0] < blueColorSensor && (time1 + 2 > getRuntime())) {
+                ResetHue(sensorColor, hsvValues);
+                pidErr = GyroPID(heading, pidErr[1], imu);
+                setMotorPower(new double[][]{{power - pidErr[0], power + pidErr[0]}, {power - pidErr[0], power + pidErr[0]}});
+                telemetry.addLine("InDriveBlue");
+                telemetry.addData("heading", imu.getAngularOrientation(AxesReference.INTRINSIC,
+                        AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
+                telemetry.addData("hsvValues[0]", hsvValues[0]);
+                telemetry.update();
+
+            }
+        }
+        setMotorPower(new double[][]{{0, 0}, {0, 0}});
+
+
+    }
+
+    public double[] GyroPID(double heading, double lasterror, BNO055IMU imu) {
+        double kp = 0.015, kd = 0.01, ki = 0, nexterror = 0;
+        double err = heading - imu.getAngularOrientation(AxesReference.INTRINSIC,
+                AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        while (err > 180)
+            err = err - 360;
+        while (err < -180)
+            err = err + 360;
+        lasterror = err - lasterror;
+        double pd = nexterror * ki + lasterror * kd + err * kp;
+        return (new double[]{-pd, err});
     }
 
     public void getOffTheClimb(BNO055IMU imu, DcMotor[] motorsHanging, double power) {
@@ -53,7 +114,7 @@ public class autoMode extends LinearOpMode {
         Driving.set2MotorPower(motorsHanging, 0);
     }
 
-    public  boolean straightToField(BNO055IMU imu) {
+    public boolean straightToField(BNO055IMU imu) {
         Orientation axis = getAxis(imu);
         return axis.secondAngle > RolltargetAngleMin && axis.secondAngle < RolltargetAngleMax && axis.thirdAngle > PitchtargetAngleMin && axis.thirdAngle < PitchtargetAngleMax;
 
@@ -79,27 +140,28 @@ public class autoMode extends LinearOpMode {
 
     public void straightOnLine(int color, double power) {
 
-        ResetHue(robot.colorRightFront,robot.valuesRightFront);
+        ResetHue(robot.colorRightFront, robot.valuesRightFront);
         ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
-        telemetry.addData("hsvValues[0]", robot.hsvValuesRightFront[0]);
+        telemetry.addData("hsvValues[0]", robot.valuesRightFront[0]);
         telemetry.update();
         if (color == 0) {
 
             double time = getRuntime();
-            while (opModeIsActive() && robot.hsvValuesRightFront[0] > robot.redColorRightSensor && robot.valuesLeftFront[0] > robot.redColorLeftSensor && (time + 1.5 > getRuntime())) {
-                ResetHue(robot.colorRightFront,robot.valuesRightFront);
+            while (opModeIsActive() && robot.valuesRightFront[0] > robot.redColorRightSensor && robot.valuesLeftFront[0] > robot.redColorLeftSensor && (time + 1.5 > getRuntime())) {
+                ResetHue(robot.colorRightFront, robot.valuesRightFront);
                 ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
                 setMotorPower(new double[][]{{power, power}, {power, power}});
                 telemetry.addLine("search the First Line");
-                telemetry.addData("hsvValuesRightFront[0]", robot.hsvValuesRightFront[0]);
+                telemetry.addData("hsvValuesRightFront[0]", robot.valuesRightFront[0]);
                 telemetry.update();
             }
             setMotorPower(new double[][]{{0, 0}, {0, 0}});
 
-            ResetHue(robot.colorRightFront,robot.valuesRightFront);
+            ResetHue(robot.colorRightFront, robot.valuesRightFront);
             ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
             if (robot.valuesRightFront[0] < robot.redColorRightSensor) {
                 while (robot.valuesLeftFront[0] > robot.redColorLeftSensor && opModeIsActive()) {
+                    ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
                     setMotorPower(new double[][]{{0.75 * power, 0}, {0.75 * power, 0}});
                     telemetry.addData("search the left Line", robot.valuesLeftFront[0]);
                     telemetry.update();
@@ -107,6 +169,7 @@ public class autoMode extends LinearOpMode {
             }
             if (robot.valuesLeftFront[0] < robot.redColorLeftSensor) {
                 while (robot.valuesRightFront[0] > robot.redColorRightSensor && opModeIsActive()) {
+                    ResetHue(robot.colorRightFront, robot.valuesRightFront);
                     setMotorPower(new double[][]{{0, 0.75 * power}, {0, 0.75 * power}});
                     telemetry.addData("search the Right Line", robot.valuesRightFront[0]);
                     telemetry.update();
@@ -117,20 +180,21 @@ public class autoMode extends LinearOpMode {
         if (color == 1) {
 
             double time = getRuntime();
-            while (opModeIsActive() && robot.hsvValuesRightFront[0] > robot.blueColorRightSensor && robot.valuesLeftFront[0] > robot.blueColorLeftSensor && (time + 1.5 > getRuntime())) {
-                ResetHue(robot.colorRightFront,robot.valuesRightFront);
+            while (opModeIsActive() && robot.valuesRightFront[0] > robot.blueColorRightSensor && robot.valuesLeftFront[0] > robot.blueColorLeftSensor && (time + 1.5 > getRuntime())) {
+                ResetHue(robot.colorRightFront, robot.valuesRightFront);
                 ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
                 setMotorPower(new double[][]{{power, power}, {power, power}});
                 telemetry.addLine("search the First Line");
-                telemetry.addData("hsvValuesRightFront[0]", robot.hsvValuesRightFront[0]);
+                telemetry.addData("hsvValuesRightFront[0]", robot.valuesRightFront[0]);
                 telemetry.update();
             }
             setMotorPower(new double[][]{{0, 0}, {0, 0}});
 
-            ResetHue(robot.colorRightFront,robot.valuesRightFront);
+            ResetHue(robot.colorRightFront, robot.valuesRightFront);
             ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
             if (robot.valuesRightFront[0] < robot.redColorRightSensor) {
                 while (robot.valuesLeftFront[0] > robot.redColorLeftSensor && opModeIsActive()) {
+                    ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
                     setMotorPower(new double[][]{{0.75 * power, 0}, {0.75 * power, 0}});
                     telemetry.addData("search the left Line", robot.valuesLeftFront[0]);
                     telemetry.update();
@@ -138,6 +202,7 @@ public class autoMode extends LinearOpMode {
             }
             if (robot.valuesLeftFront[0] < robot.redColorLeftSensor) {
                 while (robot.valuesRightFront[0] > robot.redColorRightSensor && opModeIsActive()) {
+                    ResetHue(robot.colorRightFront, robot.valuesRightFront);
                     setMotorPower(new double[][]{{0, 0.75 * power}, {0, 0.75 * power}});
                     telemetry.addData("search the Right Line", robot.valuesRightFront[0]);
                     telemetry.update();
