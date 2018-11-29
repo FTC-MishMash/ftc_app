@@ -3,48 +3,234 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Color;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+
+import java.util.List;
 
 
 /**
  * Created by user on 22/11/2018.
  */
-
+@Autonomous(name = "AutoMode")
 public class autoMode extends LinearOpMode {
+    private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
+    private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
+    private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
+    public int cubePlace = 0;// 0 = NOT HERE, 1 = RIGHT (in camera), 2 = LEFT (in camera)
     //    private static final android.graphics.Color Color = ;
     Robot robot;
+    public static final String VUFORIA_KEY = " ATgDONj/////AAABmW0G/nQirUMiumnzPc6Pl8oJhBOCC2qoUq0BWhir9YWcBFDlhZUfSwATcQArcyyLxIOV21sHaYJeeQEJZfIJ+4spBn3oJ/DfycsbPaNs87+TRpM46/vbUkj1Ok+NtZ/eqMhmMXjFC8dgdCfbCt0aMxoBNzDw4+v28abG+hjUCjVYf86Jq1m7R942XCjw0yhOZqTXWIp3WAZDXY/PdWGQGY/zWae0l6TAZ6Z27t1xYJdkkpLqEsbKM3ZprvtgIs8AsWS9Tri2892OHq2CnCL+1ZHHXKPdxON3fiC1Gd3oihwPhTUReNw0VAg9yeVsVa1UQg7ea9K6WpmVto0FG+T2/LV8uq/3Mp/NHWiNizw2DM4h";
+    ;
+
+    /**
+     * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
+     * localization engine.
+     */
+    public VuforiaLocalizer vuforia;
+
+    /**
+     * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
+     * Detection engine.
+     */
+    public TFObjectDetector tfod;
     DcMotor[][] motors;
     ElapsedTime runTime = new ElapsedTime();
     final double SCALE_FACTOR = 255;
-
+    BNO055IMU imuGlobal;
     static final int PitchtargetAngleMin = -5;
     static final int PitchtargetAngleMax = 5;
     static final int RolltargetAngleMin = -10;
     static final int RolltargetAngleMax = 10;
 
 
-
     @Override
     public void runOpMode() throws InterruptedException {
+
+
         robot = new Robot(hardwareMap);
+        initVuforia();
+
+        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+            initTfod();
+        } else {
+            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+        }
         waitForStart();
         runTime.startTime();
         runTime.reset();
         motors = robot.getDriveTrain();
+
         if (opModeIsActive()) {
-            getDown dow = new getDown();
+
+            getOffTheClimb(imuGlobal, robot.shaft, 0.3);
+            straightOnLine(0, 0.3);
+            driveByColor(0, robot.colorLeftFront, imuGlobal, robot.hsvValuesLeftFront, 0, 0.4);
             //  TODO: add the funcition from the class
+        }
+    }
+
+    public void driveByColor(int color, ColorSensor sensorColor, BNO055IMU imu, float hsvValues[], double heading, double power)//0=red, blue=1
+    {
+        double redColorSensor = robot.redColorLeftSensor;
+        double blueColorSensor = robot.blueColorLeftSensor;
+        ResetHue(sensorColor, hsvValues);
+        double pidErr[] = {0, 0};
+        telemetry.addData("hsvValues[0]", hsvValues[0]);
+        telemetry.update();
+        if (color == 0 && opModeIsActive()) {
+            double time = getRuntime();
+            while (opModeIsActive() && hsvValues[0] > redColorSensor && (time + 2 > getRuntime())) {
+                ResetHue(sensorColor, hsvValues);
+                pidErr = GyroPID(heading, pidErr[1], imu);
+                setMotorPower(new double[][]{{power - pidErr[0], power + pidErr[0]}, {power - pidErr[0], power + pidErr[0]}});
+                telemetry.addLine("ontheGrey");
+                telemetry.addData("heading", imu.getAngularOrientation(AxesReference.INTRINSIC,
+                        AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
+                telemetry.addData("hsvValues[0]", hsvValues[0]);
+                telemetry.update();
+
+            }
+
 
         }
+        if (color == 1 && opModeIsActive()) {
+            double time1 = getRuntime();
+
+            while (opModeIsActive() && hsvValues[0] < blueColorSensor && (time1 + 2 > getRuntime())) {
+                ResetHue(sensorColor, hsvValues);
+                pidErr = GyroPID(heading, pidErr[1], imu);
+                setMotorPower(new double[][]{{power - pidErr[0], power + pidErr[0]}, {power - pidErr[0], power + pidErr[0]}});
+                telemetry.addLine("InDriveBlue");
+                telemetry.addData("heading", imu.getAngularOrientation(AxesReference.INTRINSIC,
+                        AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
+                telemetry.addData("hsvValues[0]", hsvValues[0]);
+                telemetry.update();
+
+            }
+        }
+        setMotorPower(new double[][]{{0, 0}, {0, 0}});
+
+
+    }
+
+    private int getCube() {
+        // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
+        // first..
+//        initVuforia();
+//
+//        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+//            initTfod();
+//        } else {
+//            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+//        }
+//
+//        if (tfod != null) {
+//            tfod.activate();
+//        }
+
+
+        if (tfod != null) {
+            // getUpdatedRecognitions() will return null if no new information is available since
+            // the last time that call was made.
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+
+            }
+//            if (updatedRecognitions.size() == 1 && updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL)) {
+//
+//            }
+            if (updatedRecognitions.size() == 3) {
+                int goldMineralX = -1;
+                int silverMineral1X = -1;
+                int silverMineral2X = -1;
+                for (Recognition recognition : updatedRecognitions) {
+                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                        goldMineralX = (int) recognition.getLeft();
+                    } else if (silverMineral1X == -1) {
+                        silverMineral1X = (int) recognition.getLeft();
+                    } else {
+                        silverMineral2X = (int) recognition.getLeft();
+                    }
+                }
+                if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {//TODO: add cibe place
+                    if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+
+                        telemetry.addData("Gold Mineral Position", "Left");
+                    } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                        telemetry.addData("Gold Mineral Position", "Right");
+                    } else {
+                        telemetry.addData("Gold Mineral Position", "Center");
+                    }
+                }
+            }
+            else if (updatedRecognitions.size() == 2) {
+                int goldMineralX = -1;
+                int silverMineral1X = -1;
+                for (Recognition recognition : updatedRecognitions) {
+                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                        goldMineralX = (int) recognition.getLeft();
+                    } else //if (silverMineral1X == -1) {
+                        silverMineral1X = (int) recognition.getLeft();
+
+                }
+
+                if (updatedRecognitions.size() == 3) {
+
+                }
+
+
+                if (goldMineralX != -1 && silverMineral1X != -1) {
+                    if (goldMineralX < silverMineral1X) {
+                        telemetry.addData("Gold Mineral Position", "Left");
+                        cubePlace = 2;//LEFT in camera
+                    } else if (goldMineralX > silverMineral1X) {
+                        telemetry.addData("Gold Mineral Position", "Right");
+                        cubePlace = 1;//RIGHT in camera
+                    }
+
+                } else {
+                    telemetry.addData("Gold Mineral Position", "NOT HERE");
+                    cubePlace = 0;//NOT in the camera
+                }
+            }
+            telemetry.update();
+        }
+
+
+        if (tfod != null)
+
+        {
+            tfod.shutdown();
+        }
+        return (cubePlace);
+    }
+
+    public double[] GyroPID(double heading, double lasterror, BNO055IMU imu) {
+        double kp = 0.015, kd = 0.01, ki = 0, nexterror = 0;
+        double err = heading - imu.getAngularOrientation(AxesReference.INTRINSIC,
+                AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        while (err > 180)
+            err = err - 360;
+        while (err < -180)
+            err = err + 360;
+        lasterror = err - lasterror;
+        double pd = nexterror * ki + lasterror * kd + err * kp;
+        return (new double[]{-pd, err});
     }
 
     public void getOffTheClimb(BNO055IMU imu, DcMotor[] motorsHanging, double power) {
@@ -53,7 +239,7 @@ public class autoMode extends LinearOpMode {
         Driving.set2MotorPower(motorsHanging, 0);
     }
 
-    public  boolean straightToField(BNO055IMU imu) {
+    public boolean straightToField(BNO055IMU imu) {
         Orientation axis = getAxis(imu);
         return axis.secondAngle > RolltargetAngleMin && axis.secondAngle < RolltargetAngleMax && axis.thirdAngle > PitchtargetAngleMin && axis.thirdAngle < PitchtargetAngleMax;
 
@@ -79,27 +265,28 @@ public class autoMode extends LinearOpMode {
 
     public void straightOnLine(int color, double power) {
 
-        ResetHue(robot.colorRightFront,robot.valuesRightFront);
+        ResetHue(robot.colorRightFront, robot.valuesRightFront);
         ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
-        telemetry.addData("hsvValues[0]", robot.hsvValuesRightFront[0]);
+        telemetry.addData("hsvValues[0]", robot.valuesRightFront[0]);
         telemetry.update();
         if (color == 0) {
 
             double time = getRuntime();
-            while (opModeIsActive() && robot.hsvValuesRightFront[0] > robot.redColorRightSensor && robot.valuesLeftFront[0] > robot.redColorLeftSensor && (time + 1.5 > getRuntime())) {
-                ResetHue(robot.colorRightFront,robot.valuesRightFront);
+            while (opModeIsActive() && robot.valuesRightFront[0] > robot.redColorRightSensor && robot.valuesLeftFront[0] > robot.redColorLeftSensor && (time + 1.5 > getRuntime())) {
+                ResetHue(robot.colorRightFront, robot.valuesRightFront);
                 ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
                 setMotorPower(new double[][]{{power, power}, {power, power}});
                 telemetry.addLine("search the First Line");
-                telemetry.addData("hsvValuesRightFront[0]", robot.hsvValuesRightFront[0]);
+                telemetry.addData("hsvValuesRightFront[0]", robot.valuesRightFront[0]);
                 telemetry.update();
             }
             setMotorPower(new double[][]{{0, 0}, {0, 0}});
 
-            ResetHue(robot.colorRightFront,robot.valuesRightFront);
+            ResetHue(robot.colorRightFront, robot.valuesRightFront);
             ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
             if (robot.valuesRightFront[0] < robot.redColorRightSensor) {
                 while (robot.valuesLeftFront[0] > robot.redColorLeftSensor && opModeIsActive()) {
+                    ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
                     setMotorPower(new double[][]{{0.75 * power, 0}, {0.75 * power, 0}});
                     telemetry.addData("search the left Line", robot.valuesLeftFront[0]);
                     telemetry.update();
@@ -107,6 +294,7 @@ public class autoMode extends LinearOpMode {
             }
             if (robot.valuesLeftFront[0] < robot.redColorLeftSensor) {
                 while (robot.valuesRightFront[0] > robot.redColorRightSensor && opModeIsActive()) {
+                    ResetHue(robot.colorRightFront, robot.valuesRightFront);
                     setMotorPower(new double[][]{{0, 0.75 * power}, {0, 0.75 * power}});
                     telemetry.addData("search the Right Line", robot.valuesRightFront[0]);
                     telemetry.update();
@@ -117,20 +305,21 @@ public class autoMode extends LinearOpMode {
         if (color == 1) {
 
             double time = getRuntime();
-            while (opModeIsActive() && robot.hsvValuesRightFront[0] > robot.blueColorRightSensor && robot.valuesLeftFront[0] > robot.blueColorLeftSensor && (time + 1.5 > getRuntime())) {
-                ResetHue(robot.colorRightFront,robot.valuesRightFront);
+            while (opModeIsActive() && robot.valuesRightFront[0] > robot.blueColorRightSensor && robot.valuesLeftFront[0] > robot.blueColorLeftSensor && (time + 1.5 > getRuntime())) {
+                ResetHue(robot.colorRightFront, robot.valuesRightFront);
                 ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
                 setMotorPower(new double[][]{{power, power}, {power, power}});
                 telemetry.addLine("search the First Line");
-                telemetry.addData("hsvValuesRightFront[0]", robot.hsvValuesRightFront[0]);
+                telemetry.addData("hsvValuesRightFront[0]", robot.valuesRightFront[0]);
                 telemetry.update();
             }
             setMotorPower(new double[][]{{0, 0}, {0, 0}});
 
-            ResetHue(robot.colorRightFront,robot.valuesRightFront);
+            ResetHue(robot.colorRightFront, robot.valuesRightFront);
             ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
             if (robot.valuesRightFront[0] < robot.redColorRightSensor) {
                 while (robot.valuesLeftFront[0] > robot.redColorLeftSensor && opModeIsActive()) {
+                    ResetHue(robot.colorLeftFront, robot.valuesLeftFront);
                     setMotorPower(new double[][]{{0.75 * power, 0}, {0.75 * power, 0}});
                     telemetry.addData("search the left Line", robot.valuesLeftFront[0]);
                     telemetry.update();
@@ -138,6 +327,7 @@ public class autoMode extends LinearOpMode {
             }
             if (robot.valuesLeftFront[0] < robot.redColorLeftSensor) {
                 while (robot.valuesRightFront[0] > robot.redColorRightSensor && opModeIsActive()) {
+                    ResetHue(robot.colorRightFront, robot.valuesRightFront);
                     setMotorPower(new double[][]{{0, 0.75 * power}, {0, 0.75 * power}});
                     telemetry.addData("search the Right Line", robot.valuesRightFront[0]);
                     telemetry.update();
@@ -146,4 +336,32 @@ public class autoMode extends LinearOpMode {
 
         }
     }
+
+    public void initVuforia() {
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         */
+
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
+    }
+
+    /**
+     * Initialize the Tensor Flow Object Detection engine.
+     */
+    public void initTfod() {
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+    }
+
 }

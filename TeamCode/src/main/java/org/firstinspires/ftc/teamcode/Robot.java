@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
@@ -33,12 +34,22 @@ public class Robot {
         shaft = new DcMotor[2];
 
 
-//        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
-//        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
-//        driveTrain[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
-//        driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
-//        driveTrain[0][1] = hardwareMap.get(DcMotor.class, "rightFront");
-//        driveTrain[1][1] = hardwareMap.get(DcMotor.class, "rightBack");
+        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
+        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
+        driveTrain[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
+        driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
+        driveTrain[0][1] = hardwareMap.get(DcMotor.class, "rightFront");
+        driveTrain[1][1] = hardwareMap.get(DcMotor.class, "rightBack");
+
+        driveTrain[0][0].setDirection(DcMotorSimple.Direction.FORWARD);
+        driveTrain[0][1].setDirection(DcMotorSimple.Direction.REVERSE);
+        driveTrain[1][0].setDirection(DcMotorSimple.Direction.FORWARD);
+        driveTrain[1][1].setDirection(DcMotorSimple.Direction.REVERSE);
+
+        driveTrain[0][0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        driveTrain[0][1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        driveTrain[1][0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        driveTrain[1][1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        shaft[0] = hardwareMap.get(DcMotor.class, "shaft0");
 //        shaft[1] = hardwareMap.get(DcMotor.class, "shaft1");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
