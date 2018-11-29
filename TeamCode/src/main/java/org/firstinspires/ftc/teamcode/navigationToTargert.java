@@ -68,7 +68,7 @@ public class navigationToTargert extends LinearOpMode {
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection = CAMERA_CHOICE;
-        //parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
@@ -169,24 +169,23 @@ public class navigationToTargert extends LinearOpMode {
      */
     private void driveToImage() {
         //  Driving.setMotorPower(motors, new double[][]{{0.5, 0.5}, {0.5, 0.5}});
-        float[] positions = getPositions()
-                ;
-        if (positions != null)
-            while (positions[5]<=45) {
+        float[] positions = getPositions();
+        if (positions != null) {
+            while (positions[5] <= 45) {
                 positions = getPositions();
                 telemetry.addData("heading:", positions[5]);
                 telemetry.update();
                 //  TODO: Add motors turning ;
             }
-        while (positions[1]>=0) {
-            positions = getPositions();
-            telemetry.addData("y:", positions[1]);
+            while (positions[1] >= 0) {
+                positions = getPositions();
+                telemetry.addData("y:", positions[1]);
+                telemetry.update();
+                //  TODO:Add motors driving;
+            }
+            telemetry.addLine("got to y=0");
             telemetry.update();
-            //  TODO:Add motors driving;
         }
-        telemetry.addLine("got to y=0");
-        telemetry.update();
-
     }
 
     public float[] getPositions() {
