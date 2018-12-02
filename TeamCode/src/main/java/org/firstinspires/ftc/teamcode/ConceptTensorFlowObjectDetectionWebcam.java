@@ -136,12 +136,13 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
                                 } else {
                                     telemetry.addData("Gold Mineral Position", "Center");
                                 }
+                                telemetry.update();
                             }
                         }
                         telemetry.update();
                     } else
                     {
-                        telemetry.addData("NULL", "Center");
+                        telemetry.addLine("NULL");
                     telemetry.update();
                 }
 
