@@ -121,12 +121,13 @@ public class Sampling extends LinearOpMode {
 //                    break;
 //        }
         if (tfod != null)
+
         do {
             List<Recognition> updatedRecognitions  = tfod.getUpdatedRecognitions();
 
 
             if (updatedRecognitions != null
-//                    && !updatedRecognitions.isEmpty()
+                    && !updatedRecognitions.isEmpty()//was changed
                 //     && updatedRecognitions.get(0) != null
                     )
             {
