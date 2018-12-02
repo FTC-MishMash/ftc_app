@@ -234,9 +234,9 @@ public class autoMode extends LinearOpMode {
     }
 
     public void getOffTheClimb(BNO055IMU imu, DcMotor[] motorsHanging, double power) {
-        Driving.set2MotorPower(motorsHanging, power);
+        DriveRoverRuckus.Driving.set2MotorPower(motorsHanging, power);
         while (!straightToField(imu)) ;
-        Driving.set2MotorPower(motorsHanging, 0);
+        DriveRoverRuckus.Driving.set2MotorPower(motorsHanging, 0);
     }
 
     public boolean straightToField(BNO055IMU imu) {

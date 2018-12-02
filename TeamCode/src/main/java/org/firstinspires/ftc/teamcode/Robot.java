@@ -16,6 +16,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
 public class Robot {
     public DcMotor[][] driveTrain;
     public DcMotor[] shaft;
+    public DcMotor[] linear;
     public ColorSensor colorRightFront;
     public ColorSensor colorLeftFront;
     float hsvValuesLeftFront[] = {0F, 0F, 0F};
@@ -32,7 +33,10 @@ public class Robot {
     public Robot(HardwareMap hardwareMap) {
         driveTrain = new DcMotor[2][2];
         shaft = new DcMotor[2];
+        linear = new DcMotor[2];
 
+        linear[0] = hardwareMap.get(DcMotor.class, "linearRight");
+        linear[1] = hardwareMap.get(DcMotor.class, "linearLeft");
 
         colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
         colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
