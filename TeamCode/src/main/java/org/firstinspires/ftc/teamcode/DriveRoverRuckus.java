@@ -177,6 +177,22 @@ public class DriveRoverRuckus {
                 robot.shaft[0].setPower(0);
                 robot.shaft[1].setPower(0);
             }
+            if (gamepad2.left_bumper){
+                robot.shaft[0].setTargetPosition(8000);
+                robot.shaft[1].setTargetPosition(8000);
+                robot.shaft[0].setPower(0.8);
+                robot.shaft[1].setPower(0.8);
+                robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.linear[0].setTargetPosition(6700);
+                robot.linear[1].setTargetPosition(6700);
+                robot.linear[0].setPower(0.75);
+                robot.linear[1].setPower(0.75);
+                robot.linear[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            }
+
         }
 
 
