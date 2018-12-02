@@ -73,7 +73,7 @@ public class autoMode extends LinearOpMode {
         if (tfod != null) {
             tfod.activate();
         }
-        while ( !isStarted())
+        while (!isStarted())
             getCube();
         if (tfod != null)
 
@@ -164,60 +164,61 @@ public class autoMode extends LinearOpMode {
             if (updatedRecognitions != null) {
                 telemetry.addData("# Object Detected", updatedRecognitions.size());
 
-            }
+
 //            if (updatedRecognitions.size() == 1 && updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL)) {
 //
 //            }
-            if (updatedRecognitions.size() == 3) {
-                int goldMineralX = -1;
-                int silverMineral1X = -1;
-                int silverMineral2X = -1;
-                for (Recognition recognition : updatedRecognitions) {
-                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                        goldMineralX = (int) recognition.getLeft();
-                    } else if (silverMineral1X == -1) {
-                        silverMineral1X = (int) recognition.getLeft();
+                if (updatedRecognitions.size() == 3) {
+                    int goldMineralX = -1;
+                    int silverMineral1X = -1;
+                    int silverMineral2X = -1;
+                    for (Recognition recognition : updatedRecognitions) {
+                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                            goldMineralX = (int) recognition.getLeft();
+                        } else if (silverMineral1X == -1) {
+                            silverMineral1X = (int) recognition.getLeft();
+                        } else {
+                            silverMineral2X = (int) recognition.getLeft();
+                        }
+                    }
+                    if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {//TODO: add cibe place
+                        if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+
+                            telemetry.addData("Gold Mineral Position", "Left");
+                            cubePlace = 2;//Left
+                        } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                            telemetry.addData("Gold Mineral Position", "Right");
+                            cubePlace = 1;//Right
+                        } else {
+                            telemetry.addData("Gold Mineral Position", "Center");
+                            cubePlace = 4;//center
+                        }
+                    }
+                } else if (updatedRecognitions.size() == 2) {
+                    int goldMineralX = -1;
+                    int silverMineral1X = -1;
+                    for (Recognition recognition : updatedRecognitions) {
+                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                            goldMineralX = (int) recognition.getLeft();
+                        } else //if (silverMineral1X == -1) {
+                            silverMineral1X = (int) recognition.getLeft();
+
+                    }
+
+
+                    if (goldMineralX != -1 && silverMineral1X != -1) {
+                        if (goldMineralX < silverMineral1X) {
+                            telemetry.addData("Gold Mineral Position", "Left");
+                            cubePlace = 2;//LEFT in camera
+                        } else if (goldMineralX > silverMineral1X) {
+                            telemetry.addData("Gold Mineral Position", "Right");
+                            cubePlace = 1;//RIGHT in camera
+                        }
+
                     } else {
-                        silverMineral2X = (int) recognition.getLeft();
+                        telemetry.addData("Gold Mineral Position", "NOT HERE");
+                        cubePlace = 0;//NOT in the camera
                     }
-                }
-                if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {//TODO: add cibe place
-                    if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-
-                        telemetry.addData("Gold Mineral Position", "Left");
-                        cubePlace = 2;//Left
-                    } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                        telemetry.addData("Gold Mineral Position", "Right");
-                        cubePlace = 1;//Right
-                    } else {
-                        telemetry.addData("Gold Mineral Position", "Center");
-                        cubePlace = 4;//center
-                    }
-                }
-            } else if (updatedRecognitions.size() == 2) {
-                int goldMineralX = -1;
-                int silverMineral1X = -1;
-                for (Recognition recognition : updatedRecognitions) {
-                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                        goldMineralX = (int) recognition.getLeft();
-                    } else //if (silverMineral1X == -1) {
-                        silverMineral1X = (int) recognition.getLeft();
-
-                }
-
-
-                if (goldMineralX != -1 && silverMineral1X != -1) {
-                    if (goldMineralX < silverMineral1X) {
-                        telemetry.addData("Gold Mineral Position", "Left");
-                        cubePlace = 2;//LEFT in camera
-                    } else if (goldMineralX > silverMineral1X) {
-                        telemetry.addData("Gold Mineral Position", "Right");
-                        cubePlace = 1;//RIGHT in camera
-                    }
-
-                } else {
-                    telemetry.addData("Gold Mineral Position", "NOT HERE");
-                    cubePlace = 0;//NOT in the camera
                 }
             }
             telemetry.update();

@@ -14,7 +14,7 @@ import java.util.List;
 
 @TeleOp(name = "follow cube")
 public class Sampling extends LinearOpMode {
-    int goldIndex = 0;
+
     DcMotor[] drivetrainDC = new DcMotor[4];
     //drivetrainDC[0] = RIGHT
     //drivetrainDC[1] = LEFT
