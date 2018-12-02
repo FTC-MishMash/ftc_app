@@ -14,7 +14,7 @@ import java.util.List;
 
 @TeleOp(name = "follow cube")
 public class Sampling extends LinearOpMode {
-    int goldIndex = 0;
+
     DcMotor[] drivetrainDC = new DcMotor[4];
     //drivetrainDC[0] = RIGHT
     //drivetrainDC[1] = LEFT
@@ -79,6 +79,7 @@ public class Sampling extends LinearOpMode {
         if (tfod != null) {
             tfod.activate();
         }
+
         followCube(0.2);
 //        if (getCube() == 0) {
 //
@@ -101,10 +102,11 @@ public class Sampling extends LinearOpMode {
         double distanceFromLeft = 0;
         double middleCubeX = 0;
         double k = 0.0007; //EDEN
-        double[] addToMotors = new double[2];
+        double[] addToMotors;
+        addToMotors = new double[2];
+        boolean firstGold = false;
+        boolean breakLoop = false;
 
-
-        List<Recognition> updatedRecognitions = null;
 
 
 //        while (opModeIsActive()) {//TODO: ADD CONDITION
@@ -118,36 +120,50 @@ public class Sampling extends LinearOpMode {
 //                        && updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL))
 //                    break;
 //        }
+        if (tfod != null)
+        do {
+            List<Recognition> updatedRecognitions  = tfod.getUpdatedRecognitions();
 
 
-        while (opModeIsActive()) {
-            if (tfod != null)
-                updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null
-                    && !updatedRecognitions.isEmpty()
-               //     && updatedRecognitions.get(0) != null
-                    && updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL)) {
-                middleCubeX = ((updatedRecognitions.get(0).getLeft() + updatedRecognitions.get(0).getRight()) / 2);
-                distanceFromRight = 700 - middleCubeX;
-                distanceFromLeft = middleCubeX;
-                telemetry.addLine("follow cube 4:");
+//                    && !updatedRecognitions.isEmpty()
+                //     && updatedRecognitions.get(0) != null
+                    )
+            {
+                if  (updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL))
+                {
+                    firstGold = true;
+                    middleCubeX = ((updatedRecognitions.get(0).getLeft() + updatedRecognitions.get(0).getRight()) / 2);
+                    distanceFromRight = 700 - middleCubeX;
+                    distanceFromLeft = middleCubeX;
+                    telemetry.addLine("follow cube 4:");
 
-                addToMotors[0] = k * distanceFromRight;  //RIGHT
-                addToMotors[1] = k * distanceFromLeft; //LEFT
-                telemetry.addData("distance From Right:", addToMotors[0]);
-                telemetry.addData("distance From Left:", addToMotors[1]);
-                telemetry.update();
+                    addToMotors[0] = k * distanceFromRight;  //RIGHT
+                    addToMotors[1] = k * distanceFromLeft; //LEFT
+                    telemetry.addData("distance From Right:", addToMotors[0]);
+                    telemetry.addData("distance From Left:", addToMotors[1]);
+                    telemetry.update();
 
-                if (!noMotor) {
-                    drivetrainDC[0].setPower(addToMotors[0] + power);//RIGHT Front
-                    drivetrainDC[1].setPower(addToMotors[0] + power);//Right Back
-                    drivetrainDC[2].setPower(addToMotors[1] + power);//Left Back
-                    drivetrainDC[3].setPower(addToMotors[1] + power);//LEFT Front
+                    if (!noMotor) {
+                        drivetrainDC[0].setPower(addToMotors[0] + power);//RIGHT Front
+                        drivetrainDC[1].setPower(addToMotors[0] + power);//Right Back
+                        drivetrainDC[2].setPower(addToMotors[1] + power);//Left Back
+                        drivetrainDC[3].setPower(addToMotors[1] + power);//LEFT Front
+
+                    }
                 }
-            } else {
-                telemetry.addLine("dont see cube");
+                else {
+                    if (firstGold)
+                        breakLoop = true;
+                    telemetry.addLine("dont see cube 1");
+                    telemetry.update();
+                }
+            }
+            else
+            {
+                telemetry.addLine("dont see cube 2");
                 telemetry.update();
-         //       break;
+                //       break;
             }
 
 //            powerAdd ToMotors[0] = getPowerMotor()[0];//RIGHT
@@ -155,18 +171,20 @@ public class Sampling extends LinearOpMode {
 
 
             //   break;
+
+
+            //    }
+            if (!noMotor) {
+
+                drivetrainDC[0].setPower(0);//RIGHT Front
+                drivetrainDC[1].setPower(0);//Right Back
+                drivetrainDC[2].setPower(0);//Left Back
+                drivetrainDC[3].setPower(0);//LEFT Front
+
+            }
+
         }
-
-
-        //    }
-        if (!noMotor) {
-
-            drivetrainDC[0].setPower(0);//RIGHT Front
-            drivetrainDC[1].setPower(0);//Right Back
-            drivetrainDC[2].setPower(0);//Left Back
-            drivetrainDC[3].setPower(0);//LEFT Front
-
-        }
+        while (opModeIsActive() && !breakLoop);
     }
 
     private int getCube() {
@@ -214,7 +232,7 @@ public class Sampling extends LinearOpMode {
 
                         }
 
-                            if (updatedRecognitions.size() == 3) {
+                        if (updatedRecognitions.size() == 3) {
 
                         }
 

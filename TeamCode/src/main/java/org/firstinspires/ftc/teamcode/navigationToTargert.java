@@ -182,7 +182,7 @@ public class navigationToTargert extends LinearOpMode {
             positions = getPositions();
             telemetry.addData("y:", positions[1]);
             telemetry.update();
-            //  TODO:Add motors driving;+-
+            //  TODO:Add motors driving;
         }
         telemetry.addLine("got to y=0");
         telemetry.update();
