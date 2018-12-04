@@ -17,7 +17,7 @@ public class Red_1_gyro extends LinearOpMode {
     public void guro_drive(){
         double power= 0.3;
         setMotorPower(new double[][]{{power, power}, {power, power}});
-        while (getRoll()<=-30){
+        while (getRoll()<=-55){
             setMotorPower(new double[][]{{power, power}, {power, power}});
         }
         setMotorPower(new double[][]{{0, 0}, {0, 0}});
