@@ -35,7 +35,6 @@ public class Robot {
         driveTrain = new DcMotor[2][2];
         shaft = new DcMotor[2];
         linear = new DcMotor[2];
-
         inTake = hardwareMap.get(DcMotor.class, "inTake");
 
         linear[0] = hardwareMap.get(DcMotor.class, "linearRight");
