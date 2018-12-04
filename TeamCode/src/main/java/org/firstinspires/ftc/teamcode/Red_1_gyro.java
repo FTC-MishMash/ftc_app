@@ -26,9 +26,12 @@ public class Red_1_gyro extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        markIII=new Robot(hardwareMap);
+    //    markIII=new Robot(hardware Map);
         gyro = markIII.getImu();
         DriveMotors = markIII.getDriveTrain();
+
+
+
 
     }
     public float getRoll(){
