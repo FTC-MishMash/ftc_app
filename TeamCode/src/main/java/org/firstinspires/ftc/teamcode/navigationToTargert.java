@@ -23,7 +23,6 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
-import static org.firstinspires.ftc.teamcode.VuforiaWebCamImagesTargets.allTrackables;
 
 /**
  * Created by user on 06/11/2018.
@@ -61,6 +60,8 @@ public class navigationToTargert extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        robot = new Robot(hardwareMap);
+        motors = robot.getDriveTrain();
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
@@ -68,7 +69,7 @@ public class navigationToTargert extends LinearOpMode {
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection = CAMERA_CHOICE;
-        //parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
@@ -85,7 +86,7 @@ public class navigationToTargert extends LinearOpMode {
         backSpace.setName("Back-Space");
 
         // For convenience, gather together all the trackable objects in one easily-iterable collection */
-       allTrackablesNav = new ArrayList<VuforiaTrackable>();
+        allTrackablesNav = new ArrayList<VuforiaTrackable>();
         allTrackablesNav.addAll(targetsRoverRuckus);
 
 
@@ -130,7 +131,7 @@ public class navigationToTargert extends LinearOpMode {
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start tracking");
         telemetry.update();
-        waitForStart();
+
 
         /** Start tracking the data sets we care about. */
         targetsRoverRuckus.activate();
@@ -155,7 +156,7 @@ public class navigationToTargert extends LinearOpMode {
 //            if (lastLocation != null) {
 //                //  RobotLog.vv(TAG, "robot=%s", format(lastLocation));
 //                telemetry.addData("Pos", lastLocation);
-                driveToImage();
+            driveToImage();
 //            } else {
 //                telemetry.addData("Pos", "Unknown");
 //            }
@@ -168,25 +169,43 @@ public class navigationToTargert extends LinearOpMode {
      * Driving the robot near the target image and turn it across the depot.
      */
     private void driveToImage() {
-        //  Driving.setMotorPower(motors, new double[][]{{0.5, 0.5}, {0.5, 0.5}});
-        float[] positions = getPositions()
-                ;
-        if (positions != null)
-            while (positions[5]<=45) {
+        //  Driving.setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
+        float[] positions = getPositions();
+        if (positions != null) {
+            setMotorPower(motors, new double[][]{{-0.23, 0.23}, {-0.23, 0.23}});
+            while (positions[5] >= 120) {
                 positions = getPositions();
                 telemetry.addData("heading:", positions[5]);
                 telemetry.update();
-                //  TODO: Add motors turning ;
             }
-        while (positions[1]>=0) {
-            positions = getPositions();
-            telemetry.addData("y:", positions[1]);
-            telemetry.update();
-            //  TODO:Add motors driving;
-        }
-        telemetry.addLine("got to y=0");
-        telemetry.update();
+            setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
+            sleep(1000);
+            setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
+            while (positions[1] >= 0) {
+                positions = getPositions();
+                telemetry.addData("y:", positions[1]);
+                telemetry.update();
+            }
 
+            telemetry.addLine("got to y=0");
+            telemetry.update();
+            setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
+            sleep(1000);
+            setMotorPower(motors, new double[][]{{0.23, -0.23}, {0.23, -0.23}});
+            while (positions[5] >= 90) {
+                positions = getPositions();
+                telemetry.addData("y:", positions[1]);
+                telemetry.update();
+            }
+            setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
+
+        }
+    }
+
+    public void setMotorPower(DcMotor[][] motors, double[][] power) { //Stores the four drivetrain motors power in array
+        for (int row = 0; opModeIsActive() && row < 2; row++)
+            for (int col = 0; opModeIsActive() && col < 2; col++)
+                motors[row][col].setPower(power[row][col]);
     }
 
     public float[] getPositions() {

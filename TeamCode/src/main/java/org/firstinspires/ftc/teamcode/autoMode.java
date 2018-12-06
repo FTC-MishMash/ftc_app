@@ -78,12 +78,12 @@ public class autoMode extends LinearOpMode {
         int cubePlace = 0;
         while (!isStarted())
             cubePlace = getCube();
-
-        if (tfod != null)
-
-        {
-            tfod.shutdown();
-        }
+//
+//        if (tfod != null)
+//
+//        {
+//            tfod.shutdown();
+//        }
         waitForStart();
         runTime.startTime();
         runTime.reset();
