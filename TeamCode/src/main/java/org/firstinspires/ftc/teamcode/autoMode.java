@@ -374,9 +374,9 @@ public class autoMode extends LinearOpMode {
     }
 
     public void getOffTheClimb(BNO055IMU imu, DcMotor[] motorsHanging, double power) {
-        DriveRoverRuckus.Driving.set2MotorPower(motorsHanging, power);
+         setMotorPower( power);
         while (!straightToField(imu)) ;
-        DriveRoverRuckus.Driving.set2MotorPower(motorsHanging, 0);
+          setMotorPower( 0);
     }
 
     public boolean straightToField(BNO055IMU imu) {
@@ -402,7 +402,10 @@ public class autoMode extends LinearOpMode {
             for (int col = 0; opModeIsActive() && col < 2; col++)
                 robot.driveTrain[row][col].setPower(power[row][col]);
     }
-
+    public void setMotorPower(double power) { //Stores the four drivetrain motors power in array
+        for (int row = 0; opModeIsActive() && row < 2; row++)
+                robot.shaft[row].setPower(power);
+    }
     public void straightOnLine(int color, double power) {
 
         ResetHue(robot.colorRightFront, robot.valuesRightFront);
