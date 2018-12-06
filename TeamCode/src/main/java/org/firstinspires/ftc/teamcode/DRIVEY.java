@@ -18,7 +18,7 @@ import static java.lang.Thread.sleep;
 @TeleOp(name = "DRIVEY", group = "Iterative Opmode")
 //@Disabled
 public class DRIVEY extends OpMode {
-    double posRelic;
+    double   posRelic;
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor[][] drivetrainDC = new DcMotor[3][3];

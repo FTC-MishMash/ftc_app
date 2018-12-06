@@ -137,6 +137,14 @@ public class navigationToTargert extends LinearOpMode {
         targetsRoverRuckus.activate();
         waitForStart();
         while (opModeIsActive()) {
+            float[] pos = getPositions();
+            if (pos != null) {
+                telemetry.addData("pos: ", pos [0]);
+                telemetry.addData("pos: ", pos [1]);
+                telemetry.addData("pos: ", pos [2]);
+                telemetry.addData("pos: ", pos [3]);
+                telemetry.update();
+            }
 //           for (VuforiaTrackable trackable : allTrackables) {
 //                /**
 //                 * getUpdatedRobotLocation() will return null if no new information is available since
@@ -156,7 +164,7 @@ public class navigationToTargert extends LinearOpMode {
 //            if (lastLocation != null) {
 //                //  RobotLog.vv(TAG, "robot=%s", format(lastLocation));
 //                telemetry.addData("Pos", lastLocation);
-            driveToImage();
+            //   driveToImage();
 //            } else {
 //                telemetry.addData("Pos", "Unknown");
 //            }
