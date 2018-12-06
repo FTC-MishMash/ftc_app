@@ -37,6 +37,7 @@ public class Red_1_gyro extends LinearOpMode {
     public float getRoll(){
         return gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).secondAngle;
     }
+
     public void setMotorPower(double[][] power) { //Stores the four drivetrain motors power in array
         for (int row = 0; opModeIsActive() && row < 2; row++)
             for (int col = 0; opModeIsActive() && col < 2; col++)
