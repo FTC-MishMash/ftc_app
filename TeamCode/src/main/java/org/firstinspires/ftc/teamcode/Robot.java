@@ -35,20 +35,20 @@ public class Robot {
         driveTrain = new DcMotor[2][2];
         shaft = new DcMotor[2];
         linear = new DcMotor[2];
-        inTake = hardwareMap.get(DcMotor.class, "inTake");
-
-        linear[0] = hardwareMap.get(DcMotor.class, "linearRight");
-        linear[1] = hardwareMap.get(DcMotor.class, "linearLeft");
-
-        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
-        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
+//        inTake = hardwareMap.get(DcMotor.class, "inTake");
+//
+//        linear[0] = hardwareMap.get(DcMotor.class, "linearRight");
+//        linear[1] = hardwareMap.get(DcMotor.class, "linearLeft");
+//
+//        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
+//        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
         driveTrain[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
         driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
         driveTrain[0][1] = hardwareMap.get(DcMotor.class, "rightFront");
         driveTrain[1][1] = hardwareMap.get(DcMotor.class, "rightBack");
 
-        driveTrain[0][0].setDirection(DcMotorSimple.Direction.FORWARD);
-        driveTrain[0][1].setDirection(DcMotorSimple.Direction.REVERSE);
+        driveTrain[0][0].setDirection(DcMotorSimple.Direction.REVERSE);
+        driveTrain[0][1].setDirection(DcMotorSimple.Direction.FORWARD);
         driveTrain[1][0].setDirection(DcMotorSimple.Direction.FORWARD);
         driveTrain[1][1].setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -56,8 +56,8 @@ public class Robot {
         driveTrain[0][1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         driveTrain[1][0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         driveTrain[1][1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        shaft[0] = hardwareMap.get(DcMotor.class, "shaft0");
-        shaft[1] = hardwareMap.get(DcMotor.class, "shaft1");
+//        shaft[0] = hardwareMap.get(DcMotor.class, "shaft0");
+//        shaft[1] = hardwareMap.get(DcMotor.class, "shaft1");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;

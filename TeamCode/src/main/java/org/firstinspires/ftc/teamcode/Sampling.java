@@ -76,14 +76,17 @@ public class Sampling extends LinearOpMode {
             tfod.activate();
         }
 
-        followCube(0.2);
-//        if (getCube() == 0) {
+//        int placeCube = getCube();
+//        if (placeCube == 0) {
 //
-//        } else if (getCube() == 1) {
+//        } else if (placeCube == 1) {
 //
-//        } else if (getCube() == 2) {
+//        } else if (placeCube == 2) {
+//
+//        } else if (placeCube ==3){
 //
 //        }
+            followCube(0.3);
         if (tfod != null) {
             tfod.shutdown();
         }
@@ -178,7 +181,7 @@ public class Sampling extends LinearOpMode {
             while (opModeIsActive() && !breakLoop);
     }
 
-    private int getCube() {
+    public int getCube() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first..
         initVuforia();

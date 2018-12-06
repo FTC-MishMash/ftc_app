@@ -69,12 +69,16 @@ public class autoMode extends LinearOpMode {
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
         if (tfod != null) {
             tfod.activate();
         }
+        int cubePlace = 0;
         while (!isStarted())
-            getCube();
+            cubePlace = getCube();
+
         if (tfod != null)
 
         {
@@ -209,9 +213,11 @@ public class autoMode extends LinearOpMode {
                     if (goldMineralX != -1 && silverMineral1X != -1) {
                         if (goldMineralX < silverMineral1X) {
                             telemetry.addData("Gold Mineral Position", "Left");
+                            telemetry.addLine("in camera");
                             cubePlace = 2;//LEFT in camera
                         } else if (goldMineralX > silverMineral1X) {
                             telemetry.addData("Gold Mineral Position", "Right");
+                            telemetry.addLine("in camera");
                             cubePlace = 1;//RIGHT in camera
                         }
 
@@ -227,6 +233,93 @@ public class autoMode extends LinearOpMode {
 
 
         return (cubePlace);
+    }
+
+    private void followCube(double power) {
+        telemetry.addLine("follow cube 1:");
+        telemetry.update();
+
+        double distanceFromRight = 0;
+        double distanceFromLeft = 0;
+        double middleCubeX = 0;
+        double k = 0.0007; //EDEN
+        double[] addToMotors;
+        addToMotors = new double[2];
+        boolean firstGold = false;
+        boolean breakLoop = false;
+
+
+//        while (opModeIsActive()) {//TODO: ADD CONDITION
+//            telemetry.addLine("search cube 1");
+//            telemetry.update();
+//            if (tfod != null)
+//                updatedRecognitions = tfod.getUpdatedRecognitions();
+//
+//            if (updatedRecognitions != null
+//               &&!updatedRecognitions.isEmpty()
+//                        && updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL))
+//                    break;
+//        }
+        if (tfod != null)
+
+            do {
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+
+
+                if (updatedRecognitions != null
+                        && !updatedRecognitions.isEmpty()//was changed
+                    //     && updatedRecognitions.get(0) != null
+                        ) {
+                    if (updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL)) {
+                        firstGold = true;
+                        middleCubeX = ((updatedRecognitions.get(0).getLeft() + updatedRecognitions.get(0).getRight()) / 2);
+                        distanceFromRight = 700 - middleCubeX;
+                        distanceFromLeft = middleCubeX;
+                        telemetry.addLine("follow cube 4:");
+
+                        addToMotors[0] = k * distanceFromRight;  //RIGHT
+                        addToMotors[1] = k * distanceFromLeft; //LEFT
+                        telemetry.addData("distance From Right:", addToMotors[0]);
+                        telemetry.addData("distance From Left:", addToMotors[1]);
+                        telemetry.update();
+
+
+                        robot.driveTrain[0][1].setPower(addToMotors[0] + power);//RIGHT Front
+                        robot.driveTrain[1][1].setPower(addToMotors[0] + power);//Right Back
+                        robot.driveTrain[1][0].setPower(addToMotors[1] + power);//Left Back
+                        robot.driveTrain[0][0].setPower(addToMotors[1] + power);//LEFT Front
+
+
+                    } else {
+                        if (firstGold)
+                            breakLoop = true;
+                        telemetry.addLine("dont see cube 1");
+                        telemetry.update();
+                    }
+                } else {
+                    telemetry.addLine("dont see cube 2");
+                    telemetry.update();
+                    //       break;
+                }
+
+//            powerAdd ToMotors[0] = getPowerMotor()[0];//RIGHT
+//            powerAddToMotors[1] = getPowerMotor()[1];//LEFT
+
+
+                //   break;
+
+
+                //    }
+
+
+                robot.driveTrain[0][1].setPower(0);//RIGHT Front
+                robot.driveTrain[1][1].setPower(0);//Right Back
+                robot.driveTrain[1][0].setPower(0);//Left Back
+                robot.driveTrain[0][0].setPower(0);//LEFT Front
+
+
+            }
+            while (opModeIsActive() && !breakLoop);
     }
 
     public double[] GyroPID(double heading, double lasterror, BNO055IMU imu) {
