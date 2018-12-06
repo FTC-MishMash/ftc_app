@@ -212,9 +212,9 @@ public class Sampling extends LinearOpMode {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
 
                     }
-                    if (updatedRecognitions.size() == 1 && updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL)) {
-
-                    }
+//                    if (updatedRecognitions.size() == 1 && updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL)) {
+////
+////                    }
                     if (updatedRecognitions.size() == 2) {
                         int goldMineralX = -1;
                         int silverMineral1X = -1;
