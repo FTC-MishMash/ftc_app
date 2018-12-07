@@ -67,8 +67,7 @@ BNO055IMU imu;
     @Override
 
     public void init() {
-        telemetry.addData("",imu.getAngularOrientation(AxesReference.INTRINSIC,
-                AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
+
 
         telemetry.addData("Status", "Initialized");
 

@@ -21,15 +21,6 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.Driving.getCurrentScaledAngle;
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.DcMotor;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-
 
 /**
  * Created by user on 22/11/2018.
@@ -58,7 +49,7 @@ public class autoMode extends LinearOpMode {
     DcMotor[][] motors;
     ElapsedTime runTime = new ElapsedTime();
     final double SCALE_FACTOR = 255;
-    BNO055IMU imuGlobal;
+
     static final int PitchtargetAngleMin = -5;
     static final int PitchtargetAngleMax = 5;
     static final int RolltargetAngleMin = -10;
@@ -97,15 +88,15 @@ public class autoMode extends LinearOpMode {
 
         } else if (cubePlace == 0) {//see only 2 balls
 
-            Driving.ScaledTurn(50,motors,imuGlobal,0.5,telemetry);
+            Driving.ScaledTurn(50, motors, robot.imu, 0.5, telemetry);
 
         } else if (cubePlace == 1) {//cube RIGHT
 
-            Driving.ScaledTurn(5,motors,imuGlobal,0.5,telemetry);
+            Driving.ScaledTurn(15, motors, robot.imu, 0.5, telemetry);
 
         } else if (cubePlace == 2) {//cube LEFT
 
-            Driving.ScaledTurn(-65,motors,imuGlobal,0.5,telemetry);
+            Driving.ScaledTurn(70, motors, robot.imu, 0.5, telemetry);
 
         } else if (cubePlace == 3) {//cube CENTER
             //No need to move
@@ -113,11 +104,11 @@ public class autoMode extends LinearOpMode {
 
         } else if (cubePlace == 4) {//cube RIGHT in camera
 
-            Driving.ScaledTurn(50,motors,imuGlobal,0.5,telemetry);
+//            Driving.ScaledTurn(50,motors,robot.imu,0.5,telemetry);
 
         } else if (cubePlace == 5) {//cube LEFT in camera
 
-            Driving.ScaledTurn(50,motors,imuGlobal,0.5,telemetry);
+//            Driving.ScaledTurn(50,motors,robot.imu,0.5,telemetry);
 
         }
 
@@ -374,9 +365,9 @@ public class autoMode extends LinearOpMode {
     }
 
     public void getOffTheClimb(BNO055IMU imu, DcMotor[] motorsHanging, double power) {
-         setMotorPower( power);
+        setMotorPower(power);
         while (!straightToField(imu)) ;
-          setMotorPower( 0);
+        setMotorPower(0);
     }
 
     public boolean straightToField(BNO055IMU imu) {
@@ -402,10 +393,12 @@ public class autoMode extends LinearOpMode {
             for (int col = 0; opModeIsActive() && col < 2; col++)
                 robot.driveTrain[row][col].setPower(power[row][col]);
     }
+
     public void setMotorPower(double power) { //Stores the four drivetrain motors power in array
         for (int row = 0; opModeIsActive() && row < 2; row++)
-                robot.shaft[row].setPower(power);
+            robot.shaft[row].setPower(power);
     }
+
     public void straightOnLine(int color, double power) {
 
         ResetHue(robot.colorRightFront, robot.valuesRightFront);
@@ -500,11 +493,80 @@ public class autoMode extends LinearOpMode {
      * Initialize the Tensor Flow Object Detection engine.
      */
     public void initTfod() {
+
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+    }
+
+    public void driveByEncoder(double goalDist, double k, double direction) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
+//        intakeWithSensor(1);
+//dc motor [0][0] not working
+        // k is power for motors
+        //Reset encoders
+        double deg2rad = direction / 180 * Math.PI;
+        double tixRound = 700;
+        double cmRound = 29;
+        double d = (goalDist * tixRound) / cmRound;
+
+
+        double currEncoder[][] = new double[2][2];
+        double goalEncoder[][] = new double[2][2];
+        double dEncoder[][] = new double[2][2];
+        dEncoder[0][0] = (d * (Math.cos(deg2rad) + Math.sin(deg2rad)));
+        dEncoder[1][0] = (d * (Math.cos(deg2rad) - Math.sin(deg2rad)));
+        dEncoder[0][1] = (d * (Math.cos(deg2rad) - Math.sin(deg2rad)));
+        dEncoder[1][1] = (d * (Math.cos(deg2rad) + Math.sin(deg2rad)));
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+//                currEncoder[i][j] = dcmotor[i][j].getCurrentPosition();
+                goalEncoder[i][j] = robot.driveTrain[i][j].getCurrentPosition() + dEncoder[i][j];
+                // dcmotor[i][j].setDirection(DcMotorSimple.Direction.REVERSE);
+
+                robot.driveTrain[i][j].setTargetPosition((int) (goalEncoder[i][j]));
+                robot.driveTrain[i][j].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+            }
+        }
+//        intakeWithSensor(1);
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                robot.driveTrain[i][j].setPower(k);
+
+
+        double err = 200;
+        while (err > 100 && opModeIsActive()) {
+            err = 0;
+            for (int i = 0; i < 2; i++)
+                for (int j = 0; j < 2; j++) {
+                    err += Math.abs(goalEncoder[i][j] - robot.driveTrain[i][j].getCurrentPosition());
+                    telemetry.addData(" encoder", robot.driveTrain[i][j].getCurrentPosition());
+                }
+            err /= 4;
+
+            telemetry.addData(" err", err);
+            telemetry.update();
+        }
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                robot.driveTrain[i][j].setPower(0);
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+//                currEncoder[i][j] = dcmotor[i][j].getCurrentPosition();
+//                goalEncoder[i][j] = currEncoder[i][j] + dEncoder;
+            {
+                robot.driveTrain[i][j].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                robot.driveTrain[i][j].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            }
+
+//        dcmotor[0][0].setDirection(DcMotorSimple.Direction.REVERSE);
+//        dcmotor[0][1].setDirection(DcMotorSimple.Direction.FORWARD);
+//        dcmotor[1][0].setDirection(DcMotorSimple.Direction.REVERSE);
+//        dcmotor[1][1].setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
 

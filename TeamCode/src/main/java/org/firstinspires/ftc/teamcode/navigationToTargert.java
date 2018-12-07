@@ -137,14 +137,8 @@ public class navigationToTargert extends LinearOpMode {
         targetsRoverRuckus.activate();
         waitForStart();
         while (opModeIsActive()) {
-            float[] pos = getPositions();
-            if (pos != null) {
-                telemetry.addData("pos: ", pos [0]);
-                telemetry.addData("pos: ", pos [1]);
-                telemetry.addData("pos: ", pos [2]);
-                telemetry.addData("pos: ", pos [3]);
-                telemetry.update();
-            }
+          driveToImage();
+
 //           for (VuforiaTrackable trackable : allTrackables) {
 //                /**
 //                 * getUpdatedRobotLocation() will return null if no new information is available since
@@ -181,7 +175,7 @@ public class navigationToTargert extends LinearOpMode {
         float[] positions = getPositions();
         if (positions != null) {
             setMotorPower(motors, new double[][]{{-0.23, 0.23}, {-0.23, 0.23}});
-            while (positions[5] >= 120) {
+            while (opModeIsActive()&&positions[5] <= 110) {
                 positions = getPositions();
                 telemetry.addData("heading:", positions[5]);
                 telemetry.update();
@@ -189,20 +183,20 @@ public class navigationToTargert extends LinearOpMode {
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
             sleep(1000);
             setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
-            while (positions[1] >= 0) {
+            while (opModeIsActive()&&positions[1]<= 64) {
                 positions = getPositions();
-                telemetry.addData("y:", positions[1]);
+                telemetry.addData("x:", positions[1]);
                 telemetry.update();
             }
 
-            telemetry.addLine("got to y=0");
+            telemetry.addLine("got to x=65");
             telemetry.update();
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
             sleep(1000);
             setMotorPower(motors, new double[][]{{0.23, -0.23}, {0.23, -0.23}});
-            while (positions[5] >= 90) {
+            while (opModeIsActive()&&positions[5] >= 94) {
                 positions = getPositions();
-                telemetry.addData("y:", positions[1]);
+                telemetry.addData("heading:", positions[5]);
                 telemetry.update();
             }
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
@@ -243,7 +237,7 @@ public class navigationToTargert extends LinearOpMode {
              *3-roll
              *4-pitch
              *5-heading*/
-            return new float[]{translation.get(0) / mmPerInch, 5, mmPerInch, translation.get(1), translation.get(2) / mmPerInch, rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle};
+            return new float[]{translation.get(0) / mmPerInch, translation.get(1)/mmPerInch, translation.get(2) / mmPerInch, rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle};
             // express the rotation of the robot in degrees.
         }
         return null;
