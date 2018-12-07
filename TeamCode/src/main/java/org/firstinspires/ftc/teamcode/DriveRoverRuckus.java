@@ -48,8 +48,6 @@ public class DriveRoverRuckus extends OpMode {
         robot = new Robot(hardwareMap);
 
 
-        telemetry.addData("Status", "Initialized");
-
 //        robot.linear[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        robot.linear[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
