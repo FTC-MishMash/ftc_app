@@ -137,8 +137,8 @@ public class navigationToTargert extends LinearOpMode {
         targetsRoverRuckus.activate();
         waitForStart();
         while (opModeIsActive()) {
-           driveToImage();
-            }
+          driveToImage();
+
 //           for (VuforiaTrackable trackable : allTrackables) {
 //                /**
 //                 * getUpdatedRobotLocation() will return null if no new information is available since
@@ -164,18 +164,18 @@ public class navigationToTargert extends LinearOpMode {
 //            }
 //            telemetry.update();
         }
+    }
 
 
-
-     /**
+    /**
      * Driving the robot near the target image and turn it across the depot.
      */
     private void driveToImage() {
-        Driving.setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
+        //  Driving.setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
         float[] positions = getPositions();
         if (positions != null) {
             setMotorPower(motors, new double[][]{{-0.23, 0.23}, {-0.23, 0.23}});
-            while (positions[5] <= 115) {
+            while (opModeIsActive()&&positions[5] <= 110) {
                 positions = getPositions();
                 telemetry.addData("heading:", positions[5]);
                 telemetry.update();
@@ -183,20 +183,20 @@ public class navigationToTargert extends LinearOpMode {
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
             sleep(1000);
             setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
-            while (positions[0] <= 65) {
+            while (opModeIsActive()&&positions[1]<= 64) {
                 positions = getPositions();
-                telemetry.addData("x:", positions[0]);
+                telemetry.addData("x:", positions[1]);
                 telemetry.update();
             }
 
-            telemetry.addLine("got to x=0");
+            telemetry.addLine("got to x=65");
             telemetry.update();
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
             sleep(1000);
             setMotorPower(motors, new double[][]{{0.23, -0.23}, {0.23, -0.23}});
-            while (positions[5] >= 98) {
+            while (opModeIsActive()&&positions[5] >= 94) {
                 positions = getPositions();
-                telemetry.addData("y:", positions[1]);
+                telemetry.addData("heading:", positions[5]);
                 telemetry.update();
             }
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
