@@ -46,24 +46,24 @@ public class Robot {
         driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
         driveTrain[0][1] = hardwareMap.get(DcMotor.class, "rightFront");
         driveTrain[1][1] = hardwareMap.get(DcMotor.class, "rightBack");
-        shaft[0] = hardwareMap.get(DcMotor.class, "shaft0");
-        shaft[1] = hardwareMap.get(DcMotor.class, "shaft1");
+//        shaft[0] = hardwareMap.get(DcMotor.class, "shaft0");
+//        shaft[1] = hardwareMap.get(DcMotor.class, "shaft1");
 
         driveTrain[0][0].setDirection(DcMotorSimple.Direction.REVERSE);
         driveTrain[0][1].setDirection(DcMotorSimple.Direction.FORWARD);
         driveTrain[1][0].setDirection(DcMotorSimple.Direction.FORWARD);
         driveTrain[1][1].setDirection(DcMotorSimple.Direction.REVERSE);
 
-        shaft[0].setDirection(DcMotorSimple.Direction.FORWARD);
-        shaft[0].setDirection(DcMotorSimple.Direction.REVERSE);
+//        shaft[0].setDirection(DcMotorSimple.Direction.FORWARD);
+//        shaft[0].setDirection(DcMotorSimple.Direction.REVERSE);
 
         driveTrain[0][0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         driveTrain[0][1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         driveTrain[1][0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         driveTrain[1][1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        shaft[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        shaft[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        shaft[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        shaft[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
