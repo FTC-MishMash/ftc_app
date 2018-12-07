@@ -21,6 +21,15 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
+import static org.firstinspires.ftc.teamcode.Driving.getCurrentScaledAngle;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+
 
 /**
  * Created by user on 22/11/2018.
@@ -30,7 +39,6 @@ public class autoMode extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
-    public int cubePlace = 0;// 0 = NOT HERE, 1 = RIGHT (in camera), 2 = LEFT (in camera)
     //    private static final android.graphics.Color Color = ;
     Robot robot;
     public static final String VUFORIA_KEY = " ATgDONj/////AAABmW0G/nQirUMiumnzPc6Pl8oJhBOCC2qoUq0BWhir9YWcBFDlhZUfSwATcQArcyyLxIOV21sHaYJeeQEJZfIJ+4spBn3oJ/DfycsbPaNs87+TRpM46/vbUkj1Ok+NtZ/eqMhmMXjFC8dgdCfbCt0aMxoBNzDw4+v28abG+hjUCjVYf86Jq1m7R942XCjw0yhOZqTXWIp3WAZDXY/PdWGQGY/zWae0l6TAZ6Z27t1xYJdkkpLqEsbKM3ZprvtgIs8AsWS9Tri2892OHq2CnCL+1ZHHXKPdxON3fiC1Gd3oihwPhTUReNw0VAg9yeVsVa1UQg7ea9K6WpmVto0FG+T2/LV8uq/3Mp/NHWiNizw2DM4h";
@@ -78,18 +86,47 @@ public class autoMode extends LinearOpMode {
         int cubePlace = 0;
         while (!isStarted())
             cubePlace = getCube();
-//
-//        if (tfod != null)
-//
-//        {
-//            tfod.shutdown();
-//        }
+
+
         waitForStart();
         runTime.startTime();
         runTime.reset();
         motors = robot.getDriveTrain();
+        //the
+        if (cubePlace == -1) {//there is NOT cube/ or only one ball
+
+        } else if (cubePlace == 0) {//see only 2 balls
+
+            Driving.ScaledTurn(50,motors,imuGlobal,0.5,telemetry);
+
+        } else if (cubePlace == 1) {//cube RIGHT
+
+            Driving.ScaledTurn(5,motors,imuGlobal,0.5,telemetry);
+
+        } else if (cubePlace == 2) {//cube LEFT
+
+            Driving.ScaledTurn(-65,motors,imuGlobal,0.5,telemetry);
+
+        } else if (cubePlace == 3) {//cube CENTER
+            //No need to move
 
 
+        } else if (cubePlace == 4) {//cube RIGHT in camera
+
+            Driving.ScaledTurn(50,motors,imuGlobal,0.5,telemetry);
+
+        } else if (cubePlace == 5) {//cube LEFT in camera
+
+            Driving.ScaledTurn(50,motors,imuGlobal,0.5,telemetry);
+
+        }
+
+        followCube(0.3);
+        if (tfod != null)
+
+        {
+            tfod.shutdown();
+        }
 ////        if (opModeIsActive()) {
 ////
 ////            getOffTheClimb(imuGlobal, robot.shaft, 0.3);
@@ -157,6 +194,7 @@ public class autoMode extends LinearOpMode {
 //        if (tfod != null) {
 //            tfod.activate();
 //        }
+        int cubePlace = -1;// 0 = NOT HERE, 1 = RIGHT (in camera), 2 = LEFT (in camera)
 
         if (tfod != null) {
             tfod.activate();
@@ -195,7 +233,7 @@ public class autoMode extends LinearOpMode {
                             cubePlace = 1;//Right
                         } else {
                             telemetry.addData("Gold Mineral Position", "Center");
-                            cubePlace = 4;//center
+                            cubePlace = 3;//center
                         }
                     }
                 } else if (updatedRecognitions.size() == 2) {
@@ -214,16 +252,16 @@ public class autoMode extends LinearOpMode {
                         if (goldMineralX < silverMineral1X) {
                             telemetry.addData("Gold Mineral Position", "Left");
                             telemetry.addLine("in camera");
-                            cubePlace = 2;//LEFT in camera
+                            cubePlace = 5;//LEFT in camera
                         } else if (goldMineralX > silverMineral1X) {
                             telemetry.addData("Gold Mineral Position", "Right");
                             telemetry.addLine("in camera");
-                            cubePlace = 1;//RIGHT in camera
+                            cubePlace = 4;//RIGHT in camera
                         }
 
                     } else {
                         telemetry.addData("Gold Mineral Position", "NOT HERE");
-                        cubePlace = 0;//NOT in the camera
+                        cubePlace = 0;//NOT in the camera/ only see 2 BALLS
                     }
                 }
             }
@@ -336,9 +374,9 @@ public class autoMode extends LinearOpMode {
     }
 
     public void getOffTheClimb(BNO055IMU imu, DcMotor[] motorsHanging, double power) {
-        DriveRoverRuckus.Driving.set2MotorPower(motorsHanging, power);
+         setMotorPower( power);
         while (!straightToField(imu)) ;
-        DriveRoverRuckus.Driving.set2MotorPower(motorsHanging, 0);
+          setMotorPower( 0);
     }
 
     public boolean straightToField(BNO055IMU imu) {
@@ -364,7 +402,10 @@ public class autoMode extends LinearOpMode {
             for (int col = 0; opModeIsActive() && col < 2; col++)
                 robot.driveTrain[row][col].setPower(power[row][col]);
     }
-
+    public void setMotorPower(double power) { //Stores the four drivetrain motors power in array
+        for (int row = 0; opModeIsActive() && row < 2; row++)
+                robot.shaft[row].setPower(power);
+    }
     public void straightOnLine(int color, double power) {
 
         ResetHue(robot.colorRightFront, robot.valuesRightFront);
@@ -465,5 +506,6 @@ public class autoMode extends LinearOpMode {
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
     }
+
 
 }
