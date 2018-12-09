@@ -41,8 +41,8 @@ public class Robot {
         linear[0] = hardwareMap.get(DcMotor.class, "linearRight");
         linear[1] = hardwareMap.get(DcMotor.class, "linearLeft");
 
-        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
-        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
+//        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
+//        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
         driveTrain[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
         driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
         driveTrain[0][1] = hardwareMap.get(DcMotor.class, "rightFront");
