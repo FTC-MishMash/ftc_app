@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -12,13 +13,17 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+
 import static java.lang.Thread.sleep;
 
 
 @TeleOp(name = "DRIVEY", group = "Iterative Opmode")
 //@Disabled
 public class DRIVEY extends OpMode {
-    double posRelic;
+    double   posRelic;
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor[][] drivetrainDC = new DcMotor[3][3];
@@ -36,7 +41,7 @@ public class DRIVEY extends OpMode {
     ColorSensor sensorColor;
     AnalogInput pot;
     double gain = 1;
-
+BNO055IMU imu;
     int pos[][] = new int[2][2];
     boolean relicStop = false;
     DigitalChannel touchUp;    //limit switch
@@ -62,6 +67,7 @@ public class DRIVEY extends OpMode {
     @Override
 
     public void init() {
+
 
         telemetry.addData("Status", "Initialized");
 

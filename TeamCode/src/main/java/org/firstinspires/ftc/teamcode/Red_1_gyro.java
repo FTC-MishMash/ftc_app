@@ -17,7 +17,7 @@ public class Red_1_gyro extends LinearOpMode {
     public void guro_drive(){
         double power= 0.3;
         setMotorPower(new double[][]{{power, power}, {power, power}});
-        while (getRoll()<=-30){
+        while (getRoll()<=-55){
             setMotorPower(new double[][]{{power, power}, {power, power}});
         }
         setMotorPower(new double[][]{{0, 0}, {0, 0}});
@@ -26,12 +26,9 @@ public class Red_1_gyro extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-    //    markIII=new Robot(hardware Map);
+        markIII=new Robot(hardwareMap);
         gyro = markIII.getImu();
         DriveMotors = markIII.getDriveTrain();
-
-
-
 
     }
     public float getRoll(){
