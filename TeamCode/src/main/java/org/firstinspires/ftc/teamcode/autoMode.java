@@ -39,13 +39,13 @@ public class autoMode extends LinearOpMode {
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
      */
-    public VuforiaLocalizer vuforia;
+    private VuforiaLocalizer vuforia;
 
     /**
      * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
      */
-    public TFObjectDetector tfod;
+    private TFObjectDetector tfod;
     DcMotor[][] motors;
     ElapsedTime runTime = new ElapsedTime();
     final double SCALE_FACTOR = 255;
@@ -67,19 +67,22 @@ public class autoMode extends LinearOpMode {
             initTfod();
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+            telemetry.update();
         }
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+//        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+//        parameters.vuforiaLicenseKey = VUFORIA_KEY;
         if (tfod != null) {
             tfod.activate();
         }
-        int cubePlace = -1;//dont see any cube
-        while (!isStarted())
-            cubePlace = getCube();//update cube location
+//        int cubePlace = -1;//dont see any cube
+//        while (!isStarted())
+//            cubePlace = getCube();//update cube location
 
 
         waitForStart();
+        int cubePlace = -1;//dont see any cube
+            cubePlace = getCube();//update cube location
         runTime.startTime();
         runTime.reset();
 //        getOffTheClimb(robot.imu, robot.shaft, 0.3);
