@@ -31,6 +31,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 public class navigationToTargert extends LinearOpMode {
     Robot robot;
     DcMotor[][] motors;
+    double power = 0.17;
     static final int XtargetPosition = 63;
     static final int YtargetPosition = 6;
     static final int ZtargetPosition = -4;
@@ -69,7 +70,7 @@ public class navigationToTargert extends LinearOpMode {
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection = CAMERA_CHOICE;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+       parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
@@ -137,9 +138,9 @@ public class navigationToTargert extends LinearOpMode {
         targetsRoverRuckus.activate();
         waitForStart();
         if (opModeIsActive()) {
-            while (opModeIsActive() && getPositions() == null)
-                setMotorPower(motors, new double[][]{{-0.23, 0.23}, {-0.23, 0.23}});
-            driveToImage();
+            setMotorPower(motors, new double[][]{{power, -power}, {power, -power}});
+            while (opModeIsActive() && getPositions() == null);
+              driveToImage();
 
 //           for (VuforiaTrackable trackable : allTrackables) {
 //                /**
@@ -173,7 +174,7 @@ public class navigationToTargert extends LinearOpMode {
      * Driving the robot near the target image and turn it across the depot.
      */
     private void driveToImage() {
-        double power = 0.18;
+
         //  Driving.setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
         float[] positions = getPositions();
         if (positions != null) {

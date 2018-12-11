@@ -82,7 +82,7 @@ public class autoMode extends LinearOpMode {
         waitForStart();
         runTime.startTime();
         runTime.reset();
-        getOffTheClimb(robot.imu, robot.shaft, 0.3);
+//        getOffTheClimb(robot.imu, robot.shaft, 0.3);
         motors = robot.getDriveTrain();
         if (cubePlace == -1) {//there is NOT cube/ or only one ball
 
@@ -118,6 +118,7 @@ public class autoMode extends LinearOpMode {
         {
             tfod.shutdown();
         }
+        driveByEncoderRoverRuckus(20,20,0.4);
 ////        if (opModeIsActive()) {
 ////
 ////            straightOnLine(0, 0.3);
@@ -503,8 +504,8 @@ public class autoMode extends LinearOpMode {
     public void driveByEncoderRoverRuckus(double goalDistRight, double goalDistLeft, double power) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
         //Reset encoders
 
-        final double tixRound = 700;
-        final double cmRound = 29;
+        final double tixRound = 600;
+        final double cmRound = 27;
 
         double dRight = (goalDistRight * tixRound) / cmRound;
         double dLeft = (goalDistLeft * tixRound) / cmRound;
