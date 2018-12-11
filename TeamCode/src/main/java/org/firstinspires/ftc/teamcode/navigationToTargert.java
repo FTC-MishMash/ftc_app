@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -57,12 +57,14 @@ public class navigationToTargert extends LinearOpMode {
      * localization engine.
      */
     VuforiaLocalizer vuforia;
-
-
+    BNO055IMU imu;
+    final double tixRound = 600;
+    final double cmRound = 27;
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
-        motors = robot.getDriveTrain();
+        motors = robot.driveTrain;
+        imu=robot.imu;
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
@@ -70,7 +72,7 @@ public class navigationToTargert extends LinearOpMode {
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection = CAMERA_CHOICE;
-       parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
@@ -138,9 +140,12 @@ public class navigationToTargert extends LinearOpMode {
         targetsRoverRuckus.activate();
         waitForStart();
         if (opModeIsActive()) {
+            Driving.driveByEncoderRoverRuckus(motors, 8, 8, -0.5);
+            Driving.ScaledTurn(10,motors,imu,0.5,telemetry);
+            Driving.driveByEncoderRoverRuckus(motors, 20, 10, 0.6);
             setMotorPower(motors, new double[][]{{power, -power}, {power, -power}});
-            while (opModeIsActive() && getPositions() == null);
-              driveToImage();
+            while (opModeIsActive() && getPositions() == null) ;
+            driveToImage();
 
 //           for (VuforiaTrackable trackable : allTrackables) {
 //                /**
@@ -208,7 +213,7 @@ public class navigationToTargert extends LinearOpMode {
         }
     }
 
-    public void setMotorPower(DcMotor[][] motors, double[][] power) { //Stores the four drivetrain motors power in array
+    public void setMotorPower(DcMotor[][] motors, double[][] power) { //Stores the four motors motors power in array
         for (int row = 0; opModeIsActive() && row < 2; row++)
             for (int col = 0; opModeIsActive() && col < 2; col++)
                 motors[row][col].setPower(power[row][col]);
@@ -246,4 +251,53 @@ public class navigationToTargert extends LinearOpMode {
         }
         return null;
     }
+    public void NewdriveRobotEncoder(double goalDist, double direction, double k,
+                                     double heading) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
+        if (opModeIsActive()) {
+//dc motor [0][0] not working
+            // k is power for motors
+            //Reset encoders
+            motors[1][0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motors[1][0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motors[0][1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motors[0][1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motors[1][1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motors[1][1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            double pidErr[] = {0, 0};
+//PID reset
+            pidErr = PID.GyroPID(imu,heading, pidErr[1]); //Convert degrees to radians
+            double deg2rad = direction / 180 * Math.PI;
+            double currDist = 0;
+            double err = goalDist;
+            double time0 = getRuntime();
+// Drive until distance target completed
+
+            while (opModeIsActive()&&getPositions()==null && (err) > 2 && (getRuntime() - time0) < goalDist / 10) {
+                if (err > 0) {
+                    motors[0][0].setPower(k * (Math.cos(deg2rad) + Math.sin(deg2rad) - pidErr[0]));
+                    motors[1][0].setPower(k * (Math.cos(deg2rad) - Math.sin(deg2rad) + pidErr[0]));
+                    motors[0][1].setPower(k * (Math.cos(deg2rad) - Math.sin(deg2rad)) - pidErr[0]);
+                    motors[1][1].setPower(k * (Math.cos(deg2rad) + Math.sin(deg2rad)) + pidErr[0]);
+                }
+
+                currDist = Math.abs((
+                                (motors[1][0].getCurrentPosition() * cmRound / tixRound) +
+                                        (motors[0][1].getCurrentPosition() * cmRound / tixRound) +
+                                        (motors[1][1].getCurrentPosition() * cmRound / tixRound)
+                        ) / 3
+                );
+                err = goalDist - currDist;
+                telemetry.addData("currDist", currDist);
+                telemetry.addData("motors[1][0]", (motors[1][0].getCurrentPosition()));
+                telemetry.addData("motors[0][1]", (motors[0][1].getCurrentPosition()));
+                telemetry.addData("motors[1][1]", (motors[1][1].getCurrentPosition()));
+                telemetry.addData("current distance: ", currDist);
+                telemetry.addData("current error: ", err);
+                telemetry.update();
+            }
+        }
+        setMotorPower(motors,new double[][]{{0.0, 0.0}, {0.0, 0.0}});
+
+    }
+
 }

@@ -9,8 +9,8 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
  */
 
 public class PID {
-    BNO055IMU imu;
-    public double[] GyroPID(double heading, double lasterror) {
+
+    public static double[] GyroPID( BNO055IMU imu,double heading, double lasterror) {
         double kp = 0.015, kd = 0.01, ki = 0, nexterror = 0;
         double err = heading - imu.getAngularOrientation(AxesReference.INTRINSIC,
                 AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;

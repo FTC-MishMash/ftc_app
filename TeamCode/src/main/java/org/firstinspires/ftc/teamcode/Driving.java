@@ -86,5 +86,58 @@ public class Driving {
             angle += 360;
         return angle;
     }
+    public static void  driveByEncoderRoverRuckus(DcMotor[][] driveTrain,double goalDistRight, double goalDistLeft, double power) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
+        //Reset encoders
 
+        final double tixRound = 600;
+        final double cmRound = 27;
+
+        double dRight = (goalDistRight * tixRound) / cmRound;
+        double dLeft = (goalDistLeft * tixRound) / cmRound;
+
+      driveTrain[0][0].setTargetPosition((int) (driveTrain[0][0].getCurrentPosition() + dLeft));
+      driveTrain[1][0].setTargetPosition((int) (driveTrain[1][0].getCurrentPosition() + dLeft));
+
+      driveTrain[0][1].setTargetPosition((int) (driveTrain[0][1].getCurrentPosition() + dRight));
+      driveTrain[1][1].setTargetPosition((int) (driveTrain[1][1].getCurrentPosition() + dRight));
+
+
+      driveTrain[0][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      driveTrain[1][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      driveTrain[0][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      driveTrain[1][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+              driveTrain[i][j].setPower(power);
+
+
+//        double err = 200;
+//        while (err > 100 && opModeIsActive()) {
+//            err = 0;
+//            for (int i = 0; i < 2; i++)
+//                for (int j = 0; j < 2; j++) {
+//                    err += Math.abs(goalEncoder[i][j] - robot.driveTrain[i][j].getCurrentPosition());
+//                    telemetry.addData(" encoder", robot.driveTrain[i][j].getCurrentPosition());
+//                }
+//            err /= 4;
+//
+//            telemetry.addData(" err", err);
+//            telemetry.update();
+//        }
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+              driveTrain[i][j].setPower(0);
+
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+
+            {
+              driveTrain[i][j].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+              driveTrain[i][j].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            }
+
+
+    }
 }
