@@ -75,37 +75,37 @@ public class autoMode extends LinearOpMode {
         if (tfod != null) {
             tfod.activate();
         }
-//        int cubePlace = -1;//dont see any cube
-//        while (!isStarted())
-//            cubePlace = getCube();//update cube location
+        int cubePlace = -1;//dont see any cube
+        while (!isStarted())
+            cubePlace = getCube();//update cube location
 
 
         waitForStart();
-        int cubePlace = -1;//dont see any cube
-            cubePlace = getCube();//update cube location
+//        int cubePlace = -1;//dont see any cube
+//            cubePlace = getCube();//update cube location
         runTime.startTime();
         runTime.reset();
 //        getOffTheClimb(robot.imu, robot.shaft, 0.3);
         motors = robot.getDriveTrain();
         if (cubePlace == -1) {//there is NOT cube/ or only one ball
 
-        } else if (cubePlace == 0) {//see only 2 balls
+            } else if (cubePlace == 0) {//see only 2 balls
 
-            Driving.ScaledTurn(50, motors, robot.imu, 0.5, telemetry);
+                Driving.ScaledTurn(50, motors, robot.imu, 0.5, telemetry);
 
-        } else if (cubePlace == 1) {//cube RIGHT
+            } else if (cubePlace == 1) {//cube RIGHT
 
-            Driving.ScaledTurn(15, motors, robot.imu, 0.5, telemetry);
+                Driving.ScaledTurn(15, motors, robot.imu, 0.5, telemetry);
 
-        } else if (cubePlace == 2) {//cube LEFT
+            } else if (cubePlace == 2) {//cube LEFT
 
-            Driving.ScaledTurn(70, motors, robot.imu, 0.5, telemetry);
+                Driving.ScaledTurn(70, motors, robot.imu, 0.5, telemetry);
 
-        } else if (cubePlace == 3) {//cube CENTER
-            //No need to move
+            } else if (cubePlace == 3) {//cube CENTER
+                //No need to move
 
 
-        } else if (cubePlace == 4) {//cube RIGHT in camera
+            } else if (cubePlace == 4) {//cube RIGHT in camera
 //TODO: add what the robot need to do in this
 //            Driving.ScaledTurn(50,motors,robot.imu,0.5,telemetry);
 
@@ -115,7 +115,7 @@ public class autoMode extends LinearOpMode {
 
         }
 
-        followCube(0.3);
+        followCube(0.1);//start power
         if (tfod != null)
 
         {
@@ -293,7 +293,6 @@ public class autoMode extends LinearOpMode {
 //                    break;
 //        }
         if (tfod != null)
-
             do {
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
 
@@ -344,16 +343,102 @@ public class autoMode extends LinearOpMode {
                 //    }
 
 
-                robot.driveTrain[0][1].setPower(0);//RIGHT Front
-                robot.driveTrain[1][1].setPower(0);//Right Back
-                robot.driveTrain[1][0].setPower(0);//Left Back
-                robot.driveTrain[0][0].setPower(0);//LEFT Front
+
 
 
             }
             while (opModeIsActive() && !breakLoop);
+        robot.driveTrain[0][1].setPower(0);//RIGHT Front
+        robot.driveTrain[1][1].setPower(0);//Right Back
+        robot.driveTrain[1][0].setPower(0);//Left Back
+        robot.driveTrain[0][0].setPower(0);//LEFT Front
     }
+    private void followCube2(double power) {
+        telemetry.addLine("follow cube 1:");
+        telemetry.update();
 
+        double distanceFromRight = 0;
+        double distanceFromLeft = 0;
+        double middleCubeX = 0;
+        double k = 0.0007; //EDEN
+        double[] addToMotors;
+        addToMotors = new double[2];
+        boolean firstGold = false;
+        boolean breakLoop = false;
+
+
+//        while (opModeIsActive()) {//TODO: ADD CONDITION
+//            telemetry.addLine("search cube 1");
+//            telemetry.update();
+//            if (tfod != null)
+//                updatedRecognitions = tfod.getUpdatedRecognitions();
+//
+//            if (updatedRecognitions != null
+//               &&!updatedRecognitions.isEmpty()
+//                        && updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL))
+//                    break;
+//        }
+        if (tfod != null)
+            do {
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+
+
+                if (updatedRecognitions != null
+                        && !updatedRecognitions.isEmpty()//was changed
+                    //     && updatedRecognitions.get(0) != null
+                        ) {
+                    if (updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL)) {
+                        firstGold = true;
+                        middleCubeX = ((updatedRecognitions.get(0).getLeft() + updatedRecognitions.get(0).getRight()) / 2);
+                        distanceFromRight = 720 - middleCubeX;
+                        distanceFromLeft = middleCubeX;
+                        telemetry.addLine("follow cube 4:");
+
+                        addToMotors[0] = k * distanceFromRight;  //RIGHT
+                        addToMotors[1] = k * distanceFromLeft; //LEFT
+                        telemetry.addData("distance From Right:", addToMotors[0]);
+                        telemetry.addData("distance From Left:", addToMotors[1]);
+                        telemetry.update();
+
+
+                        robot.driveTrain[0][1].setPower(addToMotors[0] + power);//RIGHT Front
+                        robot.driveTrain[1][1].setPower(addToMotors[0] + power);//Right Back
+                        robot.driveTrain[1][0].setPower(addToMotors[1] + power);//Left Back
+                        robot.driveTrain[0][0].setPower(addToMotors[1] + power);//LEFT Front
+
+
+                    } else {
+                        if (firstGold)
+                            breakLoop = true;
+                        telemetry.addLine("dont see cube 1");
+                        telemetry.update();
+                    }
+                } else {
+                    telemetry.addLine("dont see cube 2");
+                    telemetry.update();
+                    //       break;
+                }
+
+//            powerAdd ToMotors[0] = getPowerMotor()[0];//RIGHT
+//            powerAddToMotors[1] = getPowerMotor()[1];//LEFT
+
+
+                //   break;
+
+
+                //    }
+
+
+
+
+
+            }
+            while (opModeIsActive() && !breakLoop);
+        robot.driveTrain[0][1].setPower(0);//RIGHT Front
+        robot.driveTrain[1][1].setPower(0);//Right Back
+        robot.driveTrain[1][0].setPower(0);//Left Back
+        robot.driveTrain[0][0].setPower(0);//LEFT Front
+    }
     public double[] GyroPID(double heading, double lasterror, BNO055IMU imu) {
         double kp = 0.015, kd = 0.01, ki = 0, nexterror = 0;
         double err = heading - imu.getAngularOrientation(AxesReference.INTRINSIC,
@@ -482,10 +567,8 @@ public class autoMode extends LinearOpMode {
          */
 
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
-
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
