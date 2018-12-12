@@ -62,9 +62,9 @@ public class navigationToTargert extends LinearOpMode {
     final double cmRound = 27;
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(hardwareMap);
+      /*  robot = new Robot(hardwareMap);
         motors = robot.driveTrain;
-        imu=robot.imu;
+        imu=robot.imu;*/
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
@@ -140,9 +140,8 @@ public class navigationToTargert extends LinearOpMode {
         targetsRoverRuckus.activate();
         waitForStart();
         if (opModeIsActive()) {
-            Driving.driveByEncoderRoverRuckus(motors, 8, 8, -0.5);
-            Driving.ScaledTurn(10,motors,imu,0.5,telemetry);
-            Driving.driveByEncoderRoverRuckus(motors, 20, 10, 0.6);
+           driveTargetImageEncoder(8,180,0.5,Driving.getCurrentScaledAngle(imu));
+            driveTargetImageEncoder(20,0,0.6,Driving.getCurrentScaledAngle(imu));
             setMotorPower(motors, new double[][]{{power, -power}, {power, -power}});
             while (opModeIsActive() && getPositions() == null) ;
             driveToImage();
@@ -251,7 +250,7 @@ public class navigationToTargert extends LinearOpMode {
         }
         return null;
     }
-    public void NewdriveRobotEncoder(double goalDist, double direction, double k,
+    public void driveTargetImageEncoder(double goalDist, double direction, double k,
                                      double heading) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
         if (opModeIsActive()) {
 //dc motor [0][0] not working
