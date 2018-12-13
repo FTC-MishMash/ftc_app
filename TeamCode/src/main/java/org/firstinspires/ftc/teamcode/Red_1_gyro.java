@@ -28,15 +28,15 @@ public class Red_1_gyro extends LinearOpMode {
     }
 
     public void gyro_drive() {
-        double power = 0.3;
+        double power = 0.7;
         double pidErr[] = {0, 0};
 
-        setMotorPower(new double[][]{{power, power}, {power, power}});
         while (opModeIsActive() && getYaw() >= -14.3) {
-            setMotorPower(new double[][]{{power, power}, {power, power}});
             pidErr = GyroPID(getheading(), pidErr[1], robot.imu);
-            setMotorPower(new double[][]{{power - pidErr[0], power + pidErr[0]}, {power - pidErr[0], power + pidErr[0]}});
+            setMotorPower(new double[][]{{power + pidErr[0], power + pidErr[0]}, {power - pidErr[0], power - pidErr[0]}});
+
         }
+
         setMotorPower(new double[][]{{0, 0}, {0, 0}});
 
     }
@@ -48,7 +48,6 @@ public class Red_1_gyro extends LinearOpMode {
         DriveMotors = robot.getDriveTrain();
         waitForStart();
         gyro_drive();
-
 
     }
 
