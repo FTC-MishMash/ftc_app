@@ -9,11 +9,15 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-
 @Autonomous
-public class Red_1_gyro extends LinearOpMode {
+public class ParkInCrator extends LinearOpMode {
     Robot robot;
     DcMotor[][] DriveMotors;
+
+    /**
+     * @param heading
+     * used to control the robot orientaion while driving.
+     */
     public double[] GyroPID(double heading, double lasterror, BNO055IMU imu) {
         double kp = 0.015, kd = 0.01, ki = 0, nexterror = 0;
         double err = heading - imu.getAngularOrientation(AxesReference.INTRINSIC,
@@ -27,6 +31,9 @@ public class Red_1_gyro extends LinearOpMode {
         return (new double[]{-pd, err});
     }
 
+    /**
+     * used to set the speed of the robot while driving and to use PID to control the robot turns.
+     */
     public void gyro_drive() {
         double power = 0.7;
         double pidErr[] = {0, 0};
