@@ -62,9 +62,9 @@ public class navigationToTargert extends LinearOpMode {
     final double cmRound = 27;
     @Override
     public void runOpMode() throws InterruptedException {
-      /*  robot = new Robot(hardwareMap);
+      robot = new Robot(hardwareMap);
         motors = robot.driveTrain;
-        imu=robot.imu;*/
+        imu=robot.imu;
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
