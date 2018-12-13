@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -49,12 +50,6 @@ public class DriveRoverRuckus extends OpMode {
 
 //        robot.linear[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        robot.linear[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.driveTrain[0][0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.driveTrain[0][1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.driveTrain[1][0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.driveTrain[1][1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
     }
 
 
@@ -79,18 +74,19 @@ public class DriveRoverRuckus extends OpMode {
 
     @Override
     public void loop() {
-        tankDriveTrainSetPower(-1);
-
+        tankDriveTrainSetPower(1);
+        robot.driveTrain[0][0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.driveTrain[0][1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //            sticks[0][0] = gamepad1.left_stick_x;
 //            sticks[1][0] = gamepad1.left_stick_y;
 //            sticks[0][1] = gamepad1.right_stick_x;
 //            sticks[1][1] = gamepad1.right_stick_y;
         telemetry.addData("imu", robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
                 AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
-        telemetry.addData("[0][0]", robot.driveTrain[0][0].getCurrentPosition());
-        telemetry.addData("[0][1]", robot.driveTrain[0][1].getCurrentPosition());
-        telemetry.addData("[1][0]", robot.driveTrain[1][0].getCurrentPosition());
-        telemetry.addData("[1][1]", robot.driveTrain[1][1].getCurrentPosition());
+        telemetry.addData("[0][0]",robot.driveTrain[0][0].getCurrentPosition());
+        telemetry.addData("[0][1]",robot.driveTrain[0][1].getCurrentPosition());
+        telemetry.addData("[1][0]",robot.driveTrain[1][0].getCurrentPosition());
+        telemetry.addData("[1][1]",robot.driveTrain[1][1].getCurrentPosition());
         telemetry.update();
 
 //        if (gamepad2.a) {
@@ -100,10 +96,7 @@ public class DriveRoverRuckus extends OpMode {
 //            robot.linear[1].setPower(0.75);
 //            robot.linear[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            //linear goes down to the crater. הלינאריקה יורדת למכתש
 //        }
-//
-//
 //        if (gamepad2.b) {
 //            robot.linear[0].setTargetPosition(0);
 //            robot.linear[1].setTargetPosition(0);
@@ -111,36 +104,19 @@ public class DriveRoverRuckus extends OpMode {
 //            robot.linear[1].setPower(0.75);
 //            robot.linear[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            //linear goes  to the beginning. הלינאריקה חוזרת למצב התחלה
 //        }
-//
 //        if (gamepad2.right_bumper) {
 //            robot.inTake.setPower(1);
-//            //intake turn on front. הציר של ההזנה פעול קדימה
-//        } else if (gamepad2.left_bumper) {
-//            robot.inTake.setPower(-1);
-            //intake turn on back. הציר של ההזנה פועל אחורה
-//        } else {
-//            robot.inTake.setPower(0);
-//        }
-
-
+//        } else robot.inTake.setPower(0);
+//
 //        if (gamepad2.y) {
-//            robot.linear[0].setTargetPosition(1000);
-//            robot.linear[1].setTargetPosition(1000);
-//            robot.linear[0].setPower(0.8);
-//            robot.linear[1].setPower(0.8);
-//            robot.linear[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.shaft[0].setTargetPosition(4000);
-//            robot.shaft[1].setTargetPosition(4000);
+//            robot.shaft[0].setTargetPosition(7666);
+//            robot.shaft[1].setTargetPosition(7666);
 //            robot.shaft[0].setPower(0.8);
 //            robot.shaft[1].setPower(0.8);
 //            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            // הלינאריקה נסגרת עד ל1000 ואז הציר עולה לחצי (4000)
 //        }
-//
 //        if (gamepad2.x) {
 //            robot.shaft[0].setTargetPosition(0);
 //            robot.shaft[1].setTargetPosition(0);
@@ -148,83 +124,43 @@ public class DriveRoverRuckus extends OpMode {
 //            robot.shaft[1].setPower(0.75);
 //            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            // shaft goes down to tha beginning. הציר יורד למצב התחלה
+//
 //        }
-
 //        if (gamepad2.dpad_up) {
 //            robot.shaft[0].setPower(0.25);
 //            robot.shaft[1].setPower(0.25);
-//            // ציר בלחיצה חופשית למעלה
-//
-//        } else if (gamepad2.dpad_down) {
+//        }
+//        if (gamepad2.dpad_down) {
 //            robot.shaft[0].setPower(-0.25);
 //            robot.shaft[1].setPower(-0.25);
-//            //ציר בלחיצה חופשית למטה
-
 //        } else {
 //            robot.shaft[0].setPower(0);
 //            robot.shaft[1].setPower(0);
 //        }
-
-        if (gamepad2.left_trigger < 0) {
-            robot.shaft[0].setTargetPosition(8000);
-            robot.shaft[1].setTargetPosition(8000);
-            robot.shaft[0].setPower(0.8);
-            robot.shaft[1].setPower(0.8);
-            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            // הציר
-            robot.linear[0].setTargetPosition(6700);
-            robot.linear[1].setTargetPosition(6700);
-            robot.linear[0].setPower(0.75);
-            robot.linear[1].setPower(0.75);
-            robot.linear[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //הלינאריקה
-            // put the mineral inside the cargo. להזין את המינרלים לתןך הקארגו
-        }
-//        if (gamepad2.right_trigger < 0) {
+//        if (gamepad2.left_bumper) {
 //            robot.shaft[0].setTargetPosition(8000);
 //            robot.shaft[1].setTargetPosition(8000);
 //            robot.shaft[0].setPower(0.8);
 //            robot.shaft[1].setPower(0.8);
 //            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            //הציר
 //            robot.linear[0].setTargetPosition(6700);
 //            robot.linear[1].setTargetPosition(6700);
 //            robot.linear[0].setPower(0.75);
 //            robot.linear[1].setPower(0.75);
 //            robot.linear[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            //הלינאריקה
-//            robot.shaft[0].setTargetPosition(16000);
-//            robot.shaft[1].setTargetPosition(16000);
-//            robot.shaft[0].setPower(0.8);
-//            robot.shaft[1].setPower(0.8);
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            //הציר
-//            //טיפוס!!
-//       }
-//        if (gamepad2.dpad_right) {
-//            robot.linear[0].setTargetPosition(6660);
-//            robot.linear[1].setTargetPosition(6660);
-//            robot.linear[0].setPower(0.75);
-//            robot.linear[1].setPower(0.75);
-//            robot.linear[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.inTake.setPower(1);
-//            // לינאריקה והזנה
+//
 //        }
 
-
     }
+
+
     void tankDriveTrainSetPower(double power) {
-        robot.driveTrain[0][0].setPower(-power * (gamepad1.left_stick_y));
-        robot.driveTrain[1][0].setPower(-power * (gamepad1.left_stick_y));
-        robot.driveTrain[0][1].setPower(-power * (gamepad1.right_stick_y));
-        robot.driveTrain[1][1].setPower(-power * (gamepad1.right_stick_y));
+        robot.driveTrain[0][0].setPower(-power * (gamepad1.right_stick_y));
+        robot.driveTrain[1][0].setPower(-power * (gamepad1.right_stick_y));
+        robot.driveTrain[0][1].setPower(-power * (gamepad1.left_stick_y));
+        robot.driveTrain[1][1].setPower(-power * (gamepad1.left_stick_y));
     }
 
 

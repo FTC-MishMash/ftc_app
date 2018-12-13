@@ -34,8 +34,8 @@ public class Robot {
 
     public Robot(HardwareMap hardwareMap) {
         driveTrain = new DcMotor[2][2];
-        shaft = new DcMotor[2];
-        linear = new DcMotor[2];
+//        shaft = new DcMotor[2];
+//        linear = new DcMotor[2];
 //        inTake = hardwareMap.get(DcMotor.class, "inTake");
 //
 //        linear[0] = hardwareMap.get(DcMotor.class, "linearRight");
@@ -47,8 +47,8 @@ public class Robot {
         driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
         driveTrain[0][1] = hardwareMap.get(DcMotor.class, "rightFront");
         driveTrain[1][1] = hardwareMap.get(DcMotor.class, "rightBack");
-//        shaft[0] = hardwareMap.get(DcMotor.class, "shaft0");
-//        shaft[1] = hardwareMap.get(DcMotor.class, "shaft1");
+//        shaft[0] = hardwareMap.get(DcMotor.class, "shaftRight");
+//        shaft[1] = hardwareMap.get(DcMotor.class, "shaftLeft");
 
         driveTrain[0][0].setDirection(DcMotorSimple.Direction.REVERSE);
         driveTrain[1][0].setDirection(DcMotorSimple.Direction.FORWARD);

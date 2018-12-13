@@ -11,8 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 @Autonomous
 public class Red_1_gyro extends LinearOpMode {
-    Robot markIII;
-    BNO055IMU gyro;
+    Robot robot;
     DcMotor[][] DriveMotors;
 
     public void gyro_drive() {
@@ -27,9 +26,9 @@ public class Red_1_gyro extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //    markIII=new Robot(hardware Map);
-        gyro = markIII.getImu();
-        DriveMotors = markIII.getDriveTrain();
+        robot=new Robot(hardwareMap);
+        robot.imu = robot.getImu();
+        DriveMotors = robot.getDriveTrain();
         waitForStart();
         gyro_drive();
 
@@ -37,13 +36,13 @@ public class Red_1_gyro extends LinearOpMode {
     }
 
     public float getRoll() {
-        return gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).secondAngle;
+        return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).secondAngle;
     }
 
     public void setMotorPower(double[][] power) { //Stores the four drivetrain motors power in array
         for (int row = 0; opModeIsActive() && row < 2; row++)
             for (int col = 0; opModeIsActive() && col < 2; col++)
-                markIII.driveTrain[row][col].setPower(power[row][col]);
+                robot.driveTrain[row][col].setPower(power[row][col]);
     }
 
 }
