@@ -17,7 +17,7 @@ public class Red_1_gyro extends LinearOpMode {
     public void gyro_drive() {
         double power = 0.3;
         setMotorPower(new double[][]{{power, power}, {power, power}});
-        while (opModeIsActive() && getRoll() >= -30) {
+        while (opModeIsActive() && getYaw() >= -14.3) {
             setMotorPower(new double[][]{{power, power}, {power, power}});
         }
         setMotorPower(new double[][]{{0, 0}, {0, 0}});
@@ -35,8 +35,8 @@ public class Red_1_gyro extends LinearOpMode {
 
     }
 
-    public float getRoll() {
-        return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).secondAngle;
+    public float getYaw() {
+        return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).thirdAngle;
     }
 
     public void setMotorPower(double[][] power) { //Stores the four drivetrain motors power in array
