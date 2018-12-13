@@ -61,7 +61,7 @@ public class autoMode extends LinearOpMode {
 
 
         robot = new Robot(hardwareMap);
-        initVuforia();
+        initVuforiaPhoneCamera();
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
@@ -87,20 +87,20 @@ public class autoMode extends LinearOpMode {
         runTime.startTime();
 
 //        getOffTheClimb(robot.imu, robot.shaft, 0.3);
-        motors = robot.getDriveTrain();
+
         if (cubePlace == -1) {//there is NOT cube/ or only one ball
 
         } else if (cubePlace == 0) {//see only 2 balls
 
-            Driving.ScaledTurn(50, motors, robot.imu, 0.5, telemetry);
+            Driving.ScaledTurn(50, robot.driveTrain, robot.imu, 0.5, telemetry);
 
         } else if (cubePlace == 1) {//cube RIGHT
 
-            Driving.ScaledTurn(15, motors, robot.imu, 0.5, telemetry);
+            Driving.ScaledTurn(15, robot.driveTrain, robot.imu, 0.5, telemetry);
 
         } else if (cubePlace == 2) {//cube LEFT
 
-            Driving.ScaledTurn(70, motors, robot.imu, 0.5, telemetry);
+            Driving.ScaledTurn(70, robot.driveTrain, robot.imu, 0.5, telemetry);
 
         } else if (cubePlace == 3) {//cube CENTER
             //No need to move
@@ -362,6 +362,7 @@ public class autoMode extends LinearOpMode {
         robot.driveTrain[1][0].setPower(0);//Left Back
         robot.driveTrain[0][0].setPower(0);//LEFT Front
     }
+
     private void followCubeRecognision(double power) {
         double runTime = 0;
         telemetry.addLine("follow cube 1:");
@@ -444,6 +445,7 @@ public class autoMode extends LinearOpMode {
         robot.driveTrain[1][0].setPower(0);//Left Back
         robot.driveTrain[0][0].setPower(0);//LEFT Front
     }
+
     public double[] GyroPID(double heading, double lasterror, BNO055IMU imu) {
         double kp = 0.015, kd = 0.01, ki = 0, nexterror = 0;
         double err = heading - imu.getAngularOrientation(AxesReference.INTRINSIC,
@@ -566,7 +568,24 @@ public class autoMode extends LinearOpMode {
         }
     }
 
-    public void initVuforia() {
+    public void initVuforiaPhoneCamera() {
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         */
+
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+//        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        //  Instantiate the Vuforia engine
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
+    }
+
+
+    public void initVuforiaWebCam() {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          */
