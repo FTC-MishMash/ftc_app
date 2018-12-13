@@ -51,7 +51,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
-public class code1 extends LinearOpMode {
+public class code extends LinearOpMode {
     Robot robot;
 
 
