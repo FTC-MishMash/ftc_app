@@ -116,7 +116,7 @@ public class autoMode extends LinearOpMode {
 
         }
 
-        followCube(0.15);//start power
+        followCubeRecognision(0.15);//start power
         if (tfod != null)
 
         {
