@@ -102,8 +102,8 @@ public class ObjectDetectionWeb extends LinearOpMode {
 
         waitForStart();
 
-        if (opModeIsActive()) {
-            /** Activate Tensor Flow Object Detection. */
+             if (opModeIsActive()) {
+             /** Activate Tensor Flow Object Detection. */
             if (tfod != null) {
                 tfod.activate();
             }
