@@ -145,7 +145,9 @@ public class navigationToTargert extends LinearOpMode {
 //           driveTargetImageEncoder(8,180,0.5,Driving.getCurrentScaledAngle(imu));
             // driveTargetImageEncoder(20,0,0.6,Driving.getCurrentScaledAngle(imu));
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
-            while (opModeIsActive() && getPositions() == null) ;
+            searchImage();
+            setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
+            sleep(1000);
             driveToImage();
 
 //           for (VuforiaTrackable trackable : allTrackables) {
@@ -252,11 +254,17 @@ public class navigationToTargert extends LinearOpMode {
         }
         return null;
     }
-public void searchImage( ){
-        runtime.reset();
-      double time0=  runtime.startTime();
 
-}
+    public void searchImage() {
+        runtime.reset();
+        double time0 = runtime.startTime();
+        double currTime = time0;
+        while (currTime - time0 > 5000 && getPositions() == null) {
+            currTime = runtime.time();
+            telemetry.addData("time passed", currTime);
+        }
+    }
+
     public void driveTargetImageEncoder(double goalDist, double direction, double k,
                                         double heading) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
         if (opModeIsActive()) {

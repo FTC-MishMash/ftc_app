@@ -57,8 +57,6 @@ public class autoMode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
-
         robot = new Robot(hardwareMap);
         initVuforiaWebCam();
 
