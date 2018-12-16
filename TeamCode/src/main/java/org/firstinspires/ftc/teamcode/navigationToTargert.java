@@ -147,7 +147,7 @@ public class navigationToTargert extends LinearOpMode {
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
             searchImage();
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
-            sleep(1000);
+            sleep(1000);///j
             driveToImage();
 
 //           for (VuforiaTrackable trackable : allTrackables) {
