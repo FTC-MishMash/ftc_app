@@ -253,8 +253,9 @@ public class navigationToTargert extends LinearOpMode {
         return null;
     }
 public void searchImage( ){
-//        runtime.sta
-//         while ()
+        runtime.reset();
+      double time0=  runtime.startTime();
+
 }
     public void driveTargetImageEncoder(double goalDist, double direction, double k,
                                         double heading) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
