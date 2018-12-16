@@ -75,7 +75,7 @@ public class autoMode extends LinearOpMode {
         if (tfod != null) {
             tfod.activate();
         }
-        int cubePlace = -1;//dont see any cube
+        int cubePlace = -1;//dont see any cube.
         while (!isStarted())
             cubePlace = getCube();//update cube location
 
