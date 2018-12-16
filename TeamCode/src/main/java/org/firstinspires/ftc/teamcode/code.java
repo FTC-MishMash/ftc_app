@@ -29,11 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
@@ -42,50 +39,39 @@ import com.qualcomm.robotcore.util.Range;
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
- *
+ * <p>
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all linear OpModes contain.
- *
+ * <p>
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
+@TeleOp(name = "Basic: Linear OpMode", group = "Linear Opmode")
 public class code extends LinearOpMode {
     Robot robot;
 
 
     @Override
     public void runOpMode() {
-
+        robot = new Robot(hardwareMap);
         waitForStart();
+        int angle = 0;
+        while (opModeIsActive()) {
+            Range.clip(angle, -180, 180);
+            if (gamepad1.a) {
+                angle += 5;
+            }
+            if ((gamepad1.b)) {
+                angle -= 5;
+            }
+            if (gamepad1.x){
+                Driving.ScaledTurn(angle, robot.driveTrain, robot.imu, 0.5, telemetry);
+            }
+            telemetry.addData("angle:   ",angle);
+            telemetry.update();
 
-        Driving.ScaledTurn(-180, robot.driveTrain, robot.imu, 0.5, telemetry);
-        sleep(5000);
-        Driving.ScaledTurn(-150, robot.driveTrain, robot.imu, 0.5, telemetry);
-        sleep(5000);
-        Driving.ScaledTurn(-100, robot.driveTrain, robot.imu, 0.5, telemetry);
-        sleep(5000);
-        Driving.ScaledTurn(-50, robot.driveTrain, robot.imu, 0.5, telemetry);
-        sleep(5000);
-        Driving.ScaledTurn(-0, robot.driveTrain, robot.imu, 0.5, telemetry);
-        sleep(5000);
-        Driving.ScaledTurn(50, robot.driveTrain, robot.imu, 0.5, telemetry);
-        sleep(5000);
-        Driving.ScaledTurn(100, robot.driveTrain, robot.imu, 0.5, telemetry);
-        sleep(5000);
-        Driving.ScaledTurn(150, robot.driveTrain, robot.imu, 0.5, telemetry);
-        sleep(5000);
-        Driving.ScaledTurn(180, robot.driveTrain, robot.imu, 0.5, telemetry);
-
-
-
-
-
-
-
-
-
+        }
 
     }
 }

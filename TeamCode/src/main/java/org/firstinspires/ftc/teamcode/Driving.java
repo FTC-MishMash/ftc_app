@@ -51,7 +51,8 @@ public class Driving {
                 telemetry.update();
             }
         else if (goalAngle > 180 && currentAngle < 180)
-            while ((currentAngle <= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle > 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
+            while (
+                    (currentAngle <= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle > 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
                 currentAngle = getCurrentScaledAngle(imu);
                 telemetry.addData("angle case 1:", currentAngle);
                 telemetry.update();
