@@ -85,21 +85,22 @@ public class autoMode extends LinearOpMode {
         runTime.reset();
         runTime.startTime();
         if (opModeIsActive()) {
+
 //        getOffTheClimb(robot.imu, robot.shaft, 0.3);
 
             if (cubePlace == -1) {//there is NOT cube/ or only one ball
 
             } else if (cubePlace == 0) {//see only 2 balls
 
-                Driving.ScaledTurn(50, robot.driveTrain, robot.imu, 0.5, telemetry);
+                ScaledTurn(50, robot.driveTrain, robot.imu, 0.5);
 
             } else if (cubePlace == 1) {//cube RIGHT
 
-                Driving.ScaledTurn(15, robot.driveTrain, robot.imu, 0.5, telemetry);
+                ScaledTurn(15, robot.driveTrain, robot.imu, 0.5);
 
             } else if (cubePlace == 2) {//cube LEFT
 
-                Driving.ScaledTurn(70, robot.driveTrain, robot.imu, 0.5, telemetry);
+                ScaledTurn(70, robot.driveTrain, robot.imu, 0.5);
 
             } else if (cubePlace == 3) {//cube CENTER
                 //No need to move
@@ -125,7 +126,7 @@ public class autoMode extends LinearOpMode {
             sleep(2000);
             driveByEncoderRoverRuckus(-20, -20, 0.4);
             sleep(2000);
-            Driving.ScaledTurn(110, robot.driveTrain, robot.imu, 0.5, telemetry);
+            ScaledTurn(110, robot.driveTrain, robot.imu, 0.5);
 
         }
     }
@@ -459,9 +460,9 @@ public class autoMode extends LinearOpMode {
     }
 
     public void getOffTheClimb(BNO055IMU imu, DcMotor[] motorsHanging, double power) {
-        setMotorPower(power);
+        setMotorSHAFTPower(power);
         while (!straightToField(imu)) ;
-        setMotorPower(0);
+        setMotorSHAFTPower(0);
     }
 
     public boolean straightToField(BNO055IMU imu) {
@@ -488,7 +489,7 @@ public class autoMode extends LinearOpMode {
                 robot.driveTrain[row][col].setPower(power[row][col]);
     }
 
-    public void setMotorPower(double power) { //Stores the four drivetrain motors power in array
+    public void setMotorSHAFTPower(double power) { //Stores the four drivetrain motors power in array
         for (int row = 0; opModeIsActive() && row < 2; row++)
             robot.shaft[row].setPower(power);
     }
@@ -665,5 +666,70 @@ public class autoMode extends LinearOpMode {
 
     }
 
+    public void ScaledTurn(double goalAngle, DcMotor[][] driveMotors, BNO055IMU imu, double power) {
+        boolean sideOfTurn = true;
+        double deltaAngle = 0;
+
+        boolean directTurn = true;
+        double currentAngle = getCurrentScaledAngle(imu);
+        double angle0 = currentAngle;
+        if (currentAngle < goalAngle) {
+            if (goalAngle - currentAngle <= 360 - (goalAngle - currentAngle)) {
+                sideOfTurn = false;
+                deltaAngle = goalAngle - currentAngle;
+            } else {
+                sideOfTurn = true;
+                deltaAngle = 360 - (goalAngle - currentAngle);
+                directTurn = false;
+            }
+
+
+        } else {
+            if (currentAngle - goalAngle <= 360 - (currentAngle - goalAngle)) {
+                sideOfTurn = true;
+                deltaAngle = currentAngle - goalAngle;
+            } else {
+                sideOfTurn = false;
+                deltaAngle = 360 - (currentAngle - goalAngle);
+                directTurn = false;
+            }
+        }
+        if (sideOfTurn)
+            setMotorPower(new double[][]{{power, -power}, {power, -power}});
+        else
+            setMotorPower(new double[][]{{-power, power}, {-power, power}});
+        if (directTurn)
+            while (Math.abs(angle0 - currentAngle) < deltaAngle) {  //motors running
+                currentAngle = getCurrentScaledAngle(imu);
+                telemetry.addData("angle case 3:", currentAngle);
+                telemetry.update();
+            }
+        else if (goalAngle > 180 && currentAngle < 180)
+            while (
+                    (currentAngle <= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle > 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
+                currentAngle = getCurrentScaledAngle(imu);
+                telemetry.addData("angle case 1:", currentAngle);
+                telemetry.update();
+            }
+
+        else if (goalAngle < 180 && currentAngle > 180)
+            while ((currentAngle >= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle < 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
+                currentAngle = getCurrentScaledAngle(imu);
+                telemetry.addData("angle case 2:", currentAngle);
+                telemetry.update();
+            }
+
+
+        setMotorPower(new double[][]{{0, 0}, {0, 0}});
+    }
+
+
+    public static double getCurrentScaledAngle(BNO055IMU imu) {
+        double angle = imu.getAngularOrientation(AxesReference.INTRINSIC,
+                AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        if (angle < 0)
+            angle += 360;
+        return angle;
+    }
 
 }
