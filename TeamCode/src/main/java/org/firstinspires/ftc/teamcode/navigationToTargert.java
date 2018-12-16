@@ -4,8 +4,9 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -48,7 +49,7 @@ public class navigationToTargert extends LinearOpMode {
     // Select which camera you want use.  The FRONT camera is the one on the same side as the screen.
     // Valid choices are:  BACK or FRONT
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-
+    ElapsedTime runtime = new ElapsedTime();
     private OpenGLMatrix lastLocation = null;
     private boolean targetVisible = false;
     List<VuforiaTrackable> allTrackablesNav;
@@ -60,11 +61,12 @@ public class navigationToTargert extends LinearOpMode {
     BNO055IMU imu;
     final double tixRound = 600;
     final double cmRound = 27;
+
     @Override
     public void runOpMode() throws InterruptedException {
-      robot = new Robot(hardwareMap);
+        robot = new Robot(hardwareMap);
         motors = robot.driveTrain;
-        imu=robot.imu;
+        imu = robot.imu;
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
@@ -141,7 +143,7 @@ public class navigationToTargert extends LinearOpMode {
         waitForStart();
         if (opModeIsActive()) {
 //           driveTargetImageEncoder(8,180,0.5,Driving.getCurrentScaledAngle(imu));
-           // driveTargetImageEncoder(20,0,0.6,Driving.getCurrentScaledAngle(imu));
+            // driveTargetImageEncoder(20,0,0.6,Driving.getCurrentScaledAngle(imu));
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
             while (opModeIsActive() && getPositions() == null) ;
             driveToImage();
@@ -250,8 +252,12 @@ public class navigationToTargert extends LinearOpMode {
         }
         return null;
     }
+public void searchImage( ){
+//        runtime.sta
+//         while ()
+}
     public void driveTargetImageEncoder(double goalDist, double direction, double k,
-                                     double heading) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
+                                        double heading) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
         if (opModeIsActive()) {
 //dc motor [0][0] not working
             // k is power for motors
@@ -264,14 +270,14 @@ public class navigationToTargert extends LinearOpMode {
             motors[1][1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             double pidErr[] = {0, 0};
 //PID reset
-            pidErr = PID.GyroPID(imu,heading, pidErr[1]); //Convert degrees to radians
+            pidErr = PID.GyroPID(imu, heading, pidErr[1]); //Convert degrees to radians
             double deg2rad = direction / 180 * Math.PI;
             double currDist = 0;
             double err = goalDist;
             double time0 = getRuntime();
 // Drive until distance target completed
 
-            while (opModeIsActive()&&getPositions()==null && (err) > 2 && (getRuntime() - time0) < goalDist / 10) {
+            while (opModeIsActive() && getPositions() == null && (err) > 2 && (getRuntime() - time0) < goalDist / 10) {
                 if (err > 0) {
                     motors[0][0].setPower(k * (Math.cos(deg2rad) + Math.sin(deg2rad) - pidErr[0]));
                     motors[1][0].setPower(k * (Math.cos(deg2rad) - Math.sin(deg2rad) + pidErr[0]));
@@ -295,7 +301,7 @@ public class navigationToTargert extends LinearOpMode {
                 telemetry.update();
             }
         }
-        setMotorPower(motors,new double[][]{{0.0, 0.0}, {0.0, 0.0}});
+        setMotorPower(motors, new double[][]{{0.0, 0.0}, {0.0, 0.0}});
 
     }
 

@@ -27,11 +27,7 @@ public class DriveRoverRuckus extends OpMode {
     int pos[][] = new int[2][2];
 
     int a = 1;
-    boolean flagSideOpen = true;
 
-    boolean flagSideWait = false;
-
-    double tSideWait = 0;
 
     Robot robot;
     /*
@@ -75,8 +71,8 @@ public class DriveRoverRuckus extends OpMode {
     @Override
     public void loop() {
         tankDriveTrainSetPower(1);
-        robot.driveTrain[0][0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.driveTrain[0][1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        robot.driveTrain[0][0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        robot.driveTrain[0][1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //            sticks[0][0] = gamepad1.left_stick_x;
 //            sticks[1][0] = gamepad1.left_stick_y;
 //            sticks[0][1] = gamepad1.right_stick_x;
@@ -158,8 +154,8 @@ public class DriveRoverRuckus extends OpMode {
 
     void tankDriveTrainSetPower(double power) {
         robot.driveTrain[0][0].setPower(-power * (gamepad1.right_stick_y));
-        robot.driveTrain[1][0].setPower(-power * (gamepad1.right_stick_y));
-        robot.driveTrain[0][1].setPower(-power * (gamepad1.left_stick_y));
+        robot.driveTrain[0][1].setPower(-power * (gamepad1.right_stick_y));
+        robot.driveTrain[1][0].setPower(-power * (gamepad1.left_stick_y));
         robot.driveTrain[1][1].setPower(-power * (gamepad1.left_stick_y));
     }
 
