@@ -141,7 +141,6 @@ public class navigationToTargert extends LinearOpMode {
         waitForStart();
         if (opModeIsActive()) {
 //           driveTargetImageEncoder(8,180,0.5,Driving.getCurrentScaledAngle(imu));
-            driveTargetImageEncoder(20,0,0.6,Driving.getCurrentScaledAngle(imu));
             setMotorPower(motors, new double[][]{{power, -power}, {power, -power}});
             while (opModeIsActive() && getPositions() == null) ;
             driveToImage();
