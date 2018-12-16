@@ -401,10 +401,10 @@ public class autoMode extends LinearOpMode {
                         telemetry.update();
 
 
-                        robot.driveTrain[0][1].setPower(-addToMotors[0] + power);//RIGHT Front
-                        robot.driveTrain[1][1].setPower(-addToMotors[0] + power);//Right Back
-                        robot.driveTrain[1][0].setPower(-addToMotors[1] + power);//Left Back
-                        robot.driveTrain[0][0].setPower(-addToMotors[1] + power);//LEFT Front
+                        robot.driveTrain[0][1].setPower(addToMotors[0] + power);//RIGHT Front
+                        robot.driveTrain[1][1].setPower(addToMotors[0] + power);//Right Back
+                        robot.driveTrain[1][0].setPower(addToMotors[1] + power);//Left Back
+                        robot.driveTrain[0][0].setPower(addToMotors[1] + power);//LEFT Front
                         runTime = getRuntime();
 
                     } else {
