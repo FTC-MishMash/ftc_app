@@ -33,6 +33,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -54,6 +58,7 @@ public class code extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
         robot = new Robot(hardwareMap);
         waitForStart();
         int angle = 0;
@@ -69,6 +74,8 @@ public class code extends LinearOpMode {
                 Driving.ScaledTurn(angle, robot.driveTrain, robot.imu, 0.5, telemetry);
             }
             telemetry.addData("angle:   ",angle);
+            telemetry.update();
+            telemetry.addData(" imt",robot.imu.getAngularOrientation(AxesReference.EXTRINSIC,AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
             telemetry.update();
 
         }
