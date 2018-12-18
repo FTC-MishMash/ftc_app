@@ -122,11 +122,11 @@ public class autoMode extends LinearOpMode {
             if (tfod != null) {
                 tfod.shutdown();
             }
-            driveByEncoderRoverRuckus(20, 20, 0.4);
+            driveByEncoderRoverRuckus(35, 50, 1);
             sleep(2000);
-            driveByEncoderRoverRuckus(-20, -20, 0.4);
+            driveByEncoderRoverRuckus(-35, -50, 1);
             sleep(2000);
-            ScaledTurn(110, robot.driveTrain, robot.imu, 0.5);
+            ScaledTurn(60, robot.driveTrain, robot.imu, 0.5);
 
         }
     }
@@ -611,20 +611,25 @@ public class autoMode extends LinearOpMode {
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
     }
 
-    public void driveByEncoderRoverRuckus(double goalDistRight, double goalDistLeft, double power) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
+    public void driveByEncoderRoverRuckus(int goalDistRight, int goalDistLeft, double power) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
         //Reset encoders
 
-        final double tixRound = 600;
-        final double cmRound = 27;
+        final int tixRound = 600;
+        final int cmRound = 27;
 
-        double dRight = (goalDistRight * tixRound) / cmRound;
-        double dLeft = (goalDistLeft * tixRound) / cmRound;
+        int startCurrentPosision[][] = new int[2][2];
+        int dRight = (goalDistRight * tixRound) / cmRound;
+        int dLeft = (goalDistLeft * tixRound) / cmRound;
+        startCurrentPosision[0][0] = robot.driveTrain[0][0].getCurrentPosition();
+        startCurrentPosision[1][0] = robot.driveTrain[1][0].getCurrentPosition();
+        startCurrentPosision[0][1] = robot.driveTrain[0][1].getCurrentPosition();
+        startCurrentPosision[1][1] = robot.driveTrain[1][1].getCurrentPosition();
 
-        robot.driveTrain[0][0].setTargetPosition((int) (robot.driveTrain[0][0].getCurrentPosition() + dLeft));
-        robot.driveTrain[1][0].setTargetPosition((int) (robot.driveTrain[1][0].getCurrentPosition() + dLeft));
 
-        robot.driveTrain[0][1].setTargetPosition((int) (robot.driveTrain[0][1].getCurrentPosition() + dRight));
-        robot.driveTrain[1][1].setTargetPosition((int) (robot.driveTrain[1][1].getCurrentPosition() + dRight));
+        robot.driveTrain[0][0].setTargetPosition(robot.driveTrain[0][0].getCurrentPosition() + dLeft);
+        robot.driveTrain[1][0].setTargetPosition(robot.driveTrain[1][0].getCurrentPosition() + dLeft);
+        robot.driveTrain[0][1].setTargetPosition(robot.driveTrain[0][1].getCurrentPosition() + dRight);
+        robot.driveTrain[1][1].setTargetPosition(robot.driveTrain[1][1].getCurrentPosition() + dRight);
 
 
         robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -650,6 +655,13 @@ public class autoMode extends LinearOpMode {
 //            telemetry.addData(" err", err);
 //            telemetry.update();
 //        }
+        while (opModeIsActive() &&
+                robot.driveTrain[0][0].getCurrentPosition() < startCurrentPosision[0][0] + dLeft
+                && robot.driveTrain[1][0].getCurrentPosition() < startCurrentPosision[1][0] + dLeft
+                && robot.driveTrain[0][1].getCurrentPosition() < startCurrentPosision[0][1] + dRight
+                && robot.driveTrain[1][1].getCurrentPosition() < startCurrentPosision[1][1] + dRight);
+
+
         for (int i = 0; i < 2; i++)
             for (int j = 0; j < 2; j++)
                 robot.driveTrain[i][j].setPower(0);
