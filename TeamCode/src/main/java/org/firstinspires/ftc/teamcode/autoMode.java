@@ -122,9 +122,9 @@ public class autoMode extends LinearOpMode {
             if (tfod != null) {
                 tfod.shutdown();
             }
-            driveByEncoderRoverRuckus(35, 50, 1);
+            driveByEncoderRoverRuckus(7, 7, 0.4);
             sleep(2000);
-            driveByEncoderRoverRuckus(-35, -50, 1);
+            driveByEncoderRoverRuckus(-15, -15, 0.3);
             sleep(2000);
             ScaledTurn(60, robot.driveTrain, robot.imu, 0.5);
 
@@ -612,14 +612,13 @@ public class autoMode extends LinearOpMode {
     }
 
     public void driveByEncoderRoverRuckus(int goalDistRight, int goalDistLeft, double power) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
-        //Reset encoders
-
+//direction 0 is forword, 1 is backword
         final int tixRound = 600;
         final int cmRound = 27;
-
+        double runTime = getRuntime();
         int startCurrentPosision[][] = new int[2][2];
-        int dRight = (goalDistRight * tixRound) / cmRound;
-        int dLeft = (goalDistLeft * tixRound) / cmRound;
+        int dRight = 1000*(goalDistRight * tixRound) / cmRound;
+        int dLeft = 1000*(goalDistLeft * tixRound) / cmRound;
         startCurrentPosision[0][0] = robot.driveTrain[0][0].getCurrentPosition();
         startCurrentPosision[1][0] = robot.driveTrain[1][0].getCurrentPosition();
         startCurrentPosision[0][1] = robot.driveTrain[0][1].getCurrentPosition();
@@ -641,27 +640,25 @@ public class autoMode extends LinearOpMode {
             for (int j = 0; j < 2; j++)
                 robot.driveTrain[i][j].setPower(power);
 
+        telemetry.addLine("go to target");
+        telemetry.update();
+//        while (opModeIsActive() &&
+//                (Math.abs((startCurrentPosision[0][0] + dLeft) - robot.driveTrain[0][0].getCurrentPosition())) > 1
+//                && (Math.abs((startCurrentPosision[1][0] + dLeft) - robot.driveTrain[1][0].getCurrentPosition())) > 1
+//                && (Math.abs((startCurrentPosision[0][1] + dRight) - robot.driveTrain[0][1].getCurrentPosition())) > 1
+//                && (Math.abs((startCurrentPosision[1][1] + dRight) - robot.driveTrain[1][1].getCurrentPosition())) > 1
+//                && getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10));
 
-//        double err = 200;
-//        while (err > 100 && opModeIsActive()) {
-//            err = 0;
-//            for (int i = 0; i < 2; i++)
-//                for (int j = 0; j < 2; j++) {
-//                    err += Math.abs(goalEncoder[i][j] - robot.driveTrain[i][j].getCurrentPosition());
-//                    telemetry.addData(" encoder", robot.driveTrain[i][j].getCurrentPosition());
-//                }
-//            err /= 4;
-//
-//            telemetry.addData(" err", err);
-//            telemetry.update();
-//        }
+
         while (opModeIsActive() &&
-                robot.driveTrain[0][0].getCurrentPosition() < startCurrentPosision[0][0] + dLeft
-                && robot.driveTrain[1][0].getCurrentPosition() < startCurrentPosision[1][0] + dLeft
-                && robot.driveTrain[0][1].getCurrentPosition() < startCurrentPosision[0][1] + dRight
-                && robot.driveTrain[1][1].getCurrentPosition() < startCurrentPosision[1][1] + dRight);
-
-
+                robot.driveTrain[0][0].isBusy()
+                && robot.driveTrain[1][0].isBusy()
+                && robot.driveTrain[0][1].isBusy()
+                && robot.driveTrain[1][1].isBusy()
+                && getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10))
+            sleep(0);
+        telemetry.addLine("end move encoder");
+        telemetry.update();
         for (int i = 0; i < 2; i++)
             for (int j = 0; j < 2; j++)
                 robot.driveTrain[i][j].setPower(0);
