@@ -32,7 +32,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 public class navigationToTargert extends LinearOpMode {
     Robot robot;
     DcMotor[][] motors;
-    double power = 0.17;
+    double power = -  0.17;
     static final int XtargetPosition = 63;
     static final int YtargetPosition = 6;
     static final int ZtargetPosition = -4;
@@ -146,9 +146,11 @@ public class navigationToTargert extends LinearOpMode {
             // driveTargetImageEncoder(20,0,0.6,Driving.getCurrentScaledAngle(imu));
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
             searchImage();
+            setMotorPower(motors, new double[][]{{power, -power}, {power, -power}});
+            while (getPositions()==null)
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
             sleep(1000);///j
-            driveToImage();
+           driveToImage();
 
 //           for (VuforiaTrackable trackable : allTrackables) {
 //                /**
@@ -195,7 +197,7 @@ public class navigationToTargert extends LinearOpMode {
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
             sleep(1000);
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
-            while (opModeIsActive() && positions[0] <= 58) {
+            while (opModeIsActive() && positions[0] <= 60) {
                 positions = getPositions();
                 telemetry.addData("x:", positions[0]);
                 telemetry.update();
@@ -257,11 +259,12 @@ public class navigationToTargert extends LinearOpMode {
 
     public void searchImage() {
         runtime.reset();
-        double time0 = runtime.startTime();
+        double time0 = runtime.seconds();
         double currTime = time0;
-        while (currTime - time0 > 5000 && getPositions() == null) {
-            currTime = runtime.time();
-            telemetry.addData("time passed", currTime);
+        while (opModeIsActive()&&currTime - time0 < 5 && getPositions() == null) {
+            currTime = runtime.seconds();
+            telemetry.addData("time passed", currTime-time0);
+            telemetry.update();
         }
     }
 
