@@ -54,7 +54,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 @TeleOp(name = "Basic: Linear OpMode", group = "Linear Opmode")
 public class code extends LinearOpMode {
     Robot robot;
-
+    autoMode auto;
 
     @Override
     public void runOpMode() {
@@ -63,19 +63,21 @@ public class code extends LinearOpMode {
         waitForStart();
         int angle = 0;
         while (opModeIsActive()) {
-            Range.clip(angle, -180, 180);
+            angle = Range.clip(angle, -180, 180);
             if (gamepad1.a) {
                 angle += 5;
+
             }
-            if ((gamepad1.b)) {
+            if (gamepad1.b) {
                 angle -= 5;
             }
             if (gamepad1.x) {
-                Driving.ScaledTurn(angle, robot.driveTrain, robot.imu, 0.5, telemetry);
+                auto.ScaledTurn(angle, robot.driveTrain, robot.imu, 0.5);
             }
             telemetry.addData("angle:   ", angle);
-            telemetry.update();
-            telemetry.addData(" imt", robot.imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
+
+            telemetry.addData(" imt", robot.imu.getAngularOrientation
+                    (AxesReference.EXTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
             telemetry.update();
 
         }

@@ -153,9 +153,9 @@ public class DriveRoverRuckus extends OpMode {
 
 
     void tankDriveTrainSetPower(double power) {
-        robot.driveTrain[0][0].setPower(-power * (gamepad1.right_stick_y));
+        robot.driveTrain[0][0].setPower(-power * (gamepad1.left_stick_y));
         robot.driveTrain[0][1].setPower(-power * (gamepad1.right_stick_y));
-        robot.driveTrain[1][0].setPower(-power * (gamepad1.left_stick_y));
+        robot.driveTrain[1][0].setPower(-power * (gamepad1.right_stick_y));
         robot.driveTrain[1][1].setPower(-power * (gamepad1.left_stick_y));
     }
 

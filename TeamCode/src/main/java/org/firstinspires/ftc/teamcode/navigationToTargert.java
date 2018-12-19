@@ -32,7 +32,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 public class navigationToTargert extends LinearOpMode {
     Robot robot;
     DcMotor[][] motors;
-    double power = 0.17;
+    double power = -  0.17;
     static final int XtargetPosition = 63;
     static final int YtargetPosition = 6;
     static final int ZtargetPosition = -4;
@@ -145,8 +145,12 @@ public class navigationToTargert extends LinearOpMode {
 //           driveTargetImageEncoder(8,180,0.5,Driving.getCurrentScaledAngle(imu));
             // driveTargetImageEncoder(20,0,0.6,Driving.getCurrentScaledAngle(imu));
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
-            while (opModeIsActive() && getPositions() == null) ;
-            driveToImage();
+            searchImage();
+            setMotorPower(motors, new double[][]{{power, -power}, {power, -power}});
+            while (getPositions()==null)
+            setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
+            sleep(1000);///j
+           driveToImage();
 
 //           for (VuforiaTrackable trackable : allTrackables) {
 //                /**
@@ -193,7 +197,7 @@ public class navigationToTargert extends LinearOpMode {
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
             sleep(1000);
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
-            while (opModeIsActive() && positions[0] <= 58) {
+            while (opModeIsActive() && positions[0] <= 60) {
                 positions = getPositions();
                 telemetry.addData("x:", positions[0]);
                 telemetry.update();
@@ -252,11 +256,18 @@ public class navigationToTargert extends LinearOpMode {
         }
         return null;
     }
-public void searchImage( ){
-        runtime.reset();
-      double time0=  runtime.startTime();
 
-}
+    public void searchImage() {
+        runtime.reset();
+        double time0 = runtime.seconds();
+        double currTime = time0;
+        while (opModeIsActive()&&currTime - time0 < 5 && getPositions() == null) {
+            currTime = runtime.seconds();
+            telemetry.addData("time passed", currTime-time0);
+            telemetry.update();
+        }
+    }
+
     public void driveTargetImageEncoder(double goalDist, double direction, double k,
                                         double heading) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
         if (opModeIsActive()) {
