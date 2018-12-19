@@ -70,12 +70,12 @@ public class code extends LinearOpMode {
             if ((gamepad1.b)) {
                 angle -= 5;
             }
-            if (gamepad1.x){
+            if (gamepad1.x) {
                 Driving.ScaledTurn(angle, robot.driveTrain, robot.imu, 0.5, telemetry);
             }
-            telemetry.addData("angle:   ",angle);
+            telemetry.addData("angle:   ", angle);
             telemetry.update();
-            telemetry.addData(" imt",robot.imu.getAngularOrientation(AxesReference.EXTRINSIC,AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
+            telemetry.addData(" imt", robot.imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
             telemetry.update();
 
         }
