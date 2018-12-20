@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -32,7 +33,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 public class navigationToTargert extends LinearOpMode {
     Robot robot;
     DcMotor[][] motors;
-    double power = -  0.17;
+    double power = -0.17;
+    final double minAngleToTarget = 35;
     static final int XtargetPosition = 63;
     static final int YtargetPosition = 6;
     static final int ZtargetPosition = -4;
@@ -141,43 +143,22 @@ public class navigationToTargert extends LinearOpMode {
         /** Start tracking the data sets we care about. */
         targetsRoverRuckus.activate();
         waitForStart();
-        if (opModeIsActive()) {
-//           driveTargetImageEncoder(8,180,0.5,Driving.getCurrentScaledAngle(imu));
-            // driveTargetImageEncoder(20,0,0.6,Driving.getCurrentScaledAngle(imu));
-            setMotorPower(motors, new double[][]{{power, power}, {power, power}});
-            searchImage();
-            setMotorPower(motors, new double[][]{{power, -power}, {power, -power}});
-            while (getPositions()==null)
-            setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
-            sleep(1000);///j
-           driveToImage();
 
-//           for (VuforiaTrackable trackable : allTrackables) {
-//                /**
-//                 * getUpdatedRobotLocation() will return null if no new information is available since
-//                 * the last time that call was made, or if the trackable is not currently visible.
-//                 * getRobotLocation() will return null if the trackable is not currently visible.
-//                 */
-//                telemetry.addData(trackable.getName(), ((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() ? "Visible" : "Not Visible");    //
-//
-//                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-//                if (robotLocationTransform != null) {
-//                    lastLocation = robotLocationTransform;
-//                }
-//            }
-            /**
-             * Provide feedback as to where the robot was last located (if we know).
-             */
-//            if (lastLocation != null) {
-//                //  RobotLog.vv(TAG, "robot=%s", format(lastLocation));
-//                telemetry.addData("Pos", lastLocation);
-            //   driveToImage();
-//            } else {
-//                telemetry.addData("Pos", "Unknown");
-//            }
-//            telemetry.update();
-        }
+    while (opModeIsActive()){
+        telemetry.addData("angle: ",Driving.getCurrentScaledAngle(imu));
+        telemetry.update();
     }
+//
+//        setMotorPower(motors, new double[][]{{power, power}, {power, power}});
+//        searchImage();
+//        setMotorPower(motors, new double[][]{{power, -power}, {power, -power}});
+//        while (getPositions() == null)
+//            setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
+//        sleep(1000);///j
+//        driveToImage();
+    }
+
+
 
 
     /**
@@ -223,6 +204,41 @@ public class navigationToTargert extends LinearOpMode {
             for (int col = 0; opModeIsActive() && col < 2; col++)
                 motors[row][col].setPower(power[row][col]);
     }
+    public  void ScaledTurn(double goalAngle, DcMotor[][] driveMotors, BNO055IMU imu, double power) {
+
+        //  autoMode auto;
+        double currentAngle = Driving.getCurrentScaledAngle(imu);
+        double angle0 = currentAngle;
+        Driving.setTurnDirection(currentAngle, goalAngle);
+        if (sideOfTurn)
+            setMotorPower(driveMotors, new double[][]{{power, -power}, {power, -power}});
+        else
+            setMotorPower(driveMotors, new double[][]{{-power, power}, {-power, power}});
+        if (directTurn)
+            while (Math.abs(angle0 - currentAngle) < deltaAngle) {  //motors running
+                currentAngle = getCurrentScaledAngle(imu);
+                telemetry.addData("angle case 3:", currentAngle);
+                telemetry.update();
+            }
+        else if (goalAngle > 180 && currentAngle < 180)
+            while (
+                    (currentAngle <= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle > 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
+                currentAngle = getCurrentScaledAngle(imu);
+                telemetry.addData("angle case 1:", currentAngle);
+                telemetry.update();
+            }
+
+        else if (goalAngle < 180 && currentAngle > 180)
+            while ((currentAngle >= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle < 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
+                currentAngle = getCurrentScaledAngle(imu);
+                telemetry.addData("angle case 2:", currentAngle);
+                telemetry.update();
+            }
+
+
+        setMotorPower(driveMotors, new double[][]{{0, 0}, {0, 0}});
+    }
+
 
     public float[] getPositions() {
         for (VuforiaTrackable trackable : allTrackablesNav) {
@@ -261,9 +277,9 @@ public class navigationToTargert extends LinearOpMode {
         runtime.reset();
         double time0 = runtime.seconds();
         double currTime = time0;
-        while (opModeIsActive()&&currTime - time0 < 5 && getPositions() == null) {
+        while (opModeIsActive() && currTime - time0 < 5 && getPositions() == null) {
             currTime = runtime.seconds();
-            telemetry.addData("time passed", currTime-time0);
+            telemetry.addData("time passed", currTime - time0);
             telemetry.update();
         }
     }
