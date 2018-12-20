@@ -70,7 +70,7 @@ public class DriveRoverRuckus extends OpMode {
 
     @Override
     public void loop() {
-        tankDriveTrainSetPower(1);
+        tankDriveTrainSetPower(0.78);
 //        robot.driveTrain[0][0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        robot.driveTrain[0][1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //            sticks[0][0] = gamepad1.left_stick_x;
@@ -84,6 +84,7 @@ public class DriveRoverRuckus extends OpMode {
         telemetry.addData("[1][0]",robot.driveTrain[1][0].getCurrentPosition());
         telemetry.addData("[1][1]",robot.driveTrain[1][1].getCurrentPosition());
         telemetry.update();
+
 
 //        if (gamepad2.a) {
 //            robot.linear[0].setTargetPosition(6660);
@@ -153,10 +154,10 @@ public class DriveRoverRuckus extends OpMode {
 
 
     void tankDriveTrainSetPower(double power) {
-        robot.driveTrain[0][0].setPower(-power * (gamepad1.left_stick_y));
         robot.driveTrain[0][1].setPower(-power * (gamepad1.right_stick_y));
-        robot.driveTrain[1][0].setPower(-power * (gamepad1.right_stick_y));
-        robot.driveTrain[1][1].setPower(-power * (gamepad1.left_stick_y));
+        robot.driveTrain[0][0].setPower(-power * (gamepad1.left_stick_y));
+        robot.driveTrain[1][1].setPower(-power * (gamepad1.right_stick_y));
+        robot.driveTrain[1][0].setPower(-power * (gamepad1.left_stick_y));
     }
 
 

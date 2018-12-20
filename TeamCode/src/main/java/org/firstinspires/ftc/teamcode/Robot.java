@@ -50,10 +50,10 @@ public class Robot {
 //        shaft[0] = hardwareMap.get(DcMotor.class, "shaftRight");
 //        shaft[1] = hardwareMap.get(DcMotor.class, "shaftLeft");
 
-        driveTrain[0][0].setDirection(DcMotorSimple.Direction.REVERSE);
+        driveTrain[0][0].setDirection(DcMotorSimple.Direction.FORWARD);
         driveTrain[1][0].setDirection(DcMotorSimple.Direction.FORWARD);
         driveTrain[0][1].setDirection(DcMotorSimple.Direction.FORWARD);
-        driveTrain[1][1].setDirection(DcMotorSimple.Direction.FORWARD);
+        driveTrain[1][1].setDirection(DcMotorSimple.Direction.REVERSE);
 
 //        shaft[0].setDirection(DcMotorSimple.Direction.FORWARD);
 //        shaft[0].setDirection(DcMotorSimple.Direction.REVERSE);

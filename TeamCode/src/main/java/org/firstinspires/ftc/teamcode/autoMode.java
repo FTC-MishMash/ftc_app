@@ -124,7 +124,7 @@ public class autoMode extends LinearOpMode {
             }
             driveByEncoderRoverRuckus(7, 7, 0.4);
             sleep(2000);
-            driveByEncoderRoverRuckus(-15, -15, 0.3);
+            driveByEncoderRoverRuckus(-15, -15, 1);
             sleep(2000);
             ScaledTurn(60, robot.driveTrain, robot.imu, 0.5);
 
@@ -617,8 +617,8 @@ public class autoMode extends LinearOpMode {
         final int cmRound = 27;
         double runTime = getRuntime();
         int startCurrentPosision[][] = new int[2][2];
-        int dRight = 1000*(goalDistRight * tixRound) / cmRound;
-        int dLeft = 1000*(goalDistLeft * tixRound) / cmRound;
+        int dRight = (goalDistRight * tixRound) / cmRound;
+        int dLeft = (goalDistLeft * tixRound) / cmRound;
         startCurrentPosision[0][0] = robot.driveTrain[0][0].getCurrentPosition();
         startCurrentPosision[1][0] = robot.driveTrain[1][0].getCurrentPosition();
         startCurrentPosision[0][1] = robot.driveTrain[0][1].getCurrentPosition();
@@ -631,7 +631,7 @@ public class autoMode extends LinearOpMode {
         robot.driveTrain[1][1].setTargetPosition(robot.driveTrain[1][1].getCurrentPosition() + dRight);
 
 
-        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.driveTrain[1][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -642,21 +642,22 @@ public class autoMode extends LinearOpMode {
 
         telemetry.addLine("go to target");
         telemetry.update();
-//        while (opModeIsActive() &&
-//                (Math.abs((startCurrentPosision[0][0] + dLeft) - robot.driveTrain[0][0].getCurrentPosition())) > 1
-//                && (Math.abs((startCurrentPosision[1][0] + dLeft) - robot.driveTrain[1][0].getCurrentPosition())) > 1
-//                && (Math.abs((startCurrentPosision[0][1] + dRight) - robot.driveTrain[0][1].getCurrentPosition())) > 1
-//                && (Math.abs((startCurrentPosision[1][1] + dRight) - robot.driveTrain[1][1].getCurrentPosition())) > 1
-//                && getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10));
-
-
         while (opModeIsActive() &&
-                robot.driveTrain[0][0].isBusy()
-                && robot.driveTrain[1][0].isBusy()
-                && robot.driveTrain[0][1].isBusy()
-                && robot.driveTrain[1][1].isBusy()
-                && getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10))
-            sleep(0);
+                (Math.abs((startCurrentPosision[0][0] + dLeft) - robot.driveTrain[0][0].getCurrentPosition())) > 1
+                && (Math.abs((startCurrentPosision[1][0] + dLeft) - robot.driveTrain[1][0].getCurrentPosition())) > 1
+                && (Math.abs((startCurrentPosision[0][1] + dRight) - robot.driveTrain[0][1].getCurrentPosition())) > 1
+                && (Math.abs((startCurrentPosision[1][1] + dRight) - robot.driveTrain[1][1].getCurrentPosition())) > 1
+                && getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10)) ;
+
+
+//        while (opModeIsActive() &&
+//                robot.driveTrain[0][0].isBusy()
+//                && robot.driveTrain[1][0].isBusy()
+//                && robot.driveTrain[0][1].isBusy()
+//                && robot.driveTrain[1][1].isBusy()
+//                && getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10))
+//            sleep(0);
+
         telemetry.addLine("end move encoder");
         telemetry.update();
         for (int i = 0; i < 2; i++)
@@ -664,12 +665,9 @@ public class autoMode extends LinearOpMode {
                 robot.driveTrain[i][j].setPower(0);
 
         for (int i = 0; i < 2; i++)
-            for (int j = 0; j < 2; j++)
-
-            {
+            for (int j = 0; j < 2; j++) {
                 robot.driveTrain[i][j].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 robot.driveTrain[i][j].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
             }
 
 
