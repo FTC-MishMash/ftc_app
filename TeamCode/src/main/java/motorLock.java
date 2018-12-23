@@ -8,8 +8,7 @@ public class motorLock {
     autoMode auto;
 
     public void MotorsLock() {
-        final int tixRound = 0;
-        final int cmRound = 0;
+
         int startCurrentPosision[][] = new int[2][2];
         startCurrentPosision[0][0] = robot.shaft[0].getCurrentPosition();
         startCurrentPosision[1][0] = robot.shaft[1].getCurrentPosition();
