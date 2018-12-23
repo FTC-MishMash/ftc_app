@@ -17,7 +17,7 @@ public class motorLock extends LinearOpMode {
     }
     public void MotorsLock() {
 
-//
+
         robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition());
         robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition());
         robot.linear[0].setTargetPosition(robot.linear[0].getCurrentPosition());
