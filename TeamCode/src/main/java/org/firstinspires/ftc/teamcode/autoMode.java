@@ -673,6 +673,27 @@ public class autoMode extends LinearOpMode {
 
     }
 
+    public void MotorsLock() {
+
+        int startCurrentPosision[][] = new int[2][2];
+        startCurrentPosision[0][0] = robot.driveTrain[0][0].getCurrentPosition();
+        startCurrentPosision[1][0] = robot.driveTrain[1][0].getCurrentPosition();
+        startCurrentPosision[0][1] = robot.driveTrain[0][1].getCurrentPosition();
+        startCurrentPosision[1][1] = robot.driveTrain[1][1].getCurrentPosition();
+
+
+        robot.driveTrain[0][0].setTargetPosition(robot.driveTrain[0][0].getCurrentPosition());
+        robot.driveTrain[1][0].setTargetPosition(robot.driveTrain[1][0].getCurrentPosition());
+        robot.driveTrain[0][1].setTargetPosition(robot.driveTrain[0][1].getCurrentPosition());
+        robot.driveTrain[1][1].setTargetPosition(robot.driveTrain[1][1].getCurrentPosition());
+
+
+        robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.driveTrain[1][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
     public void ScaledTurn(double goalAngle, DcMotor[][] driveMotors, BNO055IMU imu, double power) {
         boolean sideOfTurn = true;
         double deltaAngle = 0;
