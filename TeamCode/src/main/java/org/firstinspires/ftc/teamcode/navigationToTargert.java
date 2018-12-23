@@ -144,9 +144,8 @@ public class navigationToTargert extends LinearOpMode {
         targetsRoverRuckus.activate();
         waitForStart();
 
-    while (opModeIsActive()){
-        telemetry.addData("angle: ",Driving.getCurrentScaledAngle(imu));
-        telemetry.update();
+    if (opModeIsActive()){
+       scaledTurn(minAngleToTarget+80,0.3);
     }
 //
 //        setMotorPower(motors, new double[][]{{power, power}, {power, power}});
@@ -204,42 +203,60 @@ public class navigationToTargert extends LinearOpMode {
             for (int col = 0; opModeIsActive() && col < 2; col++)
                 motors[row][col].setPower(power[row][col]);
     }
-    public  void ScaledTurn(double goalAngle, DcMotor[][] driveMotors, BNO055IMU imu, double power) {
-
-        //  autoMode auto;
+    public void scaledTurn(double goalAngle, double power ) {
+        boolean sideOfTurn = true;
+        double deltaAngle = 0;
+        boolean directTurn = true;
         double currentAngle = Driving.getCurrentScaledAngle(imu);
         double angle0 = currentAngle;
-        Driving.setTurnDirection(currentAngle, goalAngle);
+        if (currentAngle < goalAngle) {
+            if (goalAngle - currentAngle <= 360 - (goalAngle - currentAngle)) {
+                sideOfTurn = false;
+                deltaAngle = goalAngle - currentAngle;
+            } else {
+                sideOfTurn = true;
+                deltaAngle = 360 - (goalAngle - currentAngle);
+                directTurn = false;
+            }
+
+
+        } else {
+            if (currentAngle - goalAngle <= 360 - (currentAngle - goalAngle)) {
+                sideOfTurn = true;
+                deltaAngle = currentAngle - goalAngle;
+            } else {
+                sideOfTurn = false;
+                deltaAngle = 360 - (currentAngle - goalAngle);
+                directTurn = false;
+            }
+        }
         if (sideOfTurn)
-            setMotorPower(driveMotors, new double[][]{{power, -power}, {power, -power}});
+           Driving.setMotorPower(motors, new double[][]{{power, -power}, {power, -power}});
         else
-            setMotorPower(driveMotors, new double[][]{{-power, power}, {-power, power}});
+            Driving.setMotorPower(motors, new double[][]{{-power, power}, {-power, power}});
         if (directTurn)
-            while (Math.abs(angle0 - currentAngle) < deltaAngle) {  //motors running
-                currentAngle = getCurrentScaledAngle(imu);
+            while (getPositions()==null&&Math.abs(angle0 - currentAngle) < deltaAngle) {  //motors running
+                currentAngle = Driving.getCurrentScaledAngle(imu);
                 telemetry.addData("angle case 3:", currentAngle);
                 telemetry.update();
             }
         else if (goalAngle > 180 && currentAngle < 180)
-            while (
-                    (currentAngle <= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle > 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
-                currentAngle = getCurrentScaledAngle(imu);
+            while (getPositions()==null&&(currentAngle <= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle > 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
+                currentAngle = Driving.getCurrentScaledAngle(imu);
                 telemetry.addData("angle case 1:", currentAngle);
                 telemetry.update();
             }
 
         else if (goalAngle < 180 && currentAngle > 180)
-            while ((currentAngle >= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle < 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
-                currentAngle = getCurrentScaledAngle(imu);
+            while (getPositions()==null&&(currentAngle >= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle < 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
+                currentAngle = Driving.getCurrentScaledAngle(imu);
                 telemetry.addData("angle case 2:", currentAngle);
                 telemetry.update();
             }
 
 
-        setMotorPower(driveMotors, new double[][]{{0, 0}, {0, 0}});
+        Driving. setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
     }
-
-
     public float[] getPositions() {
         for (VuforiaTrackable trackable : allTrackablesNav) {
             /**

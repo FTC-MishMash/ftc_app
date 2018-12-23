@@ -30,13 +30,51 @@ public class Driving {
         return angle;
     }
 
+    public static void  ScaledTurn(double goalAngle, DcMotor[][] driveMotors, BNO055IMU imu, double power,Telemetry telemetry) {
+
+        //  autoMode auto;
+        double currentAngle = getCurrentScaledAngle(imu);
+        double angle0 = currentAngle;
+       boolean[] direction =setTurnDirection(currentAngle, goalAngle);
+       sideOfTurn=direction[0];
+       directTurn=direction[1];
+        if (sideOfTurn)
+            setMotorPower(driveMotors, new double[][]{{power, -power}, {power, -power}});
+        else
+            setMotorPower(driveMotors, new double[][]{{-power, power}, {-power, power}});
+        if (directTurn)
+            while (Math.abs(angle0 - currentAngle) < deltaAngle) {  //motors running
+                currentAngle = getCurrentScaledAngle(imu);
+                telemetry.addData("angle case 3:", currentAngle);
+                telemetry.update();
+            }
+        else if (goalAngle > 180 && currentAngle < 180)
+            while (
+                    (currentAngle <= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle > 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
+                currentAngle = getCurrentScaledAngle(imu);
+                telemetry.addData("angle case 1:", currentAngle);
+                telemetry.update();
+            }
+
+        else if (goalAngle < 180 && currentAngle > 180)
+            while ((currentAngle >= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle < 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
+                currentAngle = getCurrentScaledAngle(imu);
+                telemetry.addData("angle case 2:", currentAngle);
+                telemetry.update();
+            }
+
+
+        setMotorPower(driveMotors, new double[][]{{0, 0}, {0, 0}});
+    }
     public static void setMotorPower(DcMotor[][] motors, double[][] powers) {
         for (int i = 0; i < motors.length; i++)
             for (int j = 0; j < motors[i].length; j++)
                 motors[i][j].setPower(powers[i][j]);
     }
 
-    static void setTurnDirection(double currentAngle, double goalAngle) {
+    static boolean[] setTurnDirection(double currentAngle, double goalAngle) {
+        boolean sideOfTurn=true;
+        boolean directTurn = true;
         if (currentAngle < goalAngle) {
             if (goalAngle - currentAngle <= 360 - (goalAngle - currentAngle)) {
                 sideOfTurn = false;
@@ -56,7 +94,8 @@ public class Driving {
                 sideOfTurn = false;
                 deltaAngle = 360 - (currentAngle - goalAngle);
                 directTurn = false;
-            }
+            }}
+            return new boolean[]{sideOfTurn,directTurn};
         }
     }
-}
+
