@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -35,26 +36,30 @@ public class LandInAuto extends LinearOpMode {
     /**
      * used to set the speed of the robot while driving and to use PID to control the robot turns.
      */
-    public void driveToCrater() {
-        double power = 0.7;
-        double pidErr[] = {0, 0};
-
-        while (opModeIsActive() && getAngularOriantion().thirdAngle >= -14.3) {
-            pidErr = auto.GyroPID(getAngularOriantion().secondAngle, pidErr[1], robot.imu);
-            auto.setMotorPower(new double[][]{{power + pidErr[0], power + pidErr[0]}, {power - pidErr[0], power - pidErr[0]}});
-
+    public void LandInAuto() {
+        while (opModeIsActive() && getAngularOriantion().thirdAngle <= 0) {
+            robot.shaft[0].setPower(0.3);
+            robot.shaft[1].setPower(0.3);
         }
+        robot.shaft[0].setPower(0);
+        robot.shaft[1].setPower(0);
 
-        auto.setMotorPower(new double[][]{{0, 0}, {0, 0}});
+        while (opModeIsActive() && robot.linear.getCurrentPosition()<=600){
+robot.linear.setPower(0.5);
+        }
+robot.linear.setPower(0);
 
     }
 
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
-        robot.imu = robot.getImu();
+        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.linear.setTargetPosition(600);
+        robot.linear.setPower(0.5);
         waitForStart();
-        driveToCrater();
+        LandInAuto();
 
     }
 
