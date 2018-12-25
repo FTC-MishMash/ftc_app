@@ -51,8 +51,8 @@ public class Robot {
 
         driveTrain[0][0].setDirection(DcMotorSimple.Direction.FORWARD);
         driveTrain[1][0].setDirection(DcMotorSimple.Direction.FORWARD);
-        driveTrain[0][1].setDirection(DcMotorSimple.Direction.FORWARD);
-        driveTrain[1][1].setDirection(DcMotorSimple.Direction.REVERSE);
+        driveTrain[0][1].setDirection(DcMotorSimple.Direction.REVERSE);
+        driveTrain[1][1].setDirection(DcMotorSimple.Direction.FORWARD);
 
 //        shaft[0].setDirection(DcMotorSimple.Direction.FORWARD);
 //        shaft[0].setDirection(DcMotorSimple.Direction.REVERSE);

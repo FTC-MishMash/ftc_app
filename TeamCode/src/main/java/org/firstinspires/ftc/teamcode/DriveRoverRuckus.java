@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -27,7 +26,6 @@ public class DriveRoverRuckus extends OpMode {
     int pos[][] = new int[2][2];
 
 
-    int a = 1;
 
 
     Robot robot;
@@ -41,18 +39,16 @@ public class DriveRoverRuckus extends OpMode {
     public void init() {
 
 
-
         telemetry.addData("Status", "Initialized");
 
         robot = new Robot(hardwareMap);
-
-        robot.driveTrain[1][0].setTargetPosition(0);
-        robot.driveTrain[0][1].setTargetPosition(0);
-
-
-        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+//
+//        robot.driveTrain[1][0].setTargetPosition(0);
+//        robot.driveTrain[0][1].setTargetPosition(0);
+//
+//
+//        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
 //        robot.linear[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -89,11 +85,42 @@ public class DriveRoverRuckus extends OpMode {
 //            sticks[1][1] = gamepad1.right_stick_y;
         telemetry.addData("imu", robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
                 AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
-        telemetry.addData("[0][0]",robot.driveTrain[0][0].getCurrentPosition());
-        telemetry.addData("[0][1]",robot.driveTrain[0][1].getCurrentPosition());
-        telemetry.addData("[1][0]",robot.driveTrain[1][0].getCurrentPosition());
-        telemetry.addData("[1][1]",robot.driveTrain[1][1].getCurrentPosition());
+//        telemetry.addData("[0][0]", robot.driveTrain[0][0].getCurrentPosition());
+//        telemetry.addData("[0][1]", robot.driveTrain[0][1].getCurrentPosition());
+//        telemetry.addData("[1][0]", robot.driveTrain[1][0].getCurrentPosition());
+//        telemetry.addData("[1][1]", robot.driveTrain[1][1].getCurrentPosition());
         telemetry.update();
+
+
+
+
+
+
+
+
+
+//        if (gamepad1.dpad_right)
+//            robot.driveTrain[1][0].setPower(1);
+//        else if (gamepad1.dpad_left)
+//            robot.driveTrain[1][0].setPower(-1);
+//        else
+//            robot.driveTrain[1][0].setPower(0);
+//
+//
+//
+//        if (gamepad1.dpad_up)
+//            robot.driveTrain[0][1].setPower(1);
+//        else if (gamepad1.dpad_down)
+//            robot.driveTrain[0][1].setPower(-1);
+//        else
+//            robot.driveTrain[0][1].setPower(0);\
+
+
+
+
+
+
+
 
 
 //        if (gamepad2.a) {
