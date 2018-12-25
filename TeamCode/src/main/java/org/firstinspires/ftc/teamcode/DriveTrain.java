@@ -31,15 +31,15 @@ public class DriveTrain extends OpMode {
 
 
 
-        drivetrainDC[1][1] = hardwareMap.get(DcMotor.class, "rightFront");
-        drivetrainDC[0][1] = hardwareMap.get(DcMotor.class, "rightBack");
-        drivetrainDC[1][0] = hardwareMap.get(DcMotor.class, "leftFront");
-        drivetrainDC[0][0] = hardwareMap.get(DcMotor.class, "leftBack");
+        drivetrainDC[1][1] = hardwareMap.get(DcMotor.class, "rightBack");
+        drivetrainDC[0][1] = hardwareMap.get(DcMotor.class, "rightFront");
+        drivetrainDC[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
+        drivetrainDC[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
 
 
 
         drivetrainDC[0][0].setDirection(DcMotorSimple.Direction.FORWARD);
-        drivetrainDC[0][1].setDirection(DcMotorSimple.Direction.REVERSE);
+        drivetrainDC[0][1].setDirection(DcMotorSimple.Direction.FORWARD);
         drivetrainDC[1][0].setDirection(DcMotorSimple.Direction.FORWARD);
         drivetrainDC[1][1].setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -51,10 +51,16 @@ public class DriveTrain extends OpMode {
 
 
 
+
+
     }
 
     @Override
     public void init_loop() {
+        while (true) {
+            drivetrainDC[0][1].setPower(0);
+            drivetrainDC[1][0].setPower(0);
+        }
 
     }
 

@@ -26,6 +26,7 @@ public class DriveRoverRuckus extends OpMode {
 
     int pos[][] = new int[2][2];
 
+
     int a = 1;
 
 
@@ -39,9 +40,19 @@ public class DriveRoverRuckus extends OpMode {
 
     public void init() {
 
+
+
         telemetry.addData("Status", "Initialized");
 
         robot = new Robot(hardwareMap);
+
+        robot.driveTrain[1][0].setTargetPosition(0);
+        robot.driveTrain[0][1].setTargetPosition(0);
+
+
+        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
 
 //        robot.linear[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -63,7 +74,6 @@ public class DriveRoverRuckus extends OpMode {
      */
     @Override
     public void start() {
-
 
     }
 
