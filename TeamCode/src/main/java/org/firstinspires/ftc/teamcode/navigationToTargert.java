@@ -144,6 +144,7 @@ public class navigationToTargert extends autoMode {
             if (getPositions() == null)
                 searchImage();
             telemetry.addLine("finish searching");
+            telemetry.addData("pos: ",getPositions()==null);
             telemetry.update();
             sleep(1500);
            // driveToImage();
