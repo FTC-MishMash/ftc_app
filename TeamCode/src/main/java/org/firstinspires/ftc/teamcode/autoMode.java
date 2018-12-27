@@ -537,31 +537,28 @@ public class autoMode extends LinearOpMode {
         double k = 0.0007; //EDEN
         double[] addToMotors;
         addToMotors = new double[2];
-        boolean firstGold = false;
-        boolean breakLoop = false;
-        int indexGold = 0;
-        List<Recognition> RecognitionList = tfod.getRecognitions();
-        for (Recognition recognition : RecognitionList) {
-            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                indexGold = RecognitionList.indexOf(recognition);
-            }
 
-        }
-//        Recognition reco = RecognitionList.get(indexGold);
+        boolean breakLoop = false;
+        Recognition goldReco = null;
+        runTime = getRuntime();
+
+//        RecognitionList.get(indexGold);
         if (tfod != null)
             do {
-                RecognitionList = tfod.getRecognitions();// I delete List<Recognition>
+                List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();// I delete List<Recognition>
 //                if (RecognitionList.get(indexGold)!=reco){
 //
 //                }
+                for (Recognition recognition : RecognitionList) {
+                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                        goldReco = recognition;
+                        runTime = getRuntime();
+                        break;
+                    }
+                }
+                if (goldReco != null) {
 
-                if (RecognitionList != null
-                        && !RecognitionList.isEmpty()//was changed
-                    //     && updatedRecognitions.get(0) != null
-                        ) {
-                    if (RecognitionList.get(indexGold).getLabel().equals(LABEL_GOLD_MINERAL)) {
-                        firstGold = true;
-                        middleCubeX = ((RecognitionList.get(indexGold).getLeft() + RecognitionList.get(indexGold).getRight()) / 2);
+                        middleCubeX = ((goldReco.getLeft() + goldReco.getRight()) / 2);
                         distanceFromRight = 720 - middleCubeX;
                         distanceFromLeft = middleCubeX;
                         telemetry.addLine("follow cube 4:");
@@ -577,14 +574,6 @@ public class autoMode extends LinearOpMode {
                         robot.driveTrain[1][1].setPower(addToMotors[0] + power);//Right Back
                         robot.driveTrain[1][0].setPower(addToMotors[1] + power);//Left Back
                         robot.driveTrain[0][0].setPower(addToMotors[1] + power);//LEFT Front
-                        runTime = getRuntime();
-
-                    } else {
-                        if (firstGold)
-                            breakLoop = true;
-                        telemetry.addLine("dont see cube 1");
-                        telemetry.update();
-                    }
                 } else {
                     telemetry.addLine("dont see cube 2");
                     telemetry.update();
