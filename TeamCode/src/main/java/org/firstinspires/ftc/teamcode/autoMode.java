@@ -96,8 +96,29 @@ public class autoMode extends LinearOpMode {
      * localization engine.
      */
     @Override
+
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
+        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.shaft[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.shaft[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        robot.linear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[0].setTargetPosition(0);
+        robot.shaft[1].setTargetPosition(0);
+        robot.linear.setTargetPosition(0);
+        robot.shaft[0].setPower(1);
+        robot.shaft[1].setPower(1);
+        robot.linear.setPower(1);
+
 //        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        robot.linear[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -175,6 +196,28 @@ public class autoMode extends LinearOpMode {
 
         }
     }
+    public void MotorsLock() {
+
+        while (opModeIsActive()) {
+
+
+            robot.shaft[0].setTargetPosition(0);
+            robot.shaft[1].setTargetPosition(0);
+            robot.linear.setTargetPosition(0);
+            robot.shaft[0].setPower(1);
+            robot.shaft[1].setPower(1);
+            robot.linear.setPower(1);
+            telemetry.addData("1: ", robot.shaft[0].getCurrentPosition());
+            telemetry.addData("2: ", robot.shaft[1].getCurrentPosition());
+            telemetry.addData("3: ", robot.linear.getCurrentPosition());
+            telemetry.update();
+        }
+        robot.shaft[0].setPower(0);
+        robot.shaft[1].setPower(0);
+        robot.linear.setPower(0);
+    }
+
+
 
     public void driveByColor(int color, ColorSensor sensorColor, BNO055IMU imu, float hsvValues[], double heading, double power)//0=red, blue=1
     {
