@@ -130,7 +130,7 @@ public class navigationToTargert extends autoMode {
         if (opModeIsActive()) {
             telemetry.addLine("op started");
             telemetry.update();
-            scaledTurnImage(305, 0.35);
+            scaledTurnImage(310, 0.35);
             //  setMotorPower(new double[][]{{power, -power}, {power, -power}});
 
             // telemetry.addData("ad",robot.imu.getAngularOrientation(AxesReference.INTRINSIC,

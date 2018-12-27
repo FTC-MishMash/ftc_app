@@ -20,9 +20,9 @@ public class LandInAuto extends LinearOpMode {
     public void LandInAuto() {
         while (opModeIsActive() && getAngularOriention().thirdAngle <= 0) {
             robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.linear.setTargetPosition(0);
             robot.linear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.linear.setTargetPosition(0);
             robot.linear.setPower(1);
 
             robot.shaft[0].setPower(0.3);
@@ -31,12 +31,28 @@ public class LandInAuto extends LinearOpMode {
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
 
-        while (opModeIsActive() && robot.linear.getCurrentPosition()<=600){
+        while (opModeIsActive() && robot.linear.getCurrentPosition()<=1200){
+            robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            robot.shaft[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            robot.shaft[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+            robot.shaft[0].setTargetPosition(0);
+            robot.shaft[1].setTargetPosition(0);
+
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            robot.shaft[0].setPower(1);
+            robot.shaft[1].setPower(1);
+
             robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.linear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             robot.linear.setTargetPosition(1200);
             robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.linear.setPower(0.5);
+            robot.linear.setPower(1);
 
         }
 robot.linear.setPower(0);
