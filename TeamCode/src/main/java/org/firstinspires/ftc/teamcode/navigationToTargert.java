@@ -110,7 +110,10 @@ public class navigationToTargert extends autoMode {
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
                         CAMERA_CHOICE == FRONT ? 90 : -90, 0, 0));
-
+        while (!isStarted()) {
+            telemetry.addData("angle", getCurrentScaledAngle());
+            telemetry.update();
+        }
         /**  Let all the trackable listeners know where the phone is.  */
         for (VuforiaTrackable trackable : allTrackablesNav) {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
@@ -119,8 +122,6 @@ public class navigationToTargert extends autoMode {
         /** Wait for the game to begin */
 
 
-        telemetry.addData("angle: ", getCurrentScaledAngle());
-        telemetry.update();
         /** Start tracking the data sets we care about. */
         targetsRoverRuckus.activate();
 
@@ -129,15 +130,23 @@ public class navigationToTargert extends autoMode {
         if (opModeIsActive()) {
             telemetry.addLine("op started");
             telemetry.update();
+            scaledTurnImage(305, 0.35);
             //  setMotorPower(new double[][]{{power, -power}, {power, -power}});
 
             // telemetry.addData("ad",robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
             //   AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
             float[] positions = getPositions();
-            ScaledTurn(35, robot.driveTrain, robot.imu, 0.6);
+//            scaledTurnImage(35,  0.6);
+//            sleep(1500);
+            telemetry.addData("pos: ",getPositions()==null);
+            telemetry.update();
+            sleep(2000);
             if (getPositions() == null)
                 searchImage();
-            driveToImage();
+            telemetry.addLine("finish searching");
+            telemetry.update();
+            sleep(1500);
+           // driveToImage();
         }
 //
 //        Driving.setMotorPower(motors, new double[][]{{power, power}, {power, power}});
@@ -193,8 +202,9 @@ public class navigationToTargert extends autoMode {
     public void scaledTurnImage(double goalAngle, double power) {
         boolean sideOfTurn = true;
         double deltaAngle = 0;
+
         boolean directTurn = true;
-        double currentAngle = Driving.getCurrentScaledAngle(robot.imu);
+        double currentAngle = getCurrentScaledAngle();
         double angle0 = currentAngle;
         if (currentAngle < goalAngle) {
             if (goalAngle - currentAngle <= 360 - (goalAngle - currentAngle)) {
@@ -222,21 +232,22 @@ public class navigationToTargert extends autoMode {
         else
             setMotorPower(new double[][]{{-power, power}, {-power, power}});
         if (directTurn)
-            while (getPositions() == null && Math.abs(angle0 - currentAngle) < deltaAngle) {  //motors running
-                // currentAngle = Driving.getCurrentScaledAngle(robot.);
+            while (opModeIsActive() && getPositions() == null && Math.abs(angle0 - currentAngle) < deltaAngle) {  //motors running
+                currentAngle = getCurrentScaledAngle();
                 telemetry.addData("angle case 3:", currentAngle);
                 telemetry.update();
             }
         else if (goalAngle > 180 && currentAngle < 180)
-            while (getPositions() == null && (currentAngle <= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle > 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
-                currentAngle = Driving.getCurrentScaledAngle(robot.imu);
+            while (opModeIsActive() && getPositions() == null && (
+                    (currentAngle <= 180 && (Math.abs(angle0 - currentAngle) < deltaAngle)) || (currentAngle > 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle))) {//motors running
+                currentAngle = getCurrentScaledAngle();
                 telemetry.addData("angle case 1:", currentAngle);
                 telemetry.update();
             }
 
         else if (goalAngle < 180 && currentAngle > 180)
-            while (getPositions() == null && (currentAngle >= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle < 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
-                currentAngle = Driving.getCurrentScaledAngle(robot.imu);
+            while (opModeIsActive() && getPositions() == null && ((currentAngle >= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle < 180 && 360 - Math.abs(angle0 - currentAngle) < deltaAngle))) {//motors running
+                currentAngle = getCurrentScaledAngle();
                 telemetry.addData("angle case 2:", currentAngle);
                 telemetry.update();
             }
@@ -282,17 +293,27 @@ public class navigationToTargert extends autoMode {
         runtime.reset();
         double time0 = runtime.seconds();
         double currTime = time0;
-        power = 0.25;
+        power =-0.32;
         int count = 0;
-        while (opModeIsActive() && currTime - time0 < 5 && getPositions() == null && count < 10) {
-            setMotorPower(new double[][]{{-power, power}, {-power, power}});
+        boolean per = true;
+        while (opModeIsActive() && currTime - time0 < 6 && getPositions() == null && count < 10) {
+            if (per) {
+                setMotorPower(new double[][]{{power - 0.21, power}, {power - 0.21, power}});
+                telemetry.addLine("side 1");
+                telemetry.update();
+            }
+            else {
+                setMotorPower(new double[][]{{power, power - 0.21}, {power, power - 0.21}});
+                telemetry.addLine("side 2");
+                telemetry.update();
+            }
             currTime = runtime.seconds();
             if (currTime - time0 >= 0.3) {
                 runtime.reset();
                 count++;
-                power *= -1;
+                per = !per;
             }
-            telemetry.addData("time passed", currTime - time0);
+            telemetry.addData("time passed: ", currTime - time0);
             telemetry.update();
         }
     }

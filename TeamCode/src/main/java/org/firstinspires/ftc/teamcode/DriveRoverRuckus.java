@@ -26,8 +26,6 @@ public class DriveRoverRuckus extends OpMode {
     int pos[][] = new int[2][2];
 
 
-
-
     Robot robot;
     /*
 
@@ -92,100 +90,71 @@ public class DriveRoverRuckus extends OpMode {
         telemetry.update();
 
 
-
-
-
-
-
-
-
-//        if (gamepad1.dpad_right)
-//            robot.driveTrain[1][0].setPower(1);
-//        else if (gamepad1.dpad_left)
-//            robot.driveTrain[1][0].setPower(-1);
-//        else
-//            robot.driveTrain[1][0].setPower(0);
-//
-//
-//
-//        if (gamepad1.dpad_up)
-//            robot.driveTrain[0][1].setPower(1);
-//        else if (gamepad1.dpad_down)
-//            robot.driveTrain[0][1].setPower(-1);
-//        else
-//            robot.driveTrain[0][1].setPower(0);\
-
-
-
-
-
-
-
-
-
-//        if (gamepad2.a) {
-//            robot.linear[0].setTargetPosition(6660);
-//            robot.linear[1].setTargetPosition(6660);
-//            robot.linear[0].setPower(0.75);
-//            robot.linear[1].setPower(0.75);
-//            robot.linear[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        }
-//        if (gamepad2.b) {
-//            robot.linear[0].setTargetPosition(0);
-//            robot.linear[1].setTargetPosition(0);
-//            robot.linear[0].setPower(0.75);
-//            robot.linear[1].setPower(0.75);
-//            robot.linear[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        }
+        if (gamepad2.a) {
+            robot.linear.setTargetPosition(6660);
+            //  robot.linear[1].setTargetPosition(6660);
+            robot.linear.setPower(1);
+            //  robot.linear[1].setPower(0.75);
+            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //  robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        } else if (gamepad2.right_bumper) {
+            robot.linear.setTargetPosition(0);
+            //    robot.linear[1].setTargetPosition(0);
+            robot.linear.setPower(0.75);
+            //     robot.linear[1].setPower(0.75);
+            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //   robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        } else if (gamepad2.left_stick_y > 0) {
+            robot.linear.setPower(1);
+        } else if (gamepad2.left_stick_y < 0) {
+            robot.linear.setPower(-1);
+        } else
+            robot.linear.setPower(0);
 //        if (gamepad2.right_bumper) {
-//            robot.inTake.setPower(1);
+//          //  robot.inTake.setPower(1);
 //        } else robot.inTake.setPower(0);
-//
-//        if (gamepad2.y) {
-//            robot.shaft[0].setTargetPosition(7666);
-//            robot.shaft[1].setTargetPosition(7666);
-//            robot.shaft[0].setPower(0.8);
-//            robot.shaft[1].setPower(0.8);
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        }
-//        if (gamepad2.x) {
-//            robot.shaft[0].setTargetPosition(0);
-//            robot.shaft[1].setTargetPosition(0);
-//            robot.shaft[0].setPower(0.75);
-//            robot.shaft[1].setPower(0.75);
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//        }
-//        if (gamepad2.dpad_up) {
-//            robot.shaft[0].setPower(0.25);
-//            robot.shaft[1].setPower(0.25);
-//        }
-//        if (gamepad2.dpad_down) {
-//            robot.shaft[0].setPower(-0.25);
-//            robot.shaft[1].setPower(-0.25);
-//        } else {
-//            robot.shaft[0].setPower(0);
-//            robot.shaft[1].setPower(0);
-//        }
-//        if (gamepad2.left_bumper) {
-//            robot.shaft[0].setTargetPosition(8000);
-//            robot.shaft[1].setTargetPosition(8000);
-//            robot.shaft[0].setPower(0.8);
-//            robot.shaft[1].setPower(0.8);
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.linear[0].setTargetPosition(6700);
-//            robot.linear[1].setTargetPosition(6700);
-//            robot.linear[0].setPower(0.75);
-//            robot.linear[1].setPower(0.75);
-//            robot.linear[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//        }
+
+
+        if (gamepad2.dpad_up) {
+            robot.shaft[0].setPower(0.7);
+            robot.shaft[1].setPower(0.7);
+        } else if (gamepad2.dpad_down) {
+            robot.shaft[0].setPower(-0.25);
+            robot.shaft[1].setPower(-0.25);
+        } else if (gamepad2.left_bumper) {
+            robot.shaft[0].setTargetPosition(8000);
+            robot.shaft[1].setTargetPosition(8000);
+            robot.shaft[0].setPower(1);
+            robot.shaft[1].setPower(1);
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.linear.setTargetPosition(6700);
+            //  robot.linear[1].setTargetPosition(6700);
+            robot.linear.setPower(1);
+            //    robot.linear[1].setPower(0.75);
+            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //  robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        } else if (gamepad2.x) {
+            robot.shaft[0].setTargetPosition(0);
+            robot.shaft[1].setTargetPosition(0);
+            robot.shaft[0].setPower(1);
+            robot.shaft[1].setPower(1);
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        } else if (gamepad2.y) {
+            robot.shaft[0].setTargetPosition(7666);
+            robot.shaft[1].setTargetPosition(7666);
+            robot.shaft[0].setPower(1);
+            robot.shaft[1].setPower(1);
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        } else {
+            robot.shaft[0].setPower(0);
+            robot.shaft[1].setPower(0);
+        }
+
 
     }
 

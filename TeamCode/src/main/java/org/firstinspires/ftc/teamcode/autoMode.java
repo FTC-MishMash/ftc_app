@@ -503,12 +503,12 @@ public class autoMode extends LinearOpMode {
             do {
                 List<Recognition> RecognitionList = tfod.getRecognitions();
 
-
+                Recognition reco = RecognitionList.get(0);
                 if (RecognitionList != null
                         && !RecognitionList.isEmpty()//was changed
                     //     && updatedRecognitions.get(0) != null
                         ) {
-                    if (RecognitionList.get(0).getLabel().equals(LABEL_GOLD_MINERAL)) {
+                    if (reco.getLabel().equals(LABEL_GOLD_MINERAL)) {
                         firstGold = true;
                         middleCubeX = ((RecognitionList.get(0).getLeft() + RecognitionList.get(0).getRight()) / 2);
                         distanceFromRight = 720 - middleCubeX;
@@ -863,9 +863,5 @@ public class autoMode extends LinearOpMode {
         return angle;
     }
 
-    public void initRobot(HardwareMap hardwareMap1, Telemetry telemetry) {
-        this.hardwareMap = hardwareMap1;
-        this.telemetry = telemetry;
-        robot = new Robot(hardwareMap);
-    }
+
 }
