@@ -16,7 +16,7 @@ public class LandInAuto extends LinearOpMode {
     Robot robot;
     autoMode auto;
 
-
+//
     public void LandInAuto() {
         while (opModeIsActive() && getAngularOriention().thirdAngle <= 0) {
             robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
