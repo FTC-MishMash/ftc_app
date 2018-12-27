@@ -11,10 +11,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -196,6 +194,7 @@ public class autoMode extends LinearOpMode {
 
         }
     }
+
     public void MotorsLock() {
 
         while (opModeIsActive()) {
@@ -216,7 +215,6 @@ public class autoMode extends LinearOpMode {
         robot.shaft[1].setPower(0);
         robot.linear.setPower(0);
     }
-
 
 
     public void driveByColor(int color, ColorSensor sensorColor, BNO055IMU imu, float hsvValues[], double heading, double power)//0=red, blue=1
@@ -541,19 +539,29 @@ public class autoMode extends LinearOpMode {
         addToMotors = new double[2];
         boolean firstGold = false;
         boolean breakLoop = false;
+        int indexGold = 0;
+        List<Recognition> RecognitionList = tfod.getRecognitions();
+        for (Recognition recognition : RecognitionList) {
+            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                indexGold = RecognitionList.indexOf(recognition);
+            }
 
+        }
+//        Recognition reco = RecognitionList.get(indexGold);
         if (tfod != null)
             do {
-                List<Recognition> RecognitionList = tfod.getRecognitions();
+                RecognitionList = tfod.getRecognitions();// I delete List<Recognition>
+//                if (RecognitionList.get(indexGold)!=reco){
+//
+//                }
 
-                Recognition reco = RecognitionList.get(0);
                 if (RecognitionList != null
                         && !RecognitionList.isEmpty()//was changed
                     //     && updatedRecognitions.get(0) != null
                         ) {
-                    if (reco.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                    if (RecognitionList.get(indexGold).getLabel().equals(LABEL_GOLD_MINERAL)) {
                         firstGold = true;
-                        middleCubeX = ((RecognitionList.get(0).getLeft() + RecognitionList.get(0).getRight()) / 2);
+                        middleCubeX = ((RecognitionList.get(indexGold).getLeft() + RecognitionList.get(indexGold).getRight()) / 2);
                         distanceFromRight = 720 - middleCubeX;
                         distanceFromLeft = middleCubeX;
                         telemetry.addLine("follow cube 4:");
