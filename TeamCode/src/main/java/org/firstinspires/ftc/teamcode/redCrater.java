@@ -2,13 +2,10 @@ package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 
-import android.graphics.Color;
-
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous(name = "red cretar")
+@Autonomous(name = "Red cretar")
 public class redCrater extends LinearOpMode {
     Robot robot;
     autoMode auto;
@@ -31,7 +28,7 @@ public class redCrater extends LinearOpMode {
         int cubePlace = -1;//dont see any cube.
         while (!isStarted()) {
             cubePlace = auto.getCube();//update cube location
-            sleep(10);
+            sleep(100);
         }
         if (auto.tfod != null) {
             auto.tfod.deactivate();
@@ -60,22 +57,21 @@ public class redCrater extends LinearOpMode {
                 auto.ScaledTurn(70, robot.driveTrain, robot.imu, 0.5);
 
             } else if (cubePlace == 3) {//cube CENTER
-                //No need to move
+                //No need to turn
 
 
             } else if (cubePlace == 4) {//cube RIGHT in camera
 //TODO: add what the robot need to do in this
-//            Driving.ScaledTurn(50,motors,robot.imu,0.5,telemetry);
 
             } else if (cubePlace == 5) {//cube LEFT in camera
 //TODO: add what the robot need to do in this
-//            Driving.ScaledTurn(50,motors,robot.imu,0.5,telemetry);
 
             }
             if (auto.tfod != null) {
                 auto.tfod.activate();
             }
             auto.followCubeRecognision(0.15);//start power
+
             if (auto.tfod != null) {
                 auto.tfod.shutdown();
             }
