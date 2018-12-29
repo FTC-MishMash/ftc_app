@@ -98,83 +98,38 @@ public class autoMode extends LinearOpMode {
     @Override
 
     public void runOpMode() throws InterruptedException {
-//        robot = new Robot(hardwareMap);
-//
-//        initVuforiaWebCam();
-//
-//        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-//            initTfod();
-//        } else {
-//            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-//            telemetry.update();
-//        }
-////        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-//
-////        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-//        if (tfod != null) {
-//            tfod.activate();
-//        }
-//        int cubePlace = -1;//dont see any cube.
-//        while (!isStarted()) {
-//            cubePlace = getCube();//update cube location
-//            sleep(2);
-//        }
-//        if (tfod != null) {
-//            tfod.deactivate();
-//        }
-//
-//        waitForStart();
-////        int cubePlace = -1;//dont see any cube
-////            cubePlace = getCube();//update cube location
-//        runTime.reset();
-//        runTime.startTime();
-//        if (opModeIsActive()) {
-//
-////        getOffTheClimb(robot.imu, robot.shaft, 0.3);
-//
-//            if (cubePlace == -1) {//there is NOT cube/ or only one ball
-//
-//            } else if (cubePlace == 0) {//see only 2 balls
-//
-//                ScaledTurn(50, robot.driveTrain, robot.imu, 0.5);
-//
-//            } else if (cubePlace == 1) {//cube RIGHT
-//
-//                ScaledTurn(15, robot.driveTrain, robot.imu, 0.5);
-//
-//            } else if (cubePlace == 2) {//cube LEFT
-//
-//                ScaledTurn(70, robot.driveTrain, robot.imu, 0.5);
-//
-//            } else if (cubePlace == 3) {//cube CENTER
-//                //No need to move
-//
-//
-//            } else if (cubePlace == 4) {//cube RIGHT in camera
-////TODO: add what the robot need to do in this
-////            Driving.ScaledTurn(50,motors,robot.imu,0.5,telemetry);
-//
-//            } else if (cubePlace == 5) {//cube LEFT in camera
-////TODO: add what the robot need to do in this
-////            Driving.ScaledTurn(50,motors,robot.imu,0.5,telemetry);
-//
-//            }
-//            if (tfod != null) {
-//                tfod.activate();
-//            }
-//            followCubeRecognision(0.15);//start power
-//            if (tfod != null) {
-//                tfod.shutdown();
-//            }
-//            driveByEncoderRoverRuckus(7, 7, 0.5);
-//            sleep(2000);
-//            driveByEncoderRoverRuckus(-20, -20, 0.5);
-//        gh    sleep(2000);
-//            ScaledTurn(60, robot.driveTrain, robot.imu, 0.5);
-//            //פונקציות של מור
-//            driveByColor(0,robot.colorRightFront,robot.imu,robot.hsvValuesRightFront,135,0.4);
 
-        //       }
+    }
+
+    public int searchCube(double power, int turnAngleRight, int turnAngleLeft, DcMotor[][] motor, BNO055IMU imu) {
+        int cubePosition = 0;
+        if (tfod != null) {
+            tfod.activate();
+        }
+        List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();// I delete List<Recognition>
+        sleep(1000);
+        for (Recognition recognition : RecognitionList) {
+            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                cubePosition = 1;//CENTER
+                break;
+            }
+        }
+        if (cubePosition != 1) {
+            ScaledTurn(turnAngleRight, motor, imu, power);
+            RecognitionList = tfod.getUpdatedRecognitions();// I delete List<Recognition>
+            sleep(1000);
+            for (Recognition recognition : RecognitionList) {
+                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                    cubePosition = 2;//RIGHT
+                    break;
+                }
+            }
+        }
+        if (cubePosition != 1 && cubePosition != 2) {
+            cubePosition = 3;//LEFT
+            ScaledTurn(turnAngleLeft, motor, imu, power);
+        }
+        return cubePosition;
     }
 
     public void MotorsLock() {
