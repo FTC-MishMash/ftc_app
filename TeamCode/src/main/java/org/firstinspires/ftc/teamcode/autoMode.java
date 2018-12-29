@@ -97,29 +97,7 @@ public class autoMode extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
-        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.shaft[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.shaft[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        robot.linear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setTargetPosition(0);
-        robot.shaft[1].setTargetPosition(0);
-        robot.linear.setTargetPosition(0);
-        robot.shaft[0].setPower(1);
-        robot.shaft[1].setPower(1);
-        robot.linear.setPower(1);
-
-//        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.linear[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         initVuforiaWebCam();
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
@@ -191,6 +169,8 @@ public class autoMode extends LinearOpMode {
             driveByEncoderRoverRuckus(-20, -20, 0.5);
             sleep(2000);
             ScaledTurn(60, robot.driveTrain, robot.imu, 0.5);
+            //פונקציות של מור
+            driveByColor(0,robot.colorRightFront,robot.imu,robot.hsvValuesRightFront,135,0.4);
 
         }
     }
@@ -198,7 +178,6 @@ public class autoMode extends LinearOpMode {
     public void MotorsLock() {
 
         while (opModeIsActive()) {
-
 
             robot.shaft[0].setTargetPosition(0);
             robot.shaft[1].setTargetPosition(0);
@@ -431,101 +410,6 @@ public class autoMode extends LinearOpMode {
     }
 
 
-//    private void followCube(double power) {
-//        double runTime = 0;
-//        telemetry.addLine("follow cube 1:");
-//        telemetry.update();
-//
-//        double distanceFromRight = 0;
-//        double distanceFromLeft = 0;
-//        double middleCubeX = 0;
-//        double k = 0.0007; //EDEN
-//        double[] addToMotors;
-//        addToMotors = new double[2];
-//        boolean firstGold = false;
-//        boolean breakLoop = false;
-//
-//
-////        while (opModeIsActive()) {//TODO: ADD CONDITION
-////            telemetry.addLine("search cube 1");
-////            telemetry.update();
-////            if (tfod != null)
-////                updatedRecognitions = tfod.getUpdatedRecognitions();
-////
-////            if (updatedRecognitions != null
-////               &&!updatedRecognitions.isEmpty()
-////                        && updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL))
-////                    break;
-////        }
-//        if (tfod != null)
-//            do {
-//                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-//
-//
-//                if (updatedRecognitions != null
-//                        && !updatedRecognitions.isEmpty()//was changed
-//                    //     && updatedRecognitions.get(0) != null
-//                        ) {
-//                    if (updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL)) {
-//                        firstGold = true;
-//                        middleCubeX = ((updatedRecognitions.get(0).getLeft() + updatedRecognitions.get(0).getRight()) / 2);
-//                        distanceFromRight = 700 - middleCubeX;
-//                        distanceFromLeft = middleCubeX;
-//                        telemetry.addLine("follow cube 4:");
-//
-//                        addToMotors[0] = k * distanceFromRight;  //RIGHT
-//                        addToMotors[1] = k * distanceFromLeft; //LEFT
-//                        telemetry.addData("distance From Right:", addToMotors[0]);
-//                        telemetry.addData("distance From Left:", addToMotors[1]);
-//                        telemetry.update();
-//
-//
-//                        robot.driveTrain[0][1].setPower(addToMotors[0] + power);//RIGHT Front
-//                        robot.driveTrain[1][1].setPower(addToMotors[0] + power);//Right Back
-//                        robot.driveTrain[1][0].setPower(addToMotors[1] + power);//Left Back
-//                        robot.driveTrain[0][0].setPower(addToMotors[1] + power);//LEFT Front
-//                        runTime = getRuntime();
-//
-//                    } else {
-//                        if (firstGold)
-//                            breakLoop = true;
-//                        telemetry.addLine("dont see cube 1");
-//                        telemetry.update();
-//                    }
-//                } else {
-//                    telemetry.addLine("dont see cube 2");
-//                    telemetry.update();
-//                    robot.driveTrain[0][1].setPower(0);//RIGHT Front
-//                    robot.driveTrain[1][1].setPower(0);//Right Back
-//                    robot.driveTrain[1][0].setPower(0);//Left Back
-//                    robot.driveTrain[0][0].setPower(0);//LEFT Front
-//                    if ((runTime - getRuntime()) < -2) {
-//
-//                        breakLoop = true;
-//                        telemetry.addData("in 2 seconds dont see the cube    ", breakLoop);
-//                        telemetry.update();
-//                    }
-//                    //       break;
-//                }
-//
-////            powerAdd ToMotors[0] = getPowerMotor()[0];//RIGHT
-////            powerAddToMotors[1] = getPowerMotor()[1];//LEFT
-//
-//
-//                //   break;
-//
-//
-//                //    }
-//
-//
-//            }
-//            while (opModeIsActive() && !breakLoop);
-//        robot.driveTrain[0][1].setPower(0);//RIGHT Front
-//        robot.driveTrain[1][1].setPower(0);//Right Back
-//        robot.driveTrain[1][0].setPower(0);//Left Back
-//        robot.driveTrain[0][0].setPower(0);//LEFT Front
-//    }
-
     private void followCubeRecognision(double power) {
         double runTime = 0;
         telemetry.addLine("follow cube 1:");
@@ -558,22 +442,22 @@ public class autoMode extends LinearOpMode {
                 }
                 if (goldReco != null) {
 
-                        middleCubeX = ((goldReco.getLeft() + goldReco.getRight()) / 2);
-                        distanceFromRight = 720 - middleCubeX;
-                        distanceFromLeft = middleCubeX;
-                        telemetry.addLine("follow cube 4:");
+                    middleCubeX = ((goldReco.getLeft() + goldReco.getRight()) / 2);
+                    distanceFromRight = 720 - middleCubeX;
+                    distanceFromLeft = middleCubeX;
+                    telemetry.addLine("follow cube 4:");
 
-                        addToMotors[0] = k * distanceFromRight;  //RIGHT
-                        addToMotors[1] = k * distanceFromLeft; //LEFT
-                        telemetry.addData("distance From Right:", addToMotors[0]);
-                        telemetry.addData("distance From Left:", addToMotors[1]);
-                        telemetry.update();
+                    addToMotors[0] = k * distanceFromRight;  //RIGHT
+                    addToMotors[1] = k * distanceFromLeft; //LEFT
+                    telemetry.addData("distance From Right:", addToMotors[0]);
+                    telemetry.addData("distance From Left:", addToMotors[1]);
+                    telemetry.update();
 
 
-                        robot.driveTrain[0][1].setPower(addToMotors[0] + power);//RIGHT Front
-                        robot.driveTrain[1][1].setPower(addToMotors[0] + power);//Right Back
-                        robot.driveTrain[1][0].setPower(addToMotors[1] + power);//Left Back
-                        robot.driveTrain[0][0].setPower(addToMotors[1] + power);//LEFT Front
+                    robot.driveTrain[0][1].setPower(addToMotors[0] + power);//RIGHT Front
+                    robot.driveTrain[1][1].setPower(addToMotors[0] + power);//Right Back
+                    robot.driveTrain[1][0].setPower(addToMotors[1] + power);//Left Back
+                    robot.driveTrain[0][0].setPower(addToMotors[1] + power);//LEFT Front
                 } else {
                     telemetry.addLine("dont see cube 2");
                     telemetry.update();
@@ -587,17 +471,7 @@ public class autoMode extends LinearOpMode {
                         telemetry.addData("in 2 seconds dont see the cube    ", breakLoop);
                         telemetry.update();
                     }
-                    //       break;
                 }
-
-//            powerAdd ToMotors[0] = getPowerMotor()[0];//RIGHT
-//            powerAddToMotors[1] = getPowerMotor()[1];//LEFT
-
-
-                //   break;
-
-
-                //    }
 
 
             }
@@ -778,13 +652,14 @@ public class autoMode extends LinearOpMode {
         final int tixRound = 600;
         final int cmRound = 27;
         double runTime = getRuntime();
-        int startCurrentPosision[][] = new int[2][2];
+
         int dRight = (goalDistRight * tixRound) / cmRound;
         int dLeft = (goalDistLeft * tixRound) / cmRound;
-        startCurrentPosision[0][0] = robot.driveTrain[0][0].getCurrentPosition();
-        startCurrentPosision[1][0] = robot.driveTrain[1][0].getCurrentPosition();
-        startCurrentPosision[0][1] = robot.driveTrain[0][1].getCurrentPosition();
-        startCurrentPosision[1][1] = robot.driveTrain[1][1].getCurrentPosition();
+
+        robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.driveTrain[1][1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         robot.driveTrain[0][0].setTargetPosition(robot.driveTrain[0][0].getCurrentPosition() + dLeft);
@@ -804,27 +679,24 @@ public class autoMode extends LinearOpMode {
 
         telemetry.addLine("go to target");
         telemetry.update();
+
+
         while (opModeIsActive() &&
-                (Math.abs((startCurrentPosision[0][0] + dLeft) - robot.driveTrain[0][0].getCurrentPosition())) > 1
-                && (Math.abs((startCurrentPosision[1][0] + dLeft) - robot.driveTrain[1][0].getCurrentPosition())) > 1
-                && (Math.abs((startCurrentPosision[0][1] + dRight) - robot.driveTrain[0][1].getCurrentPosition())) > 1
-                && (Math.abs((startCurrentPosision[1][1] + dRight) - robot.driveTrain[1][1].getCurrentPosition())) > 1
-                && getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10)) ;
+                robot.driveTrain[0][0].isBusy()
+                && robot.driveTrain[1][0].isBusy()
+                && robot.driveTrain[0][1].isBusy()
+                && robot.driveTrain[1][1].isBusy()
+                && getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10)) {
+            sleep(0);
+        }
 
 
-//        while (opModeIsActive() &&
-//                robot.driveTrain[0][0].isBusy()
-//                && robot.driveTrain[1][0].isBusy()
-//                && robot.driveTrain[0][1].isBusy()
-//                && robot.driveTrain[1][1].isBusy()
-//                && getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10))
-//            sleep(0);
-
-        telemetry.addLine("end move encoder");
-        telemetry.update();
         for (int i = 0; i < 2; i++)
             for (int j = 0; j < 2; j++)
                 robot.driveTrain[i][j].setPower(0);
+
+        telemetry.addLine("end move encoder");
+        telemetry.update();
 
         for (int i = 0; i < 2; i++)
             for (int j = 0; j < 2; j++) {

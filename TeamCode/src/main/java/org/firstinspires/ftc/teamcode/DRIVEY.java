@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -21,7 +22,7 @@ import static java.lang.Thread.sleep;
 
 
 @TeleOp(name = "DRIVEY", group = "Iterative Opmode")
-//@Disabled
+@Disabled
 public class DRIVEY extends OpMode {
     double   posRelic;
     // Declare OpMode members.
@@ -476,7 +477,7 @@ BNO055IMU imu;
     }
 
     void intakeOperation(double power) {
-        int i = 0;
+        int i =0;
         for (i = 0; i <= 1; i++)
             intakeDC[i].setPower(power);
     }

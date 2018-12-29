@@ -48,7 +48,6 @@ public class navigationToTargert extends autoMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-//        motors = robot.driveTrain;
         robot = new Robot(hardwareMap);
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);

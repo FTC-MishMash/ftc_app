@@ -19,8 +19,7 @@ public class DriveRoverRuckus extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
-    DcMotor[] intakeDC = new DcMotor[2];
-    double[][] sticks = new double[4][4];
+
 
 
     int pos[][] = new int[2][2];
@@ -40,17 +39,7 @@ public class DriveRoverRuckus extends OpMode {
         telemetry.addData("Status", "Initialized");
 
         robot = new Robot(hardwareMap);
-//
-//        robot.driveTrain[1][0].setTargetPosition(0);
-//        robot.driveTrain[0][1].setTargetPosition(0);
-//
-//
-//        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-
-//        robot.linear[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.linear[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
 
@@ -74,52 +63,39 @@ public class DriveRoverRuckus extends OpMode {
 
     @Override
     public void loop() {
-        tankDriveTrainSetPower(0.78);
-//        robot.driveTrain[0][0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        robot.driveTrain[0][1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//            sticks[0][0] = gamepad1.left_stick_x;
-//            sticks[1][0] = gamepad1.left_stick_y;
-//            sticks[0][1] = gamepad1.right_stick_x;
-//            sticks[1][1] = gamepad1.right_stick_y;
+        tankDriveTrainSetPower();//מערכת הנעה רובוט
+
         telemetry.addData("imu", robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
                 AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
-//        telemetry.addData("[0][0]", robot.driveTrain[0][0].getCurrentPosition());
-//        telemetry.addData("[0][1]", robot.driveTrain[0][1].getCurrentPosition());
-//        telemetry.addData("[1][0]", robot.driveTrain[1][0].getCurrentPosition());
-//        telemetry.addData("[1][1]", robot.driveTrain[1][1].getCurrentPosition());
+
         telemetry.update();
 
 
         if (gamepad2.a) {
             robot.linear.setTargetPosition(6660);
-            //  robot.linear[1].setTargetPosition(6660);
             robot.linear.setPower(1);
-            //  robot.linear[1].setPower(0.75);
             robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //  robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } else if (gamepad2.right_bumper) {
             robot.linear.setTargetPosition(0);
-            //    robot.linear[1].setTargetPosition(0);
             robot.linear.setPower(0.75);
-            //     robot.linear[1].setPower(0.75);
             robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //   robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } else if (gamepad2.left_stick_y > 0) {
             robot.linear.setPower(1);
         } else if (gamepad2.left_stick_y < 0) {
             robot.linear.setPower(-1);
         } else
             robot.linear.setPower(0);
-//        if (gamepad2.right_bumper) {
-//          //  robot.inTake.setPower(1);
-//        } else robot.inTake.setPower(0);
-//
+
+
         if (gamepad2.dpad_up) {
             robot.shaft[0].setPower(0.7);
             robot.shaft[1].setPower(0.7);
         } else if (gamepad2.dpad_down) {
             robot.shaft[0].setPower(-0.25);
             robot.shaft[1].setPower(-0.25);
+        } else if (gamepad2.right_bumper) {
+            robot.inTake.setPower(1);
+
         } else if (gamepad2.left_bumper) {
             robot.shaft[0].setTargetPosition(8000);
             robot.shaft[1].setTargetPosition(8000);
@@ -128,11 +104,8 @@ public class DriveRoverRuckus extends OpMode {
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.linear.setTargetPosition(6700);
-            //  robot.linear[1].setTargetPosition(6700);
             robot.linear.setPower(1);
-            //    robot.linear[1].setPower(0.75);
             robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //  robot.linear[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         } else if (gamepad2.x) {
             robot.shaft[0].setTargetPosition(0);
@@ -152,36 +125,19 @@ public class DriveRoverRuckus extends OpMode {
         } else {
             robot.shaft[0].setPower(0);
             robot.shaft[1].setPower(0);
+            robot.inTake.setPower(0);
         }
 
 
     }
-
-
-    void tankDriveTrainSetPower(double power) {
-        robot.driveTrain[0][1].setPower(-power * (gamepad1.right_stick_y));
-        robot.driveTrain[0][0].setPower(-power * (gamepad1.left_stick_y));
-        robot.driveTrain[1][1].setPower(-power * (gamepad1.right_stick_y));
-        robot.driveTrain[1][0].setPower(-power * (gamepad1.left_stick_y));
+    private void tankDriveTrainSetPower() {
+        robot.driveTrain[0][1].setPower (gamepad1.right_stick_y);
+        robot.driveTrain[0][0].setPower(gamepad1.left_stick_y);
+        robot.driveTrain[1][1].setPower(gamepad1.right_stick_y);
+        robot.driveTrain[1][0].setPower(gamepad1.left_stick_y);
     }
 
 
-    void glyphsServoOperation(int index, double position) {
-//            servosGlyph[index].setPosition(position);
-    }
-
-    void intakeOperation(double power) {
-        int i = 0;
-        for (i = 0; i <= 1; i++)
-            intakeDC[i].setPower(power);
-    }
-
-    void intakeNew(double power1, double power2) {
-
-
-        intakeDC[0].setPower(power1);
-        intakeDC[1].setPower(power2);
-    }
 
     void Sleep(int time) {
         try {
