@@ -7,34 +7,7 @@ import android.graphics.Color;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 @Autonomous(name = "red cretar")
 public class redCrater extends LinearOpMode {
     Robot robot;
@@ -51,24 +24,21 @@ public class redCrater extends LinearOpMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
             telemetry.update();
         }
-//        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
-//        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        if (tfod != null) {
-            tfod.activate();
+        if (auto.tfod != null) {
+            auto.tfod.activate();
         }
         int cubePlace = -1;//dont see any cube.
         while (!isStarted()) {
             cubePlace = auto.getCube();//update cube location
-            sleep(2);
+            sleep(10);
         }
-        if (tfod != null) {
-            tfod.deactivate();
+        if (auto.tfod != null) {
+            auto.tfod.deactivate();
         }
 
         waitForStart();
-//        int cubePlace = -1;//dont see any cube
-//            cubePlace = getCube();//update cube location
+
         auto.runTime.reset();
         auto.runTime.startTime();
         if (opModeIsActive()) {
@@ -102,12 +72,12 @@ public class redCrater extends LinearOpMode {
 //            Driving.ScaledTurn(50,motors,robot.imu,0.5,telemetry);
 
             }
-            if (tfod != null) {
-                tfod.activate();
+            if (auto.tfod != null) {
+                auto.tfod.activate();
             }
             auto.followCubeRecognision(0.15);//start power
-            if (tfod != null) {
-                tfod.shutdown();
+            if (auto.tfod != null) {
+                auto.tfod.shutdown();
             }
             auto.driveByEncoderRoverRuckus(7, 7, 0.5);
             sleep(2000);
