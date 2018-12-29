@@ -82,12 +82,12 @@ public class autoMode extends LinearOpMode {
     private static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
     // Select which camera you want use.  The FRONT camera is the one on the same side as the screen.
     // Valid choices are:  BACK or FRONT
-    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
+    public static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     ElapsedTime runtime = new ElapsedTime();
     private OpenGLMatrix lastLocation = null;
     private boolean targetVisible = false;
     List<VuforiaTrackable> allTrackablesNav;
-    BNO055IMU imu;
+
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -319,23 +319,13 @@ public class autoMode extends LinearOpMode {
     public int getCube() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first..
-//        initVuforia();
-//
-//        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-//            initTfod();
-//        } else {
-//            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-//        }
-//
-//        if (tfod != null) {
-//            tfod.activate();
-//        }
+
         int cubePlace = -1;// 0 = NOT HERE, 1 = RIGHT (in camera), 2 = LEFT (in camera)
 
         if (tfod != null) {
             tfod.activate();
         }
-        if (tfod != null) {
+            if (tfod != null) {
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
@@ -410,7 +400,7 @@ public class autoMode extends LinearOpMode {
     }
 
 
-    private void followCubeRecognision(double power) {
+    public void followCubeRecognision(double power) {
         double runTime = 0;
         telemetry.addLine("follow cube 1:");
         telemetry.update();
