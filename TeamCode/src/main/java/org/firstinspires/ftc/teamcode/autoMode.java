@@ -569,7 +569,7 @@ public class autoMode extends LinearOpMode {
     }
 
 
-    public void initVuforiaWebCam() {
+    public void initVuforiaWebCam(HardwareMap hardwareMap) {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          */
@@ -586,7 +586,7 @@ public class autoMode extends LinearOpMode {
     /**
      * Initialize the Tensor Flow Object Detection engine.
      */
-    public void initTfod() {
+    public void initTfod(HardwareMap hardwareMap) {
 
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());

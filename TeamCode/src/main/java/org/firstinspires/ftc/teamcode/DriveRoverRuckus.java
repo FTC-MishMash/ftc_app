@@ -20,11 +20,6 @@ public class DriveRoverRuckus extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
 
-
-
-    int pos[][] = new int[2][2];
-
-
     Robot robot;
     /*
 
@@ -40,6 +35,9 @@ public class DriveRoverRuckus extends OpMode {
 
         robot = new Robot(hardwareMap);
 
+        robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
 
@@ -79,19 +77,19 @@ public class DriveRoverRuckus extends OpMode {
             robot.linear.setTargetPosition(0);
             robot.linear.setPower(0.75);
             robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         } else if (gamepad2.left_stick_y > 0) {
             robot.linear.setPower(1);
         } else if (gamepad2.left_stick_y < 0) {
             robot.linear.setPower(-1);
-        }
 
+        } else if (gamepad2.right_stick_y < 0) {
+            robot.shaft[0].setPower(1);
+            robot.shaft[1].setPower(1);
+        } else if (gamepad2.right_stick_y > 0) {
+            robot.shaft[0].setPower(-1);
+            robot.shaft[1].setPower(-1);
 
-        else if (gamepad2.dpad_up) {
-            robot.shaft[0].setPower(0.7);
-            robot.shaft[1].setPower(0.7);
-        } else if (gamepad2.dpad_down) {
-            robot.shaft[0].setPower(-7);
-            robot.shaft[1].setPower(-7);
         } else if (gamepad2.right_bumper) {
             robot.inTake.setPower(1);
         } else if (gamepad2.left_bumper) {
@@ -129,13 +127,13 @@ public class DriveRoverRuckus extends OpMode {
 
 
     }
+
     private void tankDriveTrainSetPower() {
-        robot.driveTrain[0][1].setPower (gamepad1.right_stick_y);
+        robot.driveTrain[0][1].setPower(gamepad1.right_stick_y);
         robot.driveTrain[0][0].setPower(gamepad1.left_stick_y);
         robot.driveTrain[1][1].setPower(gamepad1.right_stick_y);
         robot.driveTrain[1][0].setPower(gamepad1.left_stick_y);
     }
-
 
 
     void Sleep(int time) {
