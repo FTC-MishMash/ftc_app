@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -127,7 +130,7 @@ public class navigationToTargert extends autoMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            telemetry.addData("angle",getPositions()[4]);
+            telemetry.addData("angle", getPositions()[4]);
             telemetry.update();
 //            scaledTurnImage(310, 0.35
             //  setMotorPower(new double[][]{{power, -power}, {power, -power}});
@@ -289,12 +292,13 @@ public class navigationToTargert extends autoMode {
         }
         return null;
     }
-//aa
+
+    //aa
     public void searchImage() {
         runtime.reset();
         double time0 = runtime.seconds();
         double currTime = time0;
-        power =-0.32;
+        power = -0.32;
         int count = 0;
         boolean per = true;
         while (opModeIsActive() && currTime - time0 < 6 && getPositions() == null && count < 10) {
@@ -302,8 +306,7 @@ public class navigationToTargert extends autoMode {
                 setMotorPower(new double[][]{{power - 0.21, power}, {power - 0.21, power}});
                 telemetry.addLine("side 1");
                 telemetry.update();
-            }
-            else {
+            } else {
                 setMotorPower(new double[][]{{power, power - 0.21}, {power, power - 0.21}});
                 telemetry.addLine("side 2");
                 telemetry.update();
@@ -317,6 +320,25 @@ public class navigationToTargert extends autoMode {
             telemetry.addData("time passed: ", currTime - time0);
             telemetry.update();
         }
+    }
+
+    public static double normalizedAngle(double angle) {
+        if (angle < 0) {
+            while (angle < 0)
+                angle += 360;
+        } else if (angle >= 360) {
+            while (angle >= 360)
+                angle -= 360;
+        }
+        return angle;
+    }
+
+    public void diffTurn(double diffAngle, double power) {
+        double currAngle = robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
+                AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        double goalAngle = normalizedAngle(diffAngle + currAngle);
+        ScaledTurn(goalAngle, robot.driveTrain, robot.imu, 0.4);
+
     }
 
 }
