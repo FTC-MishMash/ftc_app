@@ -98,12 +98,18 @@ public class autoMode extends LinearOpMode {
     @Override
 
     public void runOpMode() throws InterruptedException {
-              robot = new Robot(hardwareMap);
+        robot = new Robot(hardwareMap);
 
     }
 
     public int searchCube(double power, int turnAngleRight, int turnAngleLeft, DcMotor[][] motor, BNO055IMU imu) {
         int cubePosition = 0;
+        if (tfod == null) {
+            telemetry.addData("tfod is NULL  ",tfod);
+            telemetry.update();
+            cubePosition = -1;
+            return cubePosition;
+        }
         if (tfod != null) {
             tfod.activate();
         }
@@ -117,9 +123,9 @@ public class autoMode extends LinearOpMode {
         }
         if (cubePosition != 1) {
             ScaledTurn(turnAngleRight, motor, imu, power);
-            RecognitionList = tfod.getUpdatedRecognitions();// I delete List<Recognition>
+            List<Recognition> RecognitionListRight = tfod.getUpdatedRecognitions();// I delete List<Recognition>
             sleep(1000);
-            for (Recognition recognition : RecognitionList) {
+            for (Recognition recognition : RecognitionListRight) {
                 if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                     cubePosition = 2;//RIGHT
                     break;

@@ -112,10 +112,10 @@ public class navigationToTargert extends autoMode {
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
                         CAMERA_CHOICE == FRONT ? 90 : -90, 0, 0));
-        while (!isStarted()) {
-            telemetry.addData("angle", getPositions()[5]);
-            telemetry.update();
-        }
+//        while (!isStarted()) {
+//            telemetry.addData("angle", getPositions()[5]);
+//            telemetry.update();
+//        }
         /**  Let all the trackable listeners know where the phone is.  */
         for (VuforiaTrackable trackable : allTrackablesNav) {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
@@ -130,10 +130,11 @@ public class navigationToTargert extends autoMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            telemetry.addData("angle", getPositions()[4]);
-            telemetry.update();
-            if(gamepad1.a)
-                diffTurn(45,0.4);
+            float[] pos=getPositions();
+            if(pos!=null){
+            telemetry.addData("angle", pos[5]);
+            telemetry.update();}
+
 //            scaledTurnImage(310, 0.35
             //  setMotorPower(new double[][]{{power, -power}, {power, -power}});
 
@@ -145,13 +146,7 @@ public class navigationToTargert extends autoMode {
 //            telemetry.addData("pos: ",getPositions()==null);
 //            telemetry.update();
 //            sleep(2000);
-//            if (getPositions() == null)
-//                searchImage();
-//            telemetry.addLine("finish searching");
-//            telemetry.addData("pos: ",getPositions()==null);
-//            telemetry.update();
-//            sleep(1500);
-//            driveToImage();
+
 //            scaledTurnImage(90,0.4);
         }
 //
