@@ -57,10 +57,10 @@ auto.setMotorPower(new double[][]{{0.3,0.3},{0.3,0.3}});
         robot.shaft[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.shaft[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.linear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
     }
 
     @Override
+
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
         waitForStart();
