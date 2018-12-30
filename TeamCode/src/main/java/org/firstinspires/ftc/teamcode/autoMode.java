@@ -114,7 +114,7 @@ public class autoMode extends LinearOpMode {
             tfod.activate();
         }
         List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();// I delete List<Recognition>
-        sleep(1000);
+        sleep(3000);
 
         if (tfod.getUpdatedRecognitions() != null)
             for (Recognition recognition : RecognitionList) {
