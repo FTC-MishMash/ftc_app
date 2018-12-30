@@ -12,7 +12,7 @@ public class redCrater extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        auto =new autoMode();
+        auto = new autoMode();
         robot = new Robot(hardwareMap);
 
         auto.initVuforiaWebCam();
