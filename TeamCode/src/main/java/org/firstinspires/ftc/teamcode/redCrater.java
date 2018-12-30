@@ -15,6 +15,7 @@ public class redCrater extends autoMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        auto = new autoMode();
         robot = new Robot(hardwareMap);
 
         initVuforiaWebCam();
