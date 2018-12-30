@@ -174,12 +174,12 @@ public class navigationToTargert extends autoMode {
         //  Driving.Driving.setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
         float[] positions = getPositions();
         if (positions != null) {
-            setMotorPower(new double[][]{{-power, power}, {-power, power}});
-            while (opModeIsActive() && positions[5] >= 100) {
-                positions = getPositions();
-                telemetry.addData("heading:", positions[5]);
-                telemetry.update();
-            }
+//            setMotorPower(new double[][]{{-power, power}, {-power, power}});
+//            while (opModeIsActive() && positions[5] >= 100) {
+//                positions = getPositions();
+//                telemetry.addData("heading:", positions[5]);
+//                telemetry.update();
+//            }
             setMotorPower(new double[][]{{0, 0}, {0, 0}});
             sleep(1000);
             setMotorPower(new double[][]{{power, power}, {power, power}});
@@ -194,13 +194,13 @@ public class navigationToTargert extends autoMode {
             setMotorPower(new double[][]{{0, 0}, {0, 0}});
             sleep(1000);
             setMotorPower(new double[][]{{0.23, -0.23}, {0.23, -0.23}});
-            while (opModeIsActive() && positions[5] >= 94) {
-                positions = getPositions();
-                telemetry.addData("heading:", positions[5]);
-                telemetry.update();
-            }
+//            while (opModeIsActive() && positions[5] >= 94) {
+////                positions = getPositions();
+////                telemetry.addData("heading:", positions[5]);
+////                telemetry.update();
+////            }
             setMotorPower(new double[][]{{0, 0}, {0, 0}});
-
+            diffTurn(90-positions[5],0.4);
         }
     }
 
