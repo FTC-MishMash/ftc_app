@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Robot {
     public static String drive;
     public DcMotor[][] driveTrain;
-    public DcMotor[] shaft= new DcMotor[2];
+    public DcMotor[] shaft = new DcMotor[2];
     public DcMotor linear;
     public DcMotor inTake;
     public ColorSensor colorRightFront;
@@ -68,6 +68,7 @@ public class Robot {
         shaft[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         linear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+
 //        shaft[0].setTargetPosition(0);
 //        shaft[1].setTargetPosition(0);
 //        linear.setTargetPosition(0);
@@ -91,17 +92,5 @@ public class Robot {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
-    }
-
-    public BNO055IMU getImu() {
-        return imu;
-    }
-
-    public DcMotor[] getShaft() {
-        return shaft;
-    }
-
-    public DcMotor[][] getDriveTrain() {
-        return driveTrain;
     }
 }
