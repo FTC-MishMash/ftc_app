@@ -98,33 +98,43 @@ public class autoMode extends LinearOpMode {
     @Override
 
     public void runOpMode() throws InterruptedException {
-              robot = new Robot(hardwareMap);
+        robot = new Robot(hardwareMap);
 
     }
 
     public int searchCube(double power, int turnAngleRight, int turnAngleLeft, DcMotor[][] motor, BNO055IMU imu) {
         int cubePosition = 0;
+        if (tfod == null) {
+            telemetry.addData("tfod is NULL  ", tfod);
+            telemetry.update();
+            cubePosition = -1;
+            return cubePosition;
+        }
         if (tfod != null) {
             tfod.activate();
         }
         List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();// I delete List<Recognition>
         sleep(1000);
-        for (Recognition recognition : RecognitionList) {
-            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                cubePosition = 1;//CENTER
-                break;
-            }
-        }
-        if (cubePosition != 1) {
-            ScaledTurn(turnAngleRight, motor, imu, power);
-            RecognitionList = tfod.getUpdatedRecognitions();// I delete List<Recognition>
-            sleep(1000);
+
+        if (tfod.getUpdatedRecognitions() != null)
             for (Recognition recognition : RecognitionList) {
                 if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                    cubePosition = 2;//RIGHT
+                    cubePosition = 1;//CENTER
                     break;
                 }
             }
+        if (cubePosition != 1) {
+            ScaledTurn(turnAngleRight, motor, imu, power);
+            List<Recognition> RecognitionListRight = tfod.getUpdatedRecognitions();// I delete List<Recognition>
+            sleep(1000);
+
+            if (tfod.getUpdatedRecognitions() != null)
+                for (Recognition recognition : RecognitionListRight) {
+                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                        cubePosition = 2;//RIGHT
+                        break;
+                    }
+                }
         }
         if (cubePosition != 1 && cubePosition != 2) {
             cubePosition = 3;//LEFT
@@ -381,13 +391,14 @@ public class autoMode extends LinearOpMode {
 //                if (RecognitionList.get(indexGold)!=reco){
 //
 //                }
-                for (Recognition recognition : RecognitionList) {
-                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                        goldReco = recognition;
-                        runTime = getRuntime();
-                        break;
+                if (tfod.getUpdatedRecognitions() != null)
+                    for (Recognition recognition : RecognitionList) {
+                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                            goldReco = recognition;
+                            runTime = getRuntime();
+                            break;
+                        }
                     }
-                }
                 if (goldReco != null) {
 
                     middleCubeX = ((goldReco.getLeft() + goldReco.getRight()) / 2);

@@ -42,6 +42,7 @@ public class Robot {
 //
 //        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
 //        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
+
         driveTrain[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
         driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
         driveTrain[0][1] = hardwareMap.get(DcMotor.class, "rightFront");

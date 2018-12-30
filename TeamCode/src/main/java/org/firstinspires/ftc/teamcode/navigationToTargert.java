@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -29,7 +32,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 @Autonomous(name = "ImageTesting")
 public class navigationToTargert extends autoMode {
 
-    double power = 0.3;
+    double power = 0.14;
     final double tixRound = 600;
     final double cmRound = 27;
     private static final float mmPerInch = 25.4f;
@@ -109,10 +112,7 @@ public class navigationToTargert extends autoMode {
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
                         CAMERA_CHOICE == FRONT ? 90 : -90, 0, 0));
-        while (!isStarted()) {
-            telemetry.addData("angle", getCurrentScaledAngle());
-            telemetry.update();
-        }
+
         /**  Let all the trackable listeners know where the phone is.  */
         for (VuforiaTrackable trackable : allTrackablesNav) {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
@@ -123,30 +123,38 @@ public class navigationToTargert extends autoMode {
 
         /** Start tracking the data sets we care about. */
         targetsRoverRuckus.activate();
-
+        while (!isStarted()) {
+            if(getPositions()!=null) {
+                telemetry.addData("angle", getPositions()[0]);
+                telemetry.update();
+            }
+        }
         waitForStart();
 
-        if (opModeIsActive()) {
-            telemetry.addLine("op started");
-            telemetry.update();
-//            scaledTurnImage(310, 0.35);
+        while (opModeIsActive()) {
+            float[] pos=getPositions();
+           if(pos==null)
+               searchImage();
+            setMotorPower( new double[][]{{0, 0}, {0, 0}});
+           pos=getPositions();
+           telemetry.addData("pos",pos==null);
+           telemetry.update();
+           sleep(3000);
+           driveToImage();
+
+//            scaledTurnImage(310, 0.35
             //  setMotorPower(new double[][]{{power, -power}, {power, -power}});
 
             // telemetry.addData("ad",robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
             //   AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
-            float[] positions = getPositions();
-//            scaledTurnImage(35,  0.6);
-//            sleep(1500);
-            telemetry.addData("pos: ",getPositions()==null);
-            telemetry.update();
-            sleep(2000);
-            if (getPositions() == null)
-                searchImage();
-            telemetry.addLine("finish searching");
-            telemetry.addData("pos: ",getPositions()==null);
-            telemetry.update();
-            sleep(1500);
-           // driveToImage();
+//            float[] positions = getPositions();
+////            scaledTurnImage(35,  0.6);
+////            sleep(1500);
+//            telemetry.addData("pos: ",getPositions()==null);
+//            telemetry.update();
+//            sleep(2000);
+
+//            scaledTurnImage(90,0.4);
         }
 //
 //        Driving.setMotorPower(motors, new double[][]{{power, power}, {power, power}});
@@ -168,16 +176,15 @@ public class navigationToTargert extends autoMode {
         //  Driving.Driving.setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
         float[] positions = getPositions();
         if (positions != null) {
-            setMotorPower(new double[][]{{-power, power}, {-power, power}});
-            while (opModeIsActive() && positions[5] >= 100) {
-                positions = getPositions();
-                telemetry.addData("heading:", positions[5]);
-                telemetry.update();
-            }
-            setMotorPower(new double[][]{{0, 0}, {0, 0}});
+//            setMotorPower(new double[][]{{-power, power}, {-power, power}});
+//            while (opModeIsActive() && positions[5] >= 100) {
+//                positions = getPositions();
+//                telemetry.addData("heading:", positions[5]);
+//                telemetry.update();
+//            }
             sleep(1000);
             setMotorPower(new double[][]{{power, power}, {power, power}});
-            while (opModeIsActive() && positions[0] <= 60) {
+            while (opModeIsActive() && positions[0] <= 54) {
                 positions = getPositions();
                 telemetry.addData("x:", positions[0]);
                 telemetry.update();
@@ -186,15 +193,15 @@ public class navigationToTargert extends autoMode {
             telemetry.addLine("got to x=65");
             telemetry.update();
             setMotorPower(new double[][]{{0, 0}, {0, 0}});
-            sleep(1000);
-            setMotorPower(new double[][]{{0.23, -0.23}, {0.23, -0.23}});
-            while (opModeIsActive() && positions[5] >= 94) {
-                positions = getPositions();
-                telemetry.addData("heading:", positions[5]);
-                telemetry.update();
-            }
-            setMotorPower(new double[][]{{0, 0}, {0, 0}});
-
+            sleep(4000);
+           // setMotorPower(new double[][]{{0.23, -0.23}, {0.23, -0.23}});
+//            while (opModeIsActive() && positions[5] >= 94) {
+////                positions = getPositions();
+////                telemetry.addData("heading:", positions[5]);
+////                telemetry.update();
+////            }
+           // setMotorPower(new double[][]{{0, 0}, {0, 0}});
+            diffTurn(90-positions[5],0.4);
         }
     }
 
@@ -288,22 +295,22 @@ public class navigationToTargert extends autoMode {
         }
         return null;
     }
-//aa
+
+    //aa
     public void searchImage() {
         runtime.reset();
         double time0 = runtime.seconds();
         double currTime = time0;
-        power =-0.32;
+        power = -0.24;
         int count = 0;
         boolean per = true;
-        while (opModeIsActive() && currTime - time0 < 6 && getPositions() == null && count < 10) {
+        while (opModeIsActive() && currTime - time0 < 4 && getPositions() == null && count < 9) {
             if (per) {
-                setMotorPower(new double[][]{{power - 0.21, power}, {power - 0.21, power}});
+                setMotorPower(new double[][]{{power - 0.17, power}, {power - 0.17, power}});
                 telemetry.addLine("side 1");
                 telemetry.update();
-            }
-            else {
-                setMotorPower(new double[][]{{power, power - 0.21}, {power, power - 0.21}});
+            } else {
+                setMotorPower(new double[][]{{power, power - 0.17}, {power, power - 0.17}});
                 telemetry.addLine("side 2");
                 telemetry.update();
             }
@@ -312,10 +319,33 @@ public class navigationToTargert extends autoMode {
                 runtime.reset();
                 count++;
                 per = !per;
+                setMotorPower(new double[][]{{0, 0}, {0, 0}});
+                sleep(20);
+
             }
+
             telemetry.addData("time passed: ", currTime - time0);
             telemetry.update();
         }
+    }
+
+    public static double normalizedAngle(double angle) {
+        if (angle < 0) {
+            while (angle < 0)
+                angle += 360;
+        } else if (angle >= 360) {
+            while (angle >= 360)
+                angle -= 360;
+        }
+        return angle;
+    }
+
+    public void diffTurn(double diffAngle, double power) {
+        double currAngle = robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
+                AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        double goalAngle = normalizedAngle(diffAngle + currAngle);
+        ScaledTurn(goalAngle, robot.driveTrain, robot.imu, 0.4);
+
     }
 
 }
