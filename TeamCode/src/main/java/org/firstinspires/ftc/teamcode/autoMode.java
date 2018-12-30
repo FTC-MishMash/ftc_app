@@ -62,7 +62,7 @@ public class autoMode extends LinearOpMode {
      * Detection engine.
      */
     public TFObjectDetector tfod;
-    ElapsedTime runTime = new ElapsedTime();
+    public ElapsedTime runTime = new ElapsedTime();
     final double SCALE_FACTOR = 255;
 
     static final int PitchtargetAngleMin = -5;
@@ -98,6 +98,7 @@ public class autoMode extends LinearOpMode {
     @Override
 
     public void runOpMode() throws InterruptedException {
+              robot = new Robot(hardwareMap);
 
     }
 
