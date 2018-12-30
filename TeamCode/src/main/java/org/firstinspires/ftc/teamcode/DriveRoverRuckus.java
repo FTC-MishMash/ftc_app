@@ -83,19 +83,17 @@ public class DriveRoverRuckus extends OpMode {
             robot.linear.setPower(1);
         } else if (gamepad2.left_stick_y < 0) {
             robot.linear.setPower(-1);
-        } else
-            robot.linear.setPower(0);
+        }
 
 
-        if (gamepad2.dpad_up) {
+        else if (gamepad2.dpad_up) {
             robot.shaft[0].setPower(0.7);
             robot.shaft[1].setPower(0.7);
         } else if (gamepad2.dpad_down) {
-            robot.shaft[0].setPower(-0.25);
-            robot.shaft[1].setPower(-0.25);
+            robot.shaft[0].setPower(-7);
+            robot.shaft[1].setPower(-7);
         } else if (gamepad2.right_bumper) {
             robot.inTake.setPower(1);
-
         } else if (gamepad2.left_bumper) {
             robot.shaft[0].setTargetPosition(8000);
             robot.shaft[1].setTargetPosition(8000);
@@ -126,6 +124,7 @@ public class DriveRoverRuckus extends OpMode {
             robot.shaft[0].setPower(0);
             robot.shaft[1].setPower(0);
             robot.inTake.setPower(0);
+            robot.linear.setPower(0);
         }
 
 
