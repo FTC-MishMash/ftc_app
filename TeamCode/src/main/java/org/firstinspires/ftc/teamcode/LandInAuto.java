@@ -28,6 +28,8 @@ public class LandInAuto extends LinearOpMode {
         robot.shaft[0].setPower(0.5);
         robot.shaft[1].setPower(0.5);
         while (opModeIsActive() && getAngularOriention().thirdAngle <= -5) {
+//            if (robot.linear.getCurrentPosition()<=150)
+//                robot.linear.setPower(0);
             telemetry.addData("pitch",getAngularOriention().thirdAngle);
             telemetry.addData("linear encoder",robot.linear.getCurrentPosition());
             telemetry.update();
@@ -37,6 +39,7 @@ public class LandInAuto extends LinearOpMode {
 
         robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         robot.shaft[0].setTargetPosition(0);
         robot.shaft[1].setTargetPosition(0);
@@ -47,11 +50,10 @@ public class LandInAuto extends LinearOpMode {
         robot.shaft[0].setPower(1);
         robot.shaft[1].setPower(1);
 
-        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.linear.setTargetPosition(1200);
+        robot.linear.setTargetPosition(-1200);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.linear.setPower(1);
-        while (opModeIsActive() && robot.linear.getCurrentPosition() <= 1180 );
+        while (opModeIsActive() && robot.linear.getCurrentPosition() >= -1180 );
 
         robot.linear.setPower(0);
         robot.shaft[0].setPower(0);
@@ -78,20 +80,21 @@ public class LandInAuto extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
+        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
         while (!isStarted()){
             telemetry.addData("pitch",getAngularOriention().thirdAngle);
             telemetry.update();
-            robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
             robot.linear.setTargetPosition(0);
             robot.shaft[0].setTargetPosition(0);
             robot.shaft[1].setTargetPosition(0);
 
-            robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             robot.linear.setPower(1);
             robot.shaft[0].setPower(1);

@@ -32,7 +32,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 @Autonomous(name = "ImageTesting")
 public class navigationToTargert extends autoMode {
 
-    double power = 0.14;
+    double power = -0.14;
     final double tixRound = 600;
     final double cmRound = 27;
     private static final float mmPerInch = 25.4f;
@@ -131,7 +131,7 @@ public class navigationToTargert extends autoMode {
         }
         waitForStart();
 
-        while (opModeIsActive()) {
+        if (opModeIsActive()) {
             float[] pos=getPositions();
            if(pos==null)
                searchImage();
@@ -184,7 +184,7 @@ public class navigationToTargert extends autoMode {
 //            }
             sleep(1000);
             setMotorPower(new double[][]{{power, power}, {power, power}});
-            while (opModeIsActive() && positions[0] <= 54) {
+            while (opModeIsActive() && positions[0] <= 48) {
                 positions = getPositions();
                 telemetry.addData("x:", positions[0]);
                 telemetry.update();
@@ -304,7 +304,7 @@ public class navigationToTargert extends autoMode {
         power = -0.24;
         int count = 0;
         boolean per = true;
-        while (opModeIsActive() && currTime - time0 < 4 && getPositions() == null && count < 9) {
+        while (opModeIsActive() && currTime - time0 < 3 && getPositions() == null && count < 7) {
             if (per) {
                 setMotorPower(new double[][]{{power - 0.17, power}, {power - 0.17, power}});
                 telemetry.addLine("side 1");
@@ -315,12 +315,12 @@ public class navigationToTargert extends autoMode {
                 telemetry.update();
             }
             currTime = runtime.seconds();
-            if (currTime - time0 >= 0.3) {
+            if (currTime - time0 >= 0.28) {
                 runtime.reset();
                 count++;
                 per = !per;
                 setMotorPower(new double[][]{{0, 0}, {0, 0}});
-                sleep(20);
+                sleep(30);
 
             }
 
