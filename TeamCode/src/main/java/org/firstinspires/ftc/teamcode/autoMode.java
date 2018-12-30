@@ -723,5 +723,21 @@ public class autoMode extends LinearOpMode {
         return angle;
     }
 
+    public static double normalizedAngle(double angle) {
+        if (angle < 0) {
+            while (angle < 0)
+                angle += 360;
+        } else if (angle >= 360) {
+            while (angle >= 360)
+                angle -= 360;
+        }
+        return angle;
+    }
+    public void  diffTurn(double diffAngle,double power){
+        double currAngle = robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
+                AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        double goalAngle=autoMode.normalizedAngle(diffAngle+currAngle);
+        ScaledTurn(goalAngle,robot.driveTrain,robot.imu,0.4);
 
+    }
 }
