@@ -32,7 +32,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 @Autonomous(name = "ImageTesting")
 public class navigationToTargert extends autoMode {
 
-    double power = 0.3;
+    double power = 0.14;
     final double tixRound = 600;
     final double cmRound = 27;
     private static final float mmPerInch = 25.4f;
@@ -112,10 +112,7 @@ public class navigationToTargert extends autoMode {
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
                         CAMERA_CHOICE == FRONT ? 90 : -90, 0, 0));
-//        while (!isStarted()) {
-//            telemetry.addData("angle", getPositions()[5]);
-//            telemetry.update();
-//        }
+
         /**  Let all the trackable listeners know where the phone is.  */
         for (VuforiaTrackable trackable : allTrackablesNav) {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
@@ -126,14 +123,24 @@ public class navigationToTargert extends autoMode {
 
         /** Start tracking the data sets we care about. */
         targetsRoverRuckus.activate();
-
+        while (!isStarted()) {
+            if(getPositions()!=null) {
+                telemetry.addData("angle", getPositions()[0]);
+                telemetry.update();
+            }
+        }
         waitForStart();
 
         while (opModeIsActive()) {
             float[] pos=getPositions();
-            if(pos!=null){
-            telemetry.addData("angle", pos[5]);
-            telemetry.update();}
+           if(pos==null)
+               searchImage();
+            setMotorPower( new double[][]{{0, 0}, {0, 0}});
+           pos=getPositions();
+           telemetry.addData("pos",pos==null);
+           telemetry.update();
+           sleep(3000);
+           driveToImage();
 
 //            scaledTurnImage(310, 0.35
             //  setMotorPower(new double[][]{{power, -power}, {power, -power}});
@@ -175,10 +182,9 @@ public class navigationToTargert extends autoMode {
 //                telemetry.addData("heading:", positions[5]);
 //                telemetry.update();
 //            }
-            setMotorPower(new double[][]{{0, 0}, {0, 0}});
             sleep(1000);
             setMotorPower(new double[][]{{power, power}, {power, power}});
-            while (opModeIsActive() && positions[0] <= 60) {
+            while (opModeIsActive() && positions[0] <= 54) {
                 positions = getPositions();
                 telemetry.addData("x:", positions[0]);
                 telemetry.update();
@@ -187,14 +193,14 @@ public class navigationToTargert extends autoMode {
             telemetry.addLine("got to x=65");
             telemetry.update();
             setMotorPower(new double[][]{{0, 0}, {0, 0}});
-            sleep(1000);
-            setMotorPower(new double[][]{{0.23, -0.23}, {0.23, -0.23}});
+            sleep(4000);
+           // setMotorPower(new double[][]{{0.23, -0.23}, {0.23, -0.23}});
 //            while (opModeIsActive() && positions[5] >= 94) {
 ////                positions = getPositions();
 ////                telemetry.addData("heading:", positions[5]);
 ////                telemetry.update();
 ////            }
-            setMotorPower(new double[][]{{0, 0}, {0, 0}});
+           // setMotorPower(new double[][]{{0, 0}, {0, 0}});
             diffTurn(90-positions[5],0.4);
         }
     }
@@ -295,16 +301,16 @@ public class navigationToTargert extends autoMode {
         runtime.reset();
         double time0 = runtime.seconds();
         double currTime = time0;
-        power = -0.32;
+        power = -0.24;
         int count = 0;
         boolean per = true;
-        while (opModeIsActive() && currTime - time0 < 6 && getPositions() == null && count < 10) {
+        while (opModeIsActive() && currTime - time0 < 4 && getPositions() == null && count < 9) {
             if (per) {
-                setMotorPower(new double[][]{{power - 0.21, power}, {power - 0.21, power}});
+                setMotorPower(new double[][]{{power - 0.17, power}, {power - 0.17, power}});
                 telemetry.addLine("side 1");
                 telemetry.update();
             } else {
-                setMotorPower(new double[][]{{power, power - 0.21}, {power, power - 0.21}});
+                setMotorPower(new double[][]{{power, power - 0.17}, {power, power - 0.17}});
                 telemetry.addLine("side 2");
                 telemetry.update();
             }
@@ -313,7 +319,11 @@ public class navigationToTargert extends autoMode {
                 runtime.reset();
                 count++;
                 per = !per;
+                setMotorPower(new double[][]{{0, 0}, {0, 0}});
+                sleep(20);
+
             }
+
             telemetry.addData("time passed: ", currTime - time0);
             telemetry.update();
         }

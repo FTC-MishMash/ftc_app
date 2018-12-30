@@ -33,11 +33,12 @@ public class redCrater extends autoMode {
 //        getOffTheClimb
 
             int cubePosition = 0;
-            cubePosition = searchCube(0.3, 15, 50, robot.driveTrain, robot.imu);
+            cubePosition = searchCube(0.35, 345, 15, robot.driveTrain, robot.imu);
 
             if (tfod != null) {
                 tfod.activate();
             }
+            sleep(1000);
             followCubeRecognision(0.15);//start power
 
             if (tfod != null) {
