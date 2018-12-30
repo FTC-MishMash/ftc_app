@@ -110,7 +110,7 @@ public class navigationToTargert extends autoMode {
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
                         CAMERA_CHOICE == FRONT ? 90 : -90, 0, 0));
         while (!isStarted()) {
-            telemetry.addData("angle", getCurrentScaledAngle());
+            telemetry.addData("angle", getPositions()[5]);
             telemetry.update();
         }
         /**  Let all the trackable listeners know where the phone is.  */
@@ -126,27 +126,28 @@ public class navigationToTargert extends autoMode {
 
         waitForStart();
 
-        if (opModeIsActive()) {
-            telemetry.addLine("op started");
+        while (opModeIsActive()) {
+            telemetry.addData("angle",getPositions()[4]);
             telemetry.update();
-//            scaledTurnImage(310, 0.35);
+//            scaledTurnImage(310, 0.35
             //  setMotorPower(new double[][]{{power, -power}, {power, -power}});
 
             // telemetry.addData("ad",robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
             //   AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
-            float[] positions = getPositions();
-//            scaledTurnImage(35,  0.6);
+//            float[] positions = getPositions();
+////            scaledTurnImage(35,  0.6);
+////            sleep(1500);
+//            telemetry.addData("pos: ",getPositions()==null);
+//            telemetry.update();
+//            sleep(2000);
+//            if (getPositions() == null)
+//                searchImage();
+//            telemetry.addLine("finish searching");
+//            telemetry.addData("pos: ",getPositions()==null);
+//            telemetry.update();
 //            sleep(1500);
-            telemetry.addData("pos: ",getPositions()==null);
-            telemetry.update();
-            sleep(2000);
-            if (getPositions() == null)
-                searchImage();
-            telemetry.addLine("finish searching");
-            telemetry.addData("pos: ",getPositions()==null);
-            telemetry.update();
-            sleep(1500);
-           // driveToImage();
+//            driveToImage();
+//            scaledTurnImage(90,0.4);
         }
 //
 //        Driving.setMotorPower(motors, new double[][]{{power, power}, {power, power}});
