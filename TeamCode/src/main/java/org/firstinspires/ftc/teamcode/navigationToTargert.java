@@ -132,6 +132,8 @@ public class navigationToTargert extends autoMode {
         while (opModeIsActive()) {
             telemetry.addData("angle", getPositions()[4]);
             telemetry.update();
+            if(gamepad1.a)
+                diffTurn(45,0.4);
 //            scaledTurnImage(310, 0.35
             //  setMotorPower(new double[][]{{power, -power}, {power, -power}});
 
