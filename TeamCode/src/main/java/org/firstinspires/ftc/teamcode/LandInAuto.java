@@ -16,17 +16,10 @@ public class LandInAuto extends LinearOpMode {
     Robot robot;
     autoMode auto;
 
-<<<<<<< Updated upstream
-    //
-    public void LandInAuto1() {
-        while (opModeIsActive() && getAngularOriention().thirdAngle <= 5) {
-            robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-=======
 //
     public void LandInAuto() {
         robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         while (opModeIsActive() && getAngularOriention().thirdAngle <= -5) {
->>>>>>> Stashed changes
             robot.linear.setTargetPosition(0);
             robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.linear.setPower(1);
@@ -37,13 +30,8 @@ public class LandInAuto extends LinearOpMode {
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
 
-<<<<<<< Updated upstream
-        while (opModeIsActive() && robot.linear.getCurrentPosition() >= 1180 && robot.linear.getCurrentPosition() <= 1200) {
-            robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-=======
         robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
->>>>>>> Stashed changes
 
         robot.shaft[0].setTargetPosition(0);
         robot.shaft[1].setTargetPosition(0);
@@ -60,11 +48,11 @@ public class LandInAuto extends LinearOpMode {
             robot.linear.setPower(1);
         }
         double t0 = getRuntime();
-        robot.linear.setPower(0);
-        auto.setMotorPower(new double[][]{{0.3, 0.3}, {0.3, 0.3}});
+robot.linear.setPower(0);
+auto.setMotorPower(new double[][]{{0.3,0.3},{0.3,0.3}});
 
-        while (opModeIsActive() && getRuntime() - t0 <= 0.5) ;
-        auto.setMotorPower(new double[][]{{0, 0}, {0, 0}});
+        while (opModeIsActive()&& getRuntime()-t0 <= 0.5 );
+        auto.setMotorPower(new double[][]{{0,0},{0,0}});
 
         robot.shaft[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.shaft[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -76,7 +64,7 @@ public class LandInAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
         waitForStart();
-        LandInAuto1();
+        LandInAuto();
 
     }
 
