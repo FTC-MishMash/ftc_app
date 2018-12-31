@@ -126,7 +126,7 @@ public class redCrater extends autoMode {
             telemetry.update();
             sleep(3000);
             driveToImage();
-            driveByColor(0, robot.colorRightFront, robot.imu, robot.hsvValuesRightFront, 135, 0.4);
+//            driveByColor(0, robot.colorRightFront, robot.imu, robot.hsvValuesRightFront, 135, 0.4);
 
         }
     }
