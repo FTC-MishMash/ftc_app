@@ -35,7 +35,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
-import static org.firstinspires.ftc.teamcode.navigationToTargert.normalizedAngle;
+
 
 
 /**
@@ -82,9 +82,9 @@ public class autoMode extends LinearOpMode {
     static final int HeadingToSampling = 45;
     static final int HeadingToTarget = 90;
 
-    private static final float mmPerInch = 25.4f;
-    private static final float mmFTCFieldWidth = (12 * 6) * mmPerInch;       // the width of the FTC field (from the center point to the outer panels)
-    private static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    public static final float mmPerInch = 25.4f;
+    public static final float mmFTCFieldWidth = (12 * 6) * mmPerInch;       // the width of the FTC field (from the center point to the outer panels)
+    public static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
     // Select which camera you want use.  The FRONT camera is the one on the same side as the screen.
     // Valid choices are:  BACK or FRONT
     public static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
@@ -724,6 +724,17 @@ public class autoMode extends LinearOpMode {
 
         setMotorPower(new double[][]{{0, 0}, {0, 0}});
     }
+    public static double normalizedAngle(double angle) {
+        if (angle < 0) {
+            while (angle < 0)
+                angle += 360;
+        } else if (angle >= 360) {
+            while (angle >= 360)
+                angle -= 360;
+        }
+        return angle;
+    }
+
     public void driveToImage() {
 
         //  Driving.Driving.setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
@@ -743,13 +754,13 @@ public class autoMode extends LinearOpMode {
             setMotorPower(new double[][]{{0, 0}, {0, 0}});
             sleep(4000);
 
-            diffTurn(90-positions[5],0.4);
+            diffTurn(90 - positions[5], 0.4);
         }
     }
     public void diffTurn(double diffAngle, double power) {
         double currAngle = robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
                 AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-        double goalAngle = navigationToTargert.normalizedAngle(diffAngle + currAngle);
+        double goalAngle = normalizedAngle(diffAngle + currAngle);
         ScaledTurn(goalAngle, robot.driveTrain, robot.imu, 0.4);
 
     }
@@ -816,7 +827,6 @@ public class autoMode extends LinearOpMode {
             telemetry.update();
         }
     }
-
     public double getCurrentScaledAngle() {
         BNO055IMU imu = robot.imu;
         double angle = imu.getAngularOrientation(AxesReference.INTRINSIC,
