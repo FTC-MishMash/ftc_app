@@ -111,40 +111,43 @@ public class autoMode extends LinearOpMode {
             telemetry.update();
             cubePosition = -1;
             return cubePosition;
-        }
-        if (tfod != null) {
+        } else if (tfod != null) {
             tfod.activate();
         }
-        List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
+
         double runTime0 = getRuntime();
-        while (getRuntime() - runTime0 < 3)
-            RecognitionList = tfod.getUpdatedRecognitions();
+        while (opModeIsActive() && getRuntime() - runTime0 < 3) {
+            List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
+            telemetry.addData("have cube?   ", RecognitionList != null);
+            telemetry.update();
 
-
-        if (tfod.getUpdatedRecognitions() != null)
-            for (Recognition recognition : RecognitionList) {
-                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                    cubePosition = 1;//CENTER
-                    break;
-                }
-            }
-        if (cubePosition != 1) {
-            ScaledTurn(turnAngleRight, motor, imu, power);
-            List<Recognition> RecognitionListRight = tfod.getUpdatedRecognitions();// I delete List<Recognition>
-            sleep(1000);
-
-            if (tfod.getUpdatedRecognitions() != null)
-                for (Recognition recognition : RecognitionListRight) {
+            if (RecognitionList != null)
+                for (Recognition recognition : RecognitionList) {
                     if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                        cubePosition = 2;//RIGHT
-                        break;
+                        cubePosition = 1;//CENTER
+                        return cubePosition;
                     }
                 }
         }
-        if (cubePosition != 1 && cubePosition != 2) {
-            cubePosition = 3;//LEFT
-            ScaledTurn(turnAngleLeft, motor, imu, power);
+        //only if dont have cube in middle
+        ScaledTurn(turnAngleRight, motor, imu, power);
+        while (opModeIsActive() && getRuntime() - runTime0 < 1) {
+            List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
+            telemetry.addLine("have cube?   ");
+            telemetry.update();
+
+            if (RecognitionList != null)
+                for (Recognition recognition : RecognitionList) {
+                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                        cubePosition = 2;//RIGHT
+                        return cubePosition;
+                    }
+                }
         }
+
+        // cubePosition != 1 && cubePosition != 2
+        cubePosition = 3;//LEFT
+        ScaledTurn(turnAngleLeft, motor, imu, power);
         return cubePosition;
     }
 
@@ -394,7 +397,7 @@ public class autoMode extends LinearOpMode {
 //                if (RecognitionList.get(indexGold)!=reco){
 //
 //                }
-                if (tfod.getUpdatedRecognitions() != null)
+                if (RecognitionList != null)
                     for (Recognition recognition : RecognitionList) {
                         if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                             goldReco = recognition;
