@@ -39,7 +39,7 @@ public class LandInAuto extends LinearOpMode {
         robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-sleep(750);
+sleep(2000);
         robot.shaft[0].setTargetPosition(0);
         robot.shaft[1].setTargetPosition(0);
 
