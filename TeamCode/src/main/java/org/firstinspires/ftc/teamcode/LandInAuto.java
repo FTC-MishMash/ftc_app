@@ -25,8 +25,8 @@ public class LandInAuto extends LinearOpMode {
         robot.linear.setPower(1);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.shaft[0].setPower(0.5);
-        robot.shaft[1].setPower(0.5);
+        robot.shaft[0].setPower(0.3);
+        robot.shaft[1].setPower(0.3);
         while (opModeIsActive() && getAngularOriention().thirdAngle <= -5) {
 //            if (robot.linear.getCurrentPosition()<=150)
 //                robot.linear.setPower(0);
@@ -47,12 +47,12 @@ public class LandInAuto extends LinearOpMode {
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.shaft[0].setPower(1);
-        robot.shaft[1].setPower(1);
+        robot.shaft[0].setPower(0.7);
+        robot.shaft[1].setPower(0.7);
 
         robot.linear.setTargetPosition(-1200);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.linear.setPower(1);
+        robot.linear.setPower(0.4);
         while (opModeIsActive() && robot.linear.getCurrentPosition() >= -1180 );
 
         robot.linear.setPower(0);

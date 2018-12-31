@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -34,6 +35,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
+import static org.firstinspires.ftc.teamcode.navigationToTargert.normalizedAngle;
 
 
 /**
@@ -55,6 +57,7 @@ public class autoMode extends LinearOpMode {
      * localization engine.
      */
     public VuforiaLocalizer vuforia;
+    public VuforiaLocalizer vuforiaImage;
 
 
     /**
@@ -218,11 +221,11 @@ public class autoMode extends LinearOpMode {
         parameters.cameraDirection = CAMERA_CHOICE;
         //parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
         //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        vuforiaImage = ClassFactory.getInstance().createVuforia(parameters);
 
         // Load the data sets that for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
-        VuforiaTrackables targetsRoverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
+        VuforiaTrackables targetsRoverRuckus = this.vuforiaImage.loadTrackablesFromAsset("RoverRuckus");
         VuforiaTrackable blueRover = targetsRoverRuckus.get(0);
         blueRover.setName("Blue-Rover");
         VuforiaTrackable redFootprint = targetsRoverRuckus.get(1);
@@ -276,8 +279,6 @@ public class autoMode extends LinearOpMode {
         }
 
         /** Wait for the game to begin */
-        telemetry.addData(">", "c");
-        telemetry.update();
 
 
         /** Start tracking the data sets we care about. */
@@ -723,7 +724,98 @@ public class autoMode extends LinearOpMode {
 
         setMotorPower(new double[][]{{0, 0}, {0, 0}});
     }
+    public void driveToImage() {
 
+        //  Driving.Driving.setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
+        float[] positions = getPositions();
+        if (positions != null) {
+
+            sleep(1000);
+            setMotorPower(new double[][]{{power, power}, {power, power}});
+            while (opModeIsActive() && positions[0] <= 48) {
+                positions = getPositions();
+                telemetry.addData("x:", positions[0]);
+                telemetry.update();
+            }
+
+            telemetry.addLine("got to x=65");
+            telemetry.update();
+            setMotorPower(new double[][]{{0, 0}, {0, 0}});
+            sleep(4000);
+
+            diffTurn(90-positions[5],0.4);
+        }
+    }
+    public void diffTurn(double diffAngle, double power) {
+        double currAngle = robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
+                AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        double goalAngle = navigationToTargert.normalizedAngle(diffAngle + currAngle);
+        ScaledTurn(goalAngle, robot.driveTrain, robot.imu, 0.4);
+
+    }
+    public float[] getPositions() {
+        for (VuforiaTrackable trackable : allTrackablesNav) {
+            /**
+             * getUpdatedRobotLocation() will return null if no new information is available since
+             * the last time that call was made, or if the trackable is not currently visible.
+             * getRobotLocation() will return null if the trackable is not currently visible.
+             */
+            telemetry.addData(trackable.getName(), ((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() ? "Visible" : "Not Visible");    //
+
+            OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+            if (robotLocationTransform != null) {
+                lastLocation = robotLocationTransform;
+            }
+        }
+        // Provide feedback as to where the robot is located (if we know).
+        if (lastLocation != null) {
+            // express position (translation) of robot in inches.
+            VectorF translation = lastLocation.getTranslation();
+
+            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+            /*
+             *0- x
+             *1- y
+             *2- z
+             *3-roll
+             *4-pitch
+             *5-heading*/
+            return new float[]{translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch, rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle};
+            // express the rotation of the robot in degrees.
+        }
+        return null;
+    }
+    public void searchImage() {
+        runtime.reset();
+        double time0 = runtime.seconds();
+        double currTime = time0;
+        power = -0.24;
+        int count = 0;
+        boolean per = true;
+        while (opModeIsActive() && currTime - time0 < 3 && getPositions() == null && count < 7) {
+            if (per) {
+                setMotorPower(new double[][]{{power - 0.17, power}, {power - 0.17, power}});
+                telemetry.addLine("side 1");
+                telemetry.update();
+            } else {
+                setMotorPower(new double[][]{{power, power - 0.17}, {power, power - 0.17}});
+                telemetry.addLine("side 2");
+                telemetry.update();
+            }
+            currTime = runtime.seconds();
+            if (currTime - time0 >= 0.28) {
+                runtime.reset();
+                count++;
+                per = !per;
+                setMotorPower(new double[][]{{0, 0}, {0, 0}});
+                sleep(30);
+
+            }
+
+            telemetry.addData("time passed: ", currTime - time0);
+            telemetry.update();
+        }
+    }
 
     public double getCurrentScaledAngle() {
         BNO055IMU imu = robot.imu;
