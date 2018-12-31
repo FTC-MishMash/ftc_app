@@ -37,7 +37,6 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 
 
-
 /**
  * Created by user on 22/11/2018.
  */
@@ -116,8 +115,11 @@ public class autoMode extends LinearOpMode {
         if (tfod != null) {
             tfod.activate();
         }
-        List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();// I delete List<Recognition>
-        sleep(3000);
+        List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
+        double runTime0 = getRuntime();
+        while (getRuntime() - runTime0 < 3)
+            RecognitionList = tfod.getUpdatedRecognitions();
+
 
         if (tfod.getUpdatedRecognitions() != null)
             for (Recognition recognition : RecognitionList) {
@@ -724,6 +726,7 @@ public class autoMode extends LinearOpMode {
 
         setMotorPower(new double[][]{{0, 0}, {0, 0}});
     }
+
     public static double normalizedAngle(double angle) {
         if (angle < 0) {
             while (angle < 0)
@@ -752,11 +755,12 @@ public class autoMode extends LinearOpMode {
             telemetry.addLine("got to x=65");
             telemetry.update();
             setMotorPower(new double[][]{{0, 0}, {0, 0}});
-            sleep(4000);
+            sleep(2000);
 
-            diffTurn(90 - positions[5], 0.4);
+            diffTurn(90 - positions[5], 0.15);
         }
     }
+
     public void diffTurn(double diffAngle, double power) {
         double currAngle = robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
                 AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
@@ -764,6 +768,7 @@ public class autoMode extends LinearOpMode {
         ScaledTurn(goalAngle, robot.driveTrain, robot.imu, 0.4);
 
     }
+
     public float[] getPositions() {
         for (VuforiaTrackable trackable : allTrackablesNav) {
             /**
@@ -796,14 +801,26 @@ public class autoMode extends LinearOpMode {
         }
         return null;
     }
-    public void searchImage() {
+
+    public void searchImage(int cubePos) {
         runtime.reset();
         double time0 = runtime.seconds();
         double currTime = time0;
         power = -0.24;
-        int count = 0;
+        int count = 2;
+        double maxTime = 3;
+        if (cubePos == 1) {
+            maxTime += 0.6;
+            count = 0;
+        } else if (cubePos == 2) {
+            maxTime += 0.3;
+            count = 1;
+        }
+
+
         boolean per = true;
-        while (opModeIsActive() && currTime - time0 < 3 && getPositions() == null && count < 7) {
+        while (opModeIsActive() && currTime - time0 < maxTime && getPositions() == null && count < 9
+                ) {
             if (per) {
                 setMotorPower(new double[][]{{power - 0.17, power}, {power - 0.17, power}});
                 telemetry.addLine("side 1");
@@ -827,6 +844,7 @@ public class autoMode extends LinearOpMode {
             telemetry.update();
         }
     }
+
     public double getCurrentScaledAngle() {
         BNO055IMU imu = robot.imu;
         double angle = imu.getAngularOrientation(AxesReference.INTRINSIC,
