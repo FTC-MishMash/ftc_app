@@ -30,10 +30,10 @@ public class LandInAuto extends LinearOpMode {
             if (robot.linear.getCurrentPosition() <= 150)
                 robot.linear.setPower(0);
 
-            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 60);
-            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 60);
-            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 30);
-            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 30);
+            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 120);
+            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 120);
+            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 30);
+            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 30);
             telemetry.addData("pitch", getAngularOriention().thirdAngle);
             telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
             telemetry.update();
