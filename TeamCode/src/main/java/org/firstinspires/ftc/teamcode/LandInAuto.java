@@ -68,7 +68,7 @@ public class LandInAuto extends LinearOpMode {
         robot.linear.setTargetPosition(-1000);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.linear.setPower(0.6);
-        while (opModeIsActive() && robot.linear.getCurrentPosition() >= -990) {
+        while (opModeIsActive() && robot.linear.getCurrentPosition() >= -950) {
             telemetry.addData("pitch", getAngularOriention().thirdAngle);
             telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
             telemetry.update();
@@ -90,8 +90,8 @@ public class LandInAuto extends LinearOpMode {
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.linear.setPower(0.7);
-        sleep(300);
+        robot.linear.setPower(1);
+        sleep(700);
         robot.shaft[0].setPower(0.7);
         robot.shaft[1].setPower(0.7);
     }
