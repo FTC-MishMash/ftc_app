@@ -29,14 +29,14 @@ public class redCrater extends autoMode {
 //        auto = new autoMode();
         robot = new Robot(hardwareMap);
 
-        initVuforiaWebCam(hardwareMap);
-
-        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            initTfod(hardwareMap);
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-            telemetry.update();
-        }
+//        initVuforiaWebCam(hardwareMap);
+//
+//        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+//            initTfod(hardwareMap);
+//        } else {
+//            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+//            telemetry.update();
+//        }
 
 
         waitForStart();
@@ -48,7 +48,7 @@ public class redCrater extends autoMode {
 //        getOffTheClimb
 
             int cubePosition = 0;
-            cubePosition = searchCube(0.35, 345, 15, robot.driveTrain, robot.imu);
+            cubePosition = searchCube(0.35, 335, 20, robot.driveTrain, robot.imu);
 
             sleep(1000);
             followCubeRecognision(0.15);//start power
@@ -56,25 +56,26 @@ public class redCrater extends autoMode {
             if (tfod != null) {
                 tfod.shutdown();
             }
+
             driveByEncoderRoverRuckus(7, 7, 0.5);
             sleep(2500);
             driveByEncoderRoverRuckus(-20, -20, 0.5);
             sleep(2500);
             ScaledTurn(60, robot.driveTrain, robot.imu, 0.5);
-            sleep(1000);
+//            sleep(1000);
             //צריך להשתמש בcubePosition
             //פונקציות של מור
-            startTracking(hardwareMap);
-            float[] pos = getPositions();
-            if (pos == null)
-                searchImage(cubePosition, 0.19);
-
-            pos = getPositions();//למה להשתמש בPOS ולא פשוט בפונקציה?
-            telemetry.addData("pos", pos == null);
-            telemetry.update();
-            sleep(3000);
-            driveToImage(0.19);
-            sleep(2000);
+//            startTracking();
+//            float[] pos = getPositions();
+////            if (pos == null)
+////                searchImage(cubePosition, 0.19);
+//
+//            pos = getPositions();//למה להשתמש בPOS ולא פשוט בפונקציה?
+//            telemetry.addData("pos", pos == null);
+//            telemetry.update();
+//            sleep(3000);
+//            driveToImage(0.19);
+//            sleep(2000);
             driveByEncoderRoverRuckus(60, 60, 0.5);
             //marker
             //go to crater
