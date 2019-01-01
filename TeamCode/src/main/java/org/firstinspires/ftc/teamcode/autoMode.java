@@ -217,7 +217,7 @@ public class autoMode extends LinearOpMode {
         robot.linear.setTargetPosition(-1000);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.linear.setPower(0.6);
-        while (opModeIsActive() && robot.linear.getCurrentPosition() >= -950) {
+        while (opModeIsActive() && robot.linear.getCurrentPosition() >= -900) {
             telemetry.addData("pitch", getAngularOriention().thirdAngle);
             telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
             telemetry.update();
