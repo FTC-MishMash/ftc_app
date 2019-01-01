@@ -268,17 +268,17 @@ public class autoMode extends LinearOpMode {
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.linear.setPower(1);
-        sleep(400);
+//        sleep(400);
         /**
          * here the robot fold his arms to its original shape
          */
-        robot.shaft[0].setPower(0.4);
-        robot.shaft[1].setPower(0.4);
+        robot.shaft[0].setPower(0.7);
+        robot.shaft[1].setPower(0.7);
         double t0 = getRuntime();
         while (opModeIsActive() &&
                 robot.shaft[0].isBusy() &&
                 robot.shaft[1].isBusy() &&
-                getRuntime() - t0 < 0.6) ;
+                getRuntime() - t0 < 1) ;
 
         robot.linear.setPower(0);
         robot.shaft[0].setPower(0);
