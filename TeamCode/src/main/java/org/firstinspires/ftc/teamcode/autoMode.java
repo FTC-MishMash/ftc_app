@@ -151,6 +151,7 @@ public class autoMode extends LinearOpMode {
         ScaledTurn(turnAngleLeft, motor, imu, power);
         return cubePosition;
     }
+
     private Orientation getAngularOriention() {
         return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
@@ -738,20 +739,20 @@ public class autoMode extends LinearOpMode {
 
         robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.driveTrain[1][1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.driveTrain[1][1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         robot.driveTrain[0][0].setTargetPosition(robot.driveTrain[0][0].getCurrentPosition() + dLeft);
         robot.driveTrain[1][0].setTargetPosition(robot.driveTrain[1][0].getCurrentPosition() + dLeft);
-        robot.driveTrain[0][1].setTargetPosition(robot.driveTrain[0][1].getCurrentPosition() + dRight);
-        robot.driveTrain[1][1].setTargetPosition(robot.driveTrain[1][1].getCurrentPosition() + dRight);
+//        robot.driveTrain[0][1].setTargetPosition(robot.driveTrain[0][1].getCurrentPosition() + dRight);
+//        robot.driveTrain[1][1].setTargetPosition(robot.driveTrain[1][1].getCurrentPosition() + dRight);
 
 
         robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.driveTrain[1][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.driveTrain[1][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         for (int i = 0; i < 2; i++)
             for (int j = 0; j < 2; j++)
@@ -764,8 +765,8 @@ public class autoMode extends LinearOpMode {
         while (opModeIsActive() &&
                 robot.driveTrain[0][0].isBusy()
                 && robot.driveTrain[1][0].isBusy()
-                && robot.driveTrain[0][1].isBusy()
-                && robot.driveTrain[1][1].isBusy()
+//                && robot.driveTrain[0][1].isBusy()
+//                && robot.driveTrain[1][1].isBusy()
                 && getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10)) {
             sleep(0);
         }
@@ -778,16 +779,16 @@ public class autoMode extends LinearOpMode {
         telemetry.addLine("end move encoder");
         telemetry.update();
 
-        for (int i = 0; i < 2; i++)
-            for (int j = 0; j < 2; j++) {
-                robot.driveTrain[i][j].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                robot.driveTrain[i][j].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            }
 
+        robot.driveTrain[0][0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.driveTrain[1][0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
-    public void Marker(){
-        driveByEncoderRoverRuckus(75,75,0.5 );
+
+    public void Marker() {
+        driveByEncoderRoverRuckus(75, 75, 0.5);
         robot.shaft[0].setTargetPosition(175);
         robot.shaft[1].setTargetPosition(175);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -802,15 +803,16 @@ public class autoMode extends LinearOpMode {
         robot.shaft[0].setPower(0.3);
         robot.shaft[1].setPower(0.3);
     }
-public void Parking(){
-        driveByEncoderRoverRuckus(90,90,-0.5);
-    robot.shaft[0].setTargetPosition(250);
-    robot.shaft[1].setTargetPosition(250);
-    robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    robot.shaft[0].setPower(0.3);
-    robot.shaft[1].setPower(0.3);
-}
+
+    public void Parking() {
+        driveByEncoderRoverRuckus(90, 90, -0.5);
+        robot.shaft[0].setTargetPosition(250);
+        robot.shaft[1].setTargetPosition(250);
+        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[0].setPower(0.3);
+        robot.shaft[1].setPower(0.3);
+    }
 
     public void ScaledTurn(double goalAngle, DcMotor[][] driveMotors, BNO055IMU imu,
                            double power) {
