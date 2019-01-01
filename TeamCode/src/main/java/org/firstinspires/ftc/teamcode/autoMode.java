@@ -386,13 +386,13 @@ public class autoMode extends LinearOpMode {
         addToMotors = new double[2];
 
         boolean breakLoop = false;
-        Recognition goldReco = null;
         runTime = getRuntime();
 
 //        RecognitionList.get(indexGold);
         if (tfod != null)
             do {
-                List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();// I delete List<Recognition>
+                List<Recognition> RecognitionList = tfod.getRecognitions();// I delete List<Recognition>
+                Recognition goldReco = null;
 
                 if (RecognitionList != null) {
                     for (Recognition recognition : RecognitionList) {
@@ -402,8 +402,7 @@ public class autoMode extends LinearOpMode {
                             break;
                         }
                     }
-                } else if (tfod.getRecognitions() == null)//if dont have any cube in updated recognision or in recognision
-                    goldReco = null;
+                }
 
                 if (goldReco != null) {
 
@@ -673,7 +672,8 @@ public class autoMode extends LinearOpMode {
     }
 
 
-    public void ScaledTurn(double goalAngle, DcMotor[][] driveMotors, BNO055IMU imu, double power) {
+    public void ScaledTurn(double goalAngle, DcMotor[][] driveMotors, BNO055IMU imu,
+                           double power) {
         boolean sideOfTurn = true;
         double deltaAngle = 0;
 
