@@ -70,19 +70,20 @@ public class DriveRoverRuckus extends OpMode {
 
 
         if (gamepad2.a) {
-            robot.shaft[0].setTargetPosition(6660);
-            robot.shaft[1].setTargetPosition(6660);
+            robot.shaft[0].setTargetPosition(135);
+            robot.shaft[1].setTargetPosition(135);
             robot.shaft[0].setPower(1);
             robot.shaft[1].setPower(1);
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            robot.shaft[0].setPower(1);
-            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } else if (gamepad2.b) {
-            robot.linear.setTargetPosition(0);
-            robot.linear.setPower(0.75);
-            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[0].setTargetPosition(5);
+            robot.shaft[1].setTargetPosition(5);
+            robot.shaft[0].setPower(0.6);
+            robot.shaft[1].setPower(0.6);
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         } else if (gamepad2.right_stick_y > 0) {
             robot.linear.setPower(1);
