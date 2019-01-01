@@ -110,6 +110,15 @@ public class LandInAuto extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
+        motorLock();
+        waitForStart();
+        LandInAuto();
+    }
+
+    private Orientation getAngularOriention() {
+        return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+    }
+    private void motorLock() {
         robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -129,11 +138,5 @@ public class LandInAuto extends LinearOpMode {
             telemetry.addData("pitch", getAngularOriention().thirdAngle);
             telemetry.update();
         }
-        waitForStart();
-        LandInAuto();
-    }
-
-    private Orientation getAngularOriention() {
-        return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
 }
