@@ -69,7 +69,7 @@ public class redCrater extends autoMode {
             startTracking();
             float[] pos = getPositions();
             if (pos == null)
-                searchImage(cubePosition, -0.19);
+                searchImage(cubePosition, 0.19);
 
             pos = getPositions();//למה להשתמש בPOS ולא פשוט בפונקציה?
             telemetry.addData("pos", pos == null);
