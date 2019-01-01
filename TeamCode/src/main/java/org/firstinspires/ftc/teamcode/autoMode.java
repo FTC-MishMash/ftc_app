@@ -264,7 +264,7 @@ public class autoMode extends LinearOpMode {
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    private void motorLock() {
+    public void motorLock() {
         robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

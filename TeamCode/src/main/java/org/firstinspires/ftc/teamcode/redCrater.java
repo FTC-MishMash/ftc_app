@@ -29,17 +29,18 @@ public class redCrater extends autoMode {
 //        auto = new autoMode();
         robot = new Robot(hardwareMap);
 
-//        initVuforiaWebCam(hardwareMap);
-//
-//        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-//            initTfod(hardwareMap);
-//        } else {
-//            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-//            telemetry.update();
-//        }
+        initVuforiaWebCam(hardwareMap);
 
+        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+            initTfod(hardwareMap);
+        } else {
+            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+            telemetry.update();
+        }
 
+        motorLock();
         waitForStart();
+        LandInAuto();
 
 
         if (opModeIsActive()) {
