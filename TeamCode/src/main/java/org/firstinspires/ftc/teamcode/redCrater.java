@@ -41,18 +41,15 @@ public class redCrater extends autoMode {
 
         waitForStart();
 
-        runTime.reset();
-        runTime.startTime();
-        if (opModeIsActive()) {
 
+        if (opModeIsActive()) {
+            runTime.reset();
+            runTime.startTime();
 //        getOffTheClimb
 
             int cubePosition = 0;
             cubePosition = searchCube(0.35, 345, 15, robot.driveTrain, robot.imu);
 
-//            if (tfod != null) {
-//                tfod.activate();
-//            }
             sleep(1000);
             followCubeRecognision(0.15);//start power
 
@@ -60,25 +57,28 @@ public class redCrater extends autoMode {
                 tfod.shutdown();
             }
             driveByEncoderRoverRuckus(7, 7, 0.5);
-            sleep(2000);
+            sleep(2500);
             driveByEncoderRoverRuckus(-20, -20, 0.5);
-            sleep(2000);
+            sleep(2500);
             ScaledTurn(60, robot.driveTrain, robot.imu, 0.5);
-
+            sleep(1000);
             //צריך להשתמש בcubePosition
             //פונקציות של מור
             startTracking(hardwareMap);
             float[] pos = getPositions();
             if (pos == null)
-                searchImage(cubePosition);
-            setMotorPower(new double[][]{{0, 0}, {0, 0}});
-            pos = getPositions();
+                searchImage(cubePosition, 0.19);
+
+            pos = getPositions();//למה להשתמש בPOS ולא פשוט בפונקציה?
             telemetry.addData("pos", pos == null);
             telemetry.update();
             sleep(3000);
-            driveToImage();
-//            driveByColor(0, robot.colorRightFront, robot.imu, robot.hsvValuesRightFront, 135, 0.4);
-
+            driveToImage(0.19);
+            sleep(2000);
+            driveByEncoderRoverRuckus(60, 60, 0.5);
+            //marker
+            //go to crater
+            //open shaft
         }
     }
 }
