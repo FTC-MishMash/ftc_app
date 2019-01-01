@@ -131,6 +131,7 @@ public class autoMode extends LinearOpMode {
         }
         //only if dont have cube in middle
         ScaledTurn(turnAngleRight, motor, imu, power);
+        runTime0 = getRuntime();
         while (opModeIsActive() && getRuntime() - runTime0 < 2) {
             List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
             telemetry.addLine("have cube?   ");
@@ -216,20 +217,21 @@ public class autoMode extends LinearOpMode {
 
     }
 
-    public void startTracking(HardwareMap hardwareMap) {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = CAMERA_CHOICE;
-        //parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
-        //  Instantiate the Vuforia engine
-        vuforiaImage = ClassFactory.getInstance().createVuforia(parameters);
+    public void startTracking() {
+//        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+//
+//        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+//
+//        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+//        parameters.cameraDirection = CAMERA_CHOICE;
+//        //parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+//        //  Instantiate the Vuforia engine
+//        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        initVuforiaPhoneCamera();
 
         // Load the data sets that for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
-        VuforiaTrackables targetsRoverRuckus = this.vuforiaImage.loadTrackablesFromAsset("RoverRuckus");
+        VuforiaTrackables targetsRoverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
         VuforiaTrackable blueRover = targetsRoverRuckus.get(0);
         blueRover.setName("Blue-Rover");
         VuforiaTrackable redFootprint = targetsRoverRuckus.get(1);
@@ -279,7 +281,7 @@ public class autoMode extends LinearOpMode {
 
         /**  Let all the trackable listeners know where the phone is.  */
         for (VuforiaTrackable trackable : allTrackablesNav) {
-            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
+            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, /*parameters.cameraDirection*/VuforiaLocalizer.CameraDirection.BACK);
         }
 
         /** Wait for the game to begin */
@@ -845,8 +847,7 @@ public void Parking(){
 
 
         boolean per = true;
-        while (opModeIsActive() && currTime - time0 < maxTime && getPositions() == null && count < 9
-                ) {
+        while (opModeIsActive() && currTime - time0 < maxTime && getPositions() == null && count < 9) {
             if (per) {
                 setMotorPower(new double[][]{{power - 0.17, power}, {power - 0.17, power}});
                 telemetry.addLine("side 1");
