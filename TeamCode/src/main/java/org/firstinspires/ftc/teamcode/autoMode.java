@@ -49,7 +49,7 @@ public class autoMode extends LinearOpMode {
     //    private static final android.graphics.Color Color = ;
     Robot robot;
     public static final String VUFORIA_KEY = " ATgDONj/////AAABmW0G/nQirUMiumnzPc6Pl8oJhBOCC2qoUq0BWhir9YWcBFDlhZUfSwATcQArcyyLxIOV21sHaYJeeQEJZfIJ+4spBn3oJ/DfycsbPaNs87+TRpM46/vbUkj1Ok+NtZ/eqMhmMXjFC8dgdCfbCt0aMxoBNzDw4+v28abG+hjUCjVYf86Jq1m7R942XCjw0yhOZqTXWIp3WAZDXY/PdWGQGY/zWae0l6TAZ6Z27t1xYJdkkpLqEsbKM3ZprvtgIs8AsWS9Tri2892OHq2CnCL+1ZHHXKPdxON3fiC1Gd3oihwPhTUReNw0VAg9yeVsVa1UQg7ea9K6WpmVto0FG+T2/LV8uq/3Mp/NHWiNizw2DM4h";
-    double power = 0.19;
+
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -131,12 +131,12 @@ public class autoMode extends LinearOpMode {
         }
         //only if dont have cube in middle
         ScaledTurn(turnAngleRight, motor, imu, power);
-        while (opModeIsActive() && getRuntime() - runTime0 < 1) {
+        while (opModeIsActive() && getRuntime() - runTime0 < 2) {
             List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
             telemetry.addLine("have cube?   ");
             telemetry.update();
 
-            if (RecognitionList != null)
+            if (RecognitionList != null)//TODO: להבין למה לא הלך שמאלה למרות שהייתה קוביה בימין
                 for (Recognition recognition : RecognitionList) {
                     if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                         cubePosition = 2;//RIGHT
@@ -218,8 +218,7 @@ public class autoMode extends LinearOpMode {
 
     public void startTracking(HardwareMap hardwareMap) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-//        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        //   Robot robot=new Robot(hardwareMap);
+
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
@@ -323,7 +322,7 @@ public class autoMode extends LinearOpMode {
                             silverMineral2X = (int) recognition.getLeft();
                         }
                     }
-                    if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {//TODO: add cibe place
+                    if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {//TODO: add cube place
                         if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
 
                             telemetry.addData("Gold Mineral Position", "Left");
@@ -387,17 +386,15 @@ public class autoMode extends LinearOpMode {
         addToMotors = new double[2];
 
         boolean breakLoop = false;
-        Recognition goldReco = null;
         runTime = getRuntime();
 
 //        RecognitionList.get(indexGold);
         if (tfod != null)
             do {
-                List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();// I delete List<Recognition>
-//                if (RecognitionList.get(indexGold)!=reco){
-//
-//                }
-                if (RecognitionList != null)
+                List<Recognition> RecognitionList = tfod.getRecognitions();// I delete List<Recognition>
+                Recognition goldReco = null;
+
+                if (RecognitionList != null) {
                     for (Recognition recognition : RecognitionList) {
                         if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                             goldReco = recognition;
@@ -405,6 +402,8 @@ public class autoMode extends LinearOpMode {
                             break;
                         }
                     }
+                }
+
                 if (goldReco != null) {
 
                     middleCubeX = ((goldReco.getLeft() + goldReco.getRight()) / 2);
@@ -424,7 +423,7 @@ public class autoMode extends LinearOpMode {
                     robot.driveTrain[1][0].setPower(addToMotors[1] + power);//Left Back
                     robot.driveTrain[0][0].setPower(addToMotors[1] + power);//LEFT Front
                 } else {
-                    telemetry.addLine("dont see cube 2");
+                    telemetry.addLine("gold reco = null");
                     telemetry.update();
                     robot.driveTrain[0][1].setPower(0);//RIGHT Front
                     robot.driveTrain[1][1].setPower(0);//Right Back
@@ -433,7 +432,7 @@ public class autoMode extends LinearOpMode {
                     if ((runTime - getRuntime()) < -2) {
 
                         breakLoop = true;
-                        telemetry.addData("in 2 seconds dont see the cube    ", breakLoop);
+                        telemetry.addLine("in 2 seconds dont see the cube");
                         telemetry.update();
                     }
                 }
@@ -673,7 +672,8 @@ public class autoMode extends LinearOpMode {
     }
 
 
-    public void ScaledTurn(double goalAngle, DcMotor[][] driveMotors, BNO055IMU imu, double power) {
+    public void ScaledTurn(double goalAngle, DcMotor[][] driveMotors, BNO055IMU imu,
+                           double power) {
         boolean sideOfTurn = true;
         double deltaAngle = 0;
 
@@ -741,10 +741,9 @@ public class autoMode extends LinearOpMode {
         return angle;
     }
 
-    public void driveToImage() {
-
+    public void driveToImage(double power) {
         //  Driving.Driving.setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
-        float[] positions = getPositions();
+        float[] positions = getPositions();//למה לקרוא פעמים לאותה הפונקציה?
         if (positions != null) {
 
             sleep(1000);
@@ -805,8 +804,8 @@ public class autoMode extends LinearOpMode {
         return null;
     }
 
-    public void searchImage(int cubePos) {
-        runtime.reset();
+    public void searchImage(int cubePos, double power) {
+        runtime.reset();//TODO: delete this
         double time0 = runtime.seconds();
         double currTime = time0;
         power = -0.24;
@@ -846,6 +845,7 @@ public class autoMode extends LinearOpMode {
             telemetry.addData("time passed: ", currTime - time0);
             telemetry.update();
         }
+        setMotorPower(new double[][]{{0, 0}, {0, 0}});
     }
 
     public double getCurrentScaledAngle() {
