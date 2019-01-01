@@ -670,7 +670,31 @@ public class autoMode extends LinearOpMode {
 
 
     }
-
+    public void Marker(){
+        driveByEncoderRoverRuckus(75,75,0.5 );
+        robot.shaft[0].setTargetPosition(175);
+        robot.shaft[1].setTargetPosition(175);
+        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[0].setPower(0.3);
+        robot.shaft[1].setPower(0.3);
+        sleep(750);
+        robot.shaft[0].setTargetPosition(0);
+        robot.shaft[1].setTargetPosition(0);
+        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[0].setPower(0.3);
+        robot.shaft[1].setPower(0.3);
+    }
+public void Parking(){
+        driveByEncoderRoverRuckus(90,90,-0.5);
+    robot.shaft[0].setTargetPosition(250);
+    robot.shaft[1].setTargetPosition(250);
+    robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    robot.shaft[0].setPower(0.3);
+    robot.shaft[1].setPower(0.3);
+}
 
     public void ScaledTurn(double goalAngle, DcMotor[][] driveMotors, BNO055IMU imu,
                            double power) {
