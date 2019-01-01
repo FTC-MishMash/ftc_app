@@ -163,10 +163,10 @@ public class autoMode extends LinearOpMode {
         /**
          * here the robot using shafts and gyroscope to be parallel with the ground
          */
-        robot.linear.setTargetPosition(70);
-        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.linear.setPower(0.7);
-        sleep(400);
+//        robot.linear.setTargetPosition(70);
+//        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.linear.setPower(0.7);
+//        sleep(400);
         robot.linear.setTargetPosition(0);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.linear.setPower(0.7);
@@ -174,24 +174,45 @@ public class autoMode extends LinearOpMode {
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[0].setPower(0.5);
         robot.shaft[1].setPower(0.5);
+
+        telemetry.addData("pitch", getAngularOriention().thirdAngle);
+        telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
+        telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
+        telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
+        telemetry.update();
         while (opModeIsActive() && getAngularOriention().thirdAngle <= 0) {
-            if (robot.linear.getCurrentPosition() <= 150)
+            if (robot.linear.getCurrentPosition() <= 175)
                 robot.linear.setPower(0);
 
-            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 120);
-            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 120);
+            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 400);
+            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 400);
             sleep(100);
-            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 30);
-            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 30);
+            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 10);
+            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 10);
             telemetry.addData("pitch", getAngularOriention().thirdAngle);
+            telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
+            telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
             telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
             telemetry.update();
         }
+
+        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[0].setTargetPosition(2450);
+        robot.shaft[1].setTargetPosition(2450);
+
+        robot.shaft[0].setPower(1);
+        robot.shaft[1].setPower(1);
+        while (opModeIsActive() && robot.shaft[0].isBusy() && robot.shaft[1].isBusy()) {
+            telemetry.addData("pitch", getAngularOriention().thirdAngle);
+            telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
+            telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
+            telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
+            telemetry.update();
+        }
+
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
-
-
-        sleep(2000);
 
         /**
          * here the robot using the linear and encoders to det to the ground
@@ -220,6 +241,8 @@ public class autoMode extends LinearOpMode {
         robot.linear.setPower(0.6);
         while (opModeIsActive() && robot.linear.getCurrentPosition() >= -900) {
             telemetry.addData("pitch", getAngularOriention().thirdAngle);
+            telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
+            telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
             telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
             telemetry.update();
         }
@@ -342,10 +365,10 @@ public class autoMode extends LinearOpMode {
 //        //parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
 //        //  Instantiate the Vuforia engine
 //        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        initVuforiaPhoneCamera();
-
-        // Load the data sets that for the trackable objects. These particular data
-        // sets are stored in the 'assets' part of our application.
+//        initVuforiaPhoneCamera();
+//
+//         Load the data sets that for the trackable objects. These particular data
+//         sets are stored in the 'assets' part of our application.
         VuforiaTrackables targetsRoverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
         VuforiaTrackable blueRover = targetsRoverRuckus.get(0);
         blueRover.setName("Blue-Rover");
@@ -396,7 +419,7 @@ public class autoMode extends LinearOpMode {
 
         /**  Let all the trackable listeners know where the phone is.  */
         for (VuforiaTrackable trackable : allTrackablesNav) {
-            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, /*parameters.cameraDirection*/VuforiaLocalizer.CameraDirection.BACK);
+            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, CAMERA_CHOICE);
         }
 
         /** Wait for the game to begin */
@@ -899,7 +922,7 @@ public class autoMode extends LinearOpMode {
             telemetry.addLine("got to x=65");
             telemetry.update();
             setMotorPower(new double[][]{{0, 0}, {0, 0}});
-            sleep(2000);
+            sleep(1000);
 
             diffTurn(90 - positions[5], 0.15);
         }
