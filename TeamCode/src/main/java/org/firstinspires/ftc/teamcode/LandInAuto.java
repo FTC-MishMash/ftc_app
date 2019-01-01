@@ -82,7 +82,7 @@ public class LandInAuto extends LinearOpMode {
 
         setMotorPower(new double[][]{{0.3, 0.3}, {0.3, 0.3}});
 
-        while (opModeIsActive() && getRuntime() - t0 <= 1) ;
+        while (opModeIsActive() && getRuntime() - t0 <= 0.3) ;
         setMotorPower(new double[][]{{0, 0}, {0, 0}});
         robot.linear.setTargetPosition(0);
         robot.shaft[0].setTargetPosition(0);
@@ -91,6 +91,7 @@ public class LandInAuto extends LinearOpMode {
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.linear.setPower(0.7);
+        sleep(300);
         robot.shaft[0].setPower(0.7);
         robot.shaft[1].setPower(0.7);
     }
