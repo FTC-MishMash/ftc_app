@@ -239,14 +239,33 @@ public class autoMode extends LinearOpMode {
         robot.linear.setTargetPosition(-1000);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.linear.setPower(1);
-        while (opModeIsActive() && robot.linear.getCurrentPosition() >= -680) {
+        double t1 = getRuntime();
+        while (opModeIsActive() && robot.linear.getCurrentPosition() >= -550 && getRuntime() - t1 <= 0.4) {
             telemetry.addData("pitch", getAngularOriention().thirdAngle);
             telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
             telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
             telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
             telemetry.update();
         }
-
+//        if (!(getRuntime() - t1 <= 0.4)) {
+//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            robot.shaft[0].setPower(0.7);
+//            robot.shaft[1].setPower(0.7);
+//            sleep(50);
+//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            robot.shaft[0].setPower(0);
+//            robot.shaft[1].setPower(0);
+//            robot.linear.setTargetPosition(robot.linear.getTargetPosition() + 50);
+//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            robot.linear.setPower(1);
+//            robot.linear.setTargetPosition(550);
+//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            robot.linear.setPower(1);
+//        }
+        robot.shaft[0].setPower(0);
+        robot.shaft[1].setPower(0);
 
         robot.linear.setPower(0);
         robot.shaft[0].setPower(0);
@@ -416,7 +435,7 @@ public class autoMode extends LinearOpMode {
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
                         CAMERA_CHOICE == FRONT ? 90 : -90, 0, 0));
-            //T
+        //T
         /**  Let all the trackable listeners know where the phone is.  */
         for (VuforiaTrackable trackable : allTrackablesNav) {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, CAMERA_CHOICE);

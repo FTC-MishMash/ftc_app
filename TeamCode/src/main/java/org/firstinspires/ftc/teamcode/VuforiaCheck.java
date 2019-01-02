@@ -23,9 +23,9 @@ public class VuforiaCheck extends autoMode {
             telemetry.update();
         }
 
-        motorLock();
+      //  motorLock();
         waitForStart();
-        LandInAuto();
+      //  LandInAuto();
 
 
         if (opModeIsActive()) {
@@ -44,12 +44,12 @@ public class VuforiaCheck extends autoMode {
             }
 
             driveByEncoderRoverRuckus(15, 15, 0.5);
-            sleep(2500);
+            sleep(2000);
 //            driveByEncoderRoverRuckus(-20, -20, 0.5);
             setMotorPower(new double[][]{{-0.4,-0.4},{-0.4,-0.4}});
             sleep(500);
             setMotorPower(new double[][]{{0,0},{0,0}});
-            sleep(2500);
+            sleep(2000);
             ScaledTurn(60, robot.driveTrain, robot.imu, 0.4);
             sleep(1000);
 //            צריך להשתמש בcubePosition
