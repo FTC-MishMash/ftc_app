@@ -975,7 +975,7 @@ public class autoMode extends LinearOpMode {
         double currTime = time0;
 
         int count = 2;
-        double maxTime = 3;
+        double maxTime = 5;
         if (cubePos == 1) {
             maxTime += 0.6;
             count = 0;
@@ -986,7 +986,7 @@ public class autoMode extends LinearOpMode {
 
 
         boolean per = true;
-        while (opModeIsActive() && currTime - time0 < maxTime && getPositions() == null && count < 9) {
+        while (opModeIsActive() && currTime - time0 < maxTime && getPositions() == null /*&& count < 10*/) {
             if (per) {
                 setMotorPower(new double[][]{{power, power - 0.17}, {power, power - 0.17}});
                 telemetry.addLine("side 1");
@@ -1002,7 +1002,7 @@ public class autoMode extends LinearOpMode {
                 count++;
                 per = !per;
                 setMotorPower(new double[][]{{0, 0}, {0, 0}});
-                sleep(30);
+                sleep(25);
 
             }
 
