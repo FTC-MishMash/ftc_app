@@ -86,7 +86,7 @@ public class autoMode extends LinearOpMode {
     public static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
     // Select which camera you want use.  The FRONT camera is the one on the same side as the screen.
     // Valid choices are:  BACK or FRONT
-    public static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
+    public static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;//TODO
     ElapsedTime runtime = new ElapsedTime();
     private OpenGLMatrix lastLocation = null;
     private boolean targetVisible = false;
@@ -262,8 +262,8 @@ public class autoMode extends LinearOpMode {
         sleep(300);
         setMotorPower(new double[][]{{0, 0}, {0, 0}});
         robot.linear.setTargetPosition(0);
-        robot.shaft[0].setTargetPosition(120);
-        robot.shaft[1].setTargetPosition(120);
+        robot.shaft[0].setTargetPosition(140);
+        robot.shaft[1].setTargetPosition(140);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -272,8 +272,8 @@ public class autoMode extends LinearOpMode {
         /**
          * here the robot fold his arms to its original shape
          */
-        robot.shaft[0].setPower(0.7);
-        robot.shaft[1].setPower(0.7);
+        robot.shaft[0].setPower(1);
+        robot.shaft[1].setPower(1);
         double t0 = getRuntime();
         while (opModeIsActive() &&
                 robot.shaft[0].isBusy() &&
@@ -416,7 +416,7 @@ public class autoMode extends LinearOpMode {
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
                         CAMERA_CHOICE == FRONT ? 90 : -90, 0, 0));
-
+            //T
         /**  Let all the trackable listeners know where the phone is.  */
         for (VuforiaTrackable trackable : allTrackablesNav) {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, CAMERA_CHOICE);
@@ -755,7 +755,7 @@ public class autoMode extends LinearOpMode {
 //direction 0 is forword, 1 is backword
         final int tixRound = 600;
         final int cmRound = 27;
-        double runTime = getRuntime();
+
 
         int dRight = (goalDistRight * tixRound) / cmRound;
         int dLeft = (goalDistLeft * tixRound) / cmRound;
@@ -784,7 +784,7 @@ public class autoMode extends LinearOpMode {
         telemetry.addLine("go to target");
         telemetry.update();
 
-
+        double runTime = getRuntime();
         while (opModeIsActive() &&
                 robot.driveTrain[0][0].isBusy()
                 && robot.driveTrain[1][0].isBusy()
@@ -973,7 +973,7 @@ public class autoMode extends LinearOpMode {
         runtime.reset();//TODO: delete this
         double time0 = runtime.seconds();
         double currTime = time0;
-        power = -0.24;
+
         int count = 2;
         double maxTime = 3;
         if (cubePos == 1) {
@@ -988,11 +988,11 @@ public class autoMode extends LinearOpMode {
         boolean per = true;
         while (opModeIsActive() && currTime - time0 < maxTime && getPositions() == null && count < 9) {
             if (per) {
-                setMotorPower(new double[][]{{power - 0.17, power}, {power - 0.17, power}});
+                setMotorPower(new double[][]{{power, power - 0.17}, {power, power - 0.17}});
                 telemetry.addLine("side 1");
                 telemetry.update();
             } else {
-                setMotorPower(new double[][]{{power, power - 0.17}, {power, power - 0.17}});
+                setMotorPower(new double[][]{{power - 0.17, power}, {power - 0.17, power}});
                 telemetry.addLine("side 2");
                 telemetry.update();
             }

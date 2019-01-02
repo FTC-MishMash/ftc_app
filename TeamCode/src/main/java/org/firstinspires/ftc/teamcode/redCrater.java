@@ -58,9 +58,12 @@ public class redCrater extends autoMode {
                 tfod.shutdown();
             }
 
-            driveByEncoderRoverRuckus(7, 7, 0.4);
+            driveByEncoderRoverRuckus(7, 7, 0.5);
             sleep(2500);
-            driveByEncoderRoverRuckus(-20, -20, 0.4);
+//            driveByEncoderRoverRuckus(-20, -20, 0.5);
+            setMotorPower(new double[][]{{-0.4,-0.4},{-0.4,-0.4}});
+            sleep(500);
+            setMotorPower(new double[][]{{0,0},{0,0}});
             sleep(2500);
             ScaledTurn(60, robot.driveTrain, robot.imu, 0.4);
 //            sleep(1000);
@@ -69,7 +72,7 @@ public class redCrater extends autoMode {
             startTracking();
             float[] pos = getPositions();
             if (pos == null)
-                searchImage(cubePosition, 0.19);
+                searchImage(cubePosition, 0.24);
 
             pos = getPositions();//למה להשתמש בPOS ולא פשוט בפונקציה?
             telemetry.addData("pos", pos == null);
