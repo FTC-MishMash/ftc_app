@@ -169,14 +169,15 @@ public class DriveRoverRuckus extends OpMode {
             } else {
                 robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                robot.shaft[0].setPower(0);
-                robot.shaft[1].setPower(0);
+
 
 
             }
             robot.inTake.setPower(0);
             if (!robot.linear.isBusy())
             robot.linear.setPower(0);
+            robot.shaft[0].setPower(0);
+            robot.shaft[1].setPower(0);
         }
 
 
