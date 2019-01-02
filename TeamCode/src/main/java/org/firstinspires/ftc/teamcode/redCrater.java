@@ -58,7 +58,7 @@ public class redCrater extends autoMode {
                 tfod.shutdown();
             }
 
-            driveByEncoderRoverRuckus(7, 7, 0.5);
+            driveByEncoderRoverRuckus(15, 15, 0.5);
             sleep(2500);
 //            driveByEncoderRoverRuckus(-20, -20, 0.5);
             setMotorPower(new double[][]{{-0.4,-0.4},{-0.4,-0.4}});

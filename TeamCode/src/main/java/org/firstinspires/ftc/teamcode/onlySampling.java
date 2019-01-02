@@ -31,7 +31,6 @@ public class onlySampling extends autoMode {
         if (opModeIsActive()) {
             runTime.reset();
             runTime.startTime();
-//        getOffTheClimb
 
             int cubePosition = 0;
             cubePosition = searchCube(0.35, 335, 20, robot.driveTrain, robot.imu);
@@ -43,12 +42,12 @@ public class onlySampling extends autoMode {
                 tfod.shutdown();
             }
 
-            driveByEncoderRoverRuckus(7, 7, 0.5);
+            driveByEncoderRoverRuckus(15, 15, 0.5);
             sleep(2500);
 //            driveByEncoderRoverRuckus(-20, -20, 0.5);
-            setMotorPower(new double[][]{{-0.4,-0.4},{-0.4,-0.4}});
+            setMotorPower(new double[][]{{-0.4, -0.4}, {-0.4, -0.4}});
             sleep(500);
-            setMotorPower(new double[][]{{0,0},{0,0}});
+            setMotorPower(new double[][]{{0, 0}, {0, 0}});
 
 
         }
