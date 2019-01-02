@@ -149,6 +149,21 @@ public class autoMode extends LinearOpMode {
         // cubePosition != 1 && cubePosition != 2
         cubePosition = 3;//LEFT
         ScaledTurn(turnAngleLeft, motor, imu, power);
+        runTime0 = getRuntime();
+        while (opModeIsActive() && getRuntime() - runTime0 < 2) {
+            List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
+            telemetry.addLine("have cube?   ");
+            telemetry.update();
+
+            if (RecognitionList != null)//TODO: להבין למה לא הלך שמאלה למרות שהייתה קוביה בימין
+                for (Recognition recognition : RecognitionList) {
+                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                        cubePosition = 3;//RIGHT
+                        return cubePosition;
+                    }
+                }
+        }
+        ScaledTurn(0, motor, imu, power);
         return cubePosition;
     }
 
