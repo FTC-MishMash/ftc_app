@@ -45,7 +45,7 @@ public class onlySampling extends autoMode {
             driveByEncoderRoverRuckus(20, 20, 0.5);
             sleep(1000);
             ScaledTurn(0,robot.driveTrain,robot.imu,0.35);
-            driveByEncoderRoverRuckus(45, 50, 0.5);
+            driveByEncoderRoverRuckus(35, 35, 0.35);
 //            driveByEncoderRoverRuckus(-20, -20, 0.5);
 //            setMotorPower(new double[][]{{-0.4, -0.4}, {-0.4, -0.4}});
 //            sleep(500);

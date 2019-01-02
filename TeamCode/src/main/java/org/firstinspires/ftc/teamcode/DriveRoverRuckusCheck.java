@@ -74,11 +74,11 @@ public class DriveRoverRuckusCheck extends OpMode {
         telemetry.update();
 
 
-        if (gamepad2.a) {
-            motorLock();
-        }
-        //   else
-        else if (gamepad2.right_stick_y > 0) {
+//        if (gamepad2.a) {
+//            motorLock();
+//        }
+//        //   else
+         if (gamepad2.right_stick_y > 0) {
             robot.linear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.linear.setPower(1);
         } else if (gamepad2.right_stick_y < 0) {
@@ -134,6 +134,13 @@ public class DriveRoverRuckusCheck extends OpMode {
             robot.shaft[1].setPower(1);
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }  else if (gamepad2.left_trigger !=0) {
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[0].setTargetPosition(2675);
+            robot.shaft[1].setTargetPosition(2675);
+            robot.shaft[0].setPower(1);
+            robot.shaft[1].setPower(1);
         }
 //        } else if (gamepad2.y) {
 //            robot.shaft[0].setTargetPosition(7666);
