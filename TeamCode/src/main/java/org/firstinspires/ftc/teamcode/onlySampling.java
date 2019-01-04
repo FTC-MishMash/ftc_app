@@ -33,7 +33,7 @@ public class onlySampling extends autoMode {
             runTime.startTime();
 
             int cubePosition = 0;
-            cubePosition = searchCube(0.35, 335, 20, robot.driveTrain, robot.imu);
+            cubePosition = searchCube(0.35, 332, 20, robot.driveTrain, robot.imu);
 
             sleep(1000);
             followCubeRecognision(0.15);//start power
@@ -44,8 +44,8 @@ public class onlySampling extends autoMode {
 
             driveByEncoderRoverRuckus(20, 20, 0.5);
             sleep(1000);
-            ScaledTurn(0,robot.driveTrain,robot.imu,0.35);
-            driveByEncoderRoverRuckus(35, 35, 0.35);
+            ScaledTurn(0, robot.driveTrain, robot.imu, 0.35);
+            driveByEncoderRoverRuckus(50, 50, 0.35);
 //            driveByEncoderRoverRuckus(-20, -20, 0.5);
 //            setMotorPower(new double[][]{{-0.4, -0.4}, {-0.4, -0.4}});
 //            sleep(500);
