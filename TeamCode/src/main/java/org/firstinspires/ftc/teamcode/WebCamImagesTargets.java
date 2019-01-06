@@ -93,7 +93,7 @@ import java.util.List;
  */
 
 @TeleOp(name = "Concept: Vuforia Images Targets", group = "Concept")
-@Disabled
+//@Disabled
 public class WebCamImagesTargets extends LinearOpMode {
 
     /*
