@@ -56,7 +56,6 @@ public class autoMode extends LinearOpMode {
      * localization engine.
      */
     public VuforiaLocalizer vuforia;
-    public VuforiaLocalizer vuforiaImage;
 
 
     /**

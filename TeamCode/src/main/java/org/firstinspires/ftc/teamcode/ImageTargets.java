@@ -1,0 +1,210 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
+import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
+
+public class ImageTargets {
+    Robot robot;
+    LinearOpMode currOpmode;
+    public VuforiaLocalizer vuforia;
+    Telemetry telemetry;
+
+    /**
+     * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
+     * Detection engine.
+     */
+    public TFObjectDetector tfod;
+    public ElapsedTime runTime = new ElapsedTime();
+    final double SCALE_FACTOR = 255;
+
+    static final int PitchtargetAngleMin = -5;
+    static final int PitchtargetAngleMax = 5;
+    static final int RolltargetAngleMin = -10;
+    static final int RolltargetAngleMax = 10;
+
+
+    final double minAngleToTarget = 35;
+    static final int XtargetPosition = 63;
+    static final int YtargetPosition = 6;
+    static final int ZtargetPosition = -4;
+
+    static final int HeadingToSampling = 45;
+    static final int HeadingToTarget = 90;
+
+    public static final float mmPerInch = 25.4f;
+    public static final float mmFTCFieldWidth = (12 * 6) * mmPerInch;       // the width of the FTC field (from the center point to the outer panels)
+    public static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    // Select which camera you want use.  The FRONT camera is the one on the same side as the screen.
+    // Valid choices are:  BACK or FRONT
+    public static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;//TODO
+    ElapsedTime runtime = new ElapsedTime();
+    private OpenGLMatrix lastLocation = null;
+    private boolean targetVisible = false;
+    List<VuforiaTrackable> allTrackablesNav;
+
+    public ImageTargets(LinearOpMode currOpmode, Robot robot, VuforiaLocalizer vuforia) {
+        this.currOpmode = currOpmode;
+        this.robot = robot;
+        this.vuforia = vuforia;
+        this.telemetry=currOpmode.telemetry;
+    }
+
+    public void startTracking() {
+
+        VuforiaTrackables targetsRoverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
+        VuforiaTrackable blueRover = targetsRoverRuckus.get(0);
+        blueRover.setName("Blue-Rover");
+        VuforiaTrackable redFootprint = targetsRoverRuckus.get(1);
+        redFootprint.setName("Red-Footprint");
+        VuforiaTrackable frontCraters = targetsRoverRuckus.get(2);
+        frontCraters.setName("Front-Craters");
+        VuforiaTrackable backSpace = targetsRoverRuckus.get(3);
+        backSpace.setName("Back-Space");
+
+        // For convenience, gather together all the trackable objects in one easily-iterable collection */
+        allTrackablesNav = new ArrayList<VuforiaTrackable>();
+        allTrackablesNav.addAll(targetsRoverRuckus);
+
+
+        OpenGLMatrix blueRoverLocationOnField = OpenGLMatrix
+                .translation(0, mmFTCFieldWidth, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0));
+        blueRover.setLocation(blueRoverLocationOnField);
+
+
+        OpenGLMatrix redFootprintLocationOnField = OpenGLMatrix
+                .translation(0, -mmFTCFieldWidth, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180));
+        redFootprint.setLocation(redFootprintLocationOnField);
+
+
+        OpenGLMatrix frontCratersLocationOnField = OpenGLMatrix
+                .translation(-mmFTCFieldWidth, 0, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90));
+        frontCraters.setLocation(frontCratersLocationOnField);
+
+
+        OpenGLMatrix backSpaceLocationOnField = OpenGLMatrix
+                .translation(mmFTCFieldWidth, 0, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
+        backSpace.setLocation(backSpaceLocationOnField);
+
+
+        final int CAMERA_FORWARD_DISPLACEMENT = 110;   // eg: Camera is 110 mm in front of robot center
+        final int CAMERA_VERTICAL_DISPLACEMENT = 200;   // eg: Camera is 200 mm above ground
+        final int CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
+
+        OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
+                .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
+                        CAMERA_CHOICE == FRONT ? 90 : -90, 0, 0));
+        //T
+        /**  Let all the trackable listeners know where the phone is.  */
+        for (VuforiaTrackable trackable : allTrackablesNav) {
+            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, CAMERA_CHOICE);
+        }
+
+        /** Wait for the game to begin */
+
+
+        /** Start tracking the data sets we care about. */
+        targetsRoverRuckus.activate();
+    }
+
+    public float[] getPositions() {
+        for (VuforiaTrackable trackable : allTrackablesNav) {
+            /**
+             * getUpdatedRobotLocation() will return null if no new information is available since
+             * the last time that call was made, or if the trackable is not currently visible.
+             * getRobotLocation() will return null if the trackable is not currently visible.
+             */
+            telemetry.addData(trackable.getName(), ((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() ? "Visible" : "Not Visible");    //
+
+            OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+            if (robotLocationTransform != null) {
+                lastLocation = robotLocationTransform;
+            }
+        }
+        // Provide feedback as to where the robot is located (if we know).
+        if (lastLocation != null) {
+            // express position (translation) of robot in inches.
+            VectorF translation = lastLocation.getTranslation();
+
+            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+            /*
+             *0- x
+             *1- y
+             *2- z
+             *3-roll
+             *4-pitch
+             *5-heading*/
+            return new float[]{translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch, rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle};
+            // express the rotation of the robot in degrees.
+        }
+        return null;
+    }
+
+    public void searchImage(int cubePos, double power) {
+
+        runtime.reset();//TODO: delete this
+        double time0 = runtime.seconds();
+        double currTime = time0;
+
+        int count = 2;
+        double maxTime = 5;
+        if (cubePos == 1) {
+            maxTime += 0.6;
+            count = 0;
+        } else if (cubePos == 2) {
+            maxTime += 0.3;
+            count = 1;
+        }
+
+
+        boolean per = true;
+        while (currOpmode.opModeIsActive() && currTime - time0 < maxTime && getPositions() == null /*&& count < 10*/) {
+            if (per) {
+                setMotorPower(new double[][]{{power, power - 0.17}, {power, power - 0.17}});
+                telemetry.addLine("side 1");
+                telemetry.update();
+            } else {
+                setMotorPower(new double[][]{{power - 0.17, power}, {power - 0.17, power}});
+                telemetry.addLine("side 2");
+                telemetry.update();
+            }
+            currTime = runtime.seconds();
+            if (currTime - time0 >= 0.28) {
+                runtime.reset();
+                count++;
+                per = !per;
+                setMotorPower(new double[][]{{0, 0}, {0, 0}});
+                currOpmode.sleep(25);
+
+            }
+
+            telemetry.addData("time passed: ", currTime - time0);
+            telemetry.update();
+        }
+        setMotorPower(new double[][]{{0, 0}, {0, 0}});
+    }
+}
