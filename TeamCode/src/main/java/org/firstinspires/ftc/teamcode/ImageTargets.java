@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -22,6 +23,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
+import static org.firstinspires.ftc.teamcode.DriveUtilities.setMotorPower;
 
 public class ImageTargets {
     Robot robot;
@@ -50,7 +52,7 @@ public class ImageTargets {
 
     static final int HeadingToSampling = 45;
     static final int HeadingToTarget = 90;
-
+    DcMotor[][] motors;
     public static final float mmPerInch = 25.4f;
     public static final float mmFTCFieldWidth = (12 * 6) * mmPerInch;       // the width of the FTC field (from the center point to the outer panels)
     public static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
@@ -66,7 +68,8 @@ public class ImageTargets {
         this.currOpmode = currOpmode;
         this.robot = robot;
         this.vuforia = vuforia;
-        this.telemetry=currOpmode.telemetry;
+        this.telemetry = currOpmode.telemetry;
+        this.motors=robot.driveTrain;
     }
 
     public void startTracking() {
@@ -184,11 +187,11 @@ public class ImageTargets {
         boolean per = true;
         while (currOpmode.opModeIsActive() && currTime - time0 < maxTime && getPositions() == null /*&& count < 10*/) {
             if (per) {
-                setMotorPower(new double[][]{{power, power - 0.17}, {power, power - 0.17}});
+                setMotorPower(motors, new double[][]{{power, power - 0.17}, {power, power - 0.17}});
                 telemetry.addLine("side 1");
                 telemetry.update();
             } else {
-                setMotorPower(new double[][]{{power - 0.17, power}, {power - 0.17, power}});
+                setMotorPower(motors,new double[][]{{power - 0.17, power}, {power - 0.17, power}});
                 telemetry.addLine("side 2");
                 telemetry.update();
             }
@@ -197,7 +200,7 @@ public class ImageTargets {
                 runtime.reset();
                 count++;
                 per = !per;
-                setMotorPower(new double[][]{{0, 0}, {0, 0}});
+                setMotorPower(motors,new double[][]{{0, 0}, {0, 0}});
                 currOpmode.sleep(25);
 
             }
@@ -205,6 +208,6 @@ public class ImageTargets {
             telemetry.addData("time passed: ", currTime - time0);
             telemetry.update();
         }
-        setMotorPower(new double[][]{{0, 0}, {0, 0}});
+        setMotorPower(motors,new double[][]{{0, 0}, {0, 0}});
     }
 }
