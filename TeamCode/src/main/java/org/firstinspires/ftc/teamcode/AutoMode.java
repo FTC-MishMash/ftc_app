@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Color;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -26,6 +25,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +33,6 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGR
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 
 
@@ -42,12 +41,12 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 @Autonomous(name = "AutoMode")
 @Disabled
-public class autoMode extends LinearOpMode {
+public class AutoMode extends LinearOpMode {
     public static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     public static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     public static final String LABEL_SILVER_MINERAL = "Silver Mineral";
     //    private static final android.graphics.Color Color = ;
-    Robot robot;
+    public Robot robot;
     public static final String VUFORIA_KEY = " ATgDONj/////AAABmW0G/nQirUMiumnzPc6Pl8oJhBOCC2qoUq0BWhir9YWcBFDlhZUfSwATcQArcyyLxIOV21sHaYJeeQEJZfIJ+4spBn3oJ/DfycsbPaNs87+TRpM46/vbUkj1Ok+NtZ/eqMhmMXjFC8dgdCfbCt0aMxoBNzDw4+v28abG+hjUCjVYf86Jq1m7R942XCjw0yhOZqTXWIp3WAZDXY/PdWGQGY/zWae0l6TAZ6Z27t1xYJdkkpLqEsbKM3ZprvtgIs8AsWS9Tri2892OHq2CnCL+1ZHHXKPdxON3fiC1Gd3oihwPhTUReNw0VAg9yeVsVa1UQg7ea9K6WpmVto0FG+T2/LV8uq/3Mp/NHWiNizw2DM4h";
 
 
@@ -90,7 +89,8 @@ public class autoMode extends LinearOpMode {
     private OpenGLMatrix lastLocation = null;
     private boolean targetVisible = false;
     List<VuforiaTrackable> allTrackablesNav;
-
+    ImageTargets targetNav;
+    DriveUtilities driveUtils;
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -100,6 +100,11 @@ public class autoMode extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
+        driveUtils=new DriveUtilities(this);
+        waitForStart();
+        if (opModeIsActive()){
+            driveUtils.diffTurn(140,0.4);
+        }
 
     }
 
@@ -116,7 +121,7 @@ public class autoMode extends LinearOpMode {
 
         double runTime0 = getRuntime();
         while (opModeIsActive() && getRuntime() - runTime0 < 3) {
-            List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
+            java.util.List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
             telemetry.addData("have cube?   ", RecognitionList != null);
             telemetry.update();
 
@@ -132,7 +137,7 @@ public class autoMode extends LinearOpMode {
         ScaledTurn(turnAngleRight, motor, imu, power);
         runTime0 = getRuntime();
         while (opModeIsActive() && getRuntime() - runTime0 < 2) {
-            List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
+            java.util.List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
             telemetry.addLine("have cube?   ");
             telemetry.update();
 

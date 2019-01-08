@@ -27,10 +27,10 @@ import static org.firstinspires.ftc.teamcode.DriveUtilities.setMotorPower;
 
 public class ImageTargets {
     Robot robot;
-    LinearOpMode currOpmode;
+    AutoMode currOpmode;
     public VuforiaLocalizer vuforia;
     Telemetry telemetry;
-
+    DriveUtilities driveUtilities;
     /**
      * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
@@ -64,12 +64,13 @@ public class ImageTargets {
     private boolean targetVisible = false;
     List<VuforiaTrackable> allTrackablesNav;
 
-    public ImageTargets(LinearOpMode currOpmode, Robot robot, VuforiaLocalizer vuforia) {
+    public ImageTargets(AutoMode currOpmode) {
         this.currOpmode = currOpmode;
-        this.robot = robot;
-        this.vuforia = vuforia;
+        this.robot = currOpmode.robot;
+        this.vuforia = currOpmode.vuforia;
         this.telemetry = currOpmode.telemetry;
-        this.motors=robot.driveTrain;
+        this.motors = robot.driveTrain;
+        this.driveUtilities=currOpmode.driveUtils;
     }
 
     public void startTracking() {
@@ -191,7 +192,7 @@ public class ImageTargets {
                 telemetry.addLine("side 1");
                 telemetry.update();
             } else {
-                setMotorPower(motors,new double[][]{{power - 0.17, power}, {power - 0.17, power}});
+                setMotorPower(motors, new double[][]{{power - 0.17, power}, {power - 0.17, power}});
                 telemetry.addLine("side 2");
                 telemetry.update();
             }
@@ -200,7 +201,7 @@ public class ImageTargets {
                 runtime.reset();
                 count++;
                 per = !per;
-                setMotorPower(motors,new double[][]{{0, 0}, {0, 0}});
+                setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
                 currOpmode.sleep(25);
 
             }
@@ -208,6 +209,29 @@ public class ImageTargets {
             telemetry.addData("time passed: ", currTime - time0);
             telemetry.update();
         }
-        setMotorPower(motors,new double[][]{{0, 0}, {0, 0}});
+        setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
+    }
+
+    public void driveToImage(double power) {
+        //  Driving.Driving.setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
+
+        float[] positions = getPositions();//למה לקרוא פעמים לאותה הפונקציה?
+        if (positions != null) {
+
+            currOpmode.sleep(1000);
+            setMotorPower(motors, new double[][]{{power, power}, {power, power}});
+            while (currOpmode.opModeIsActive() && positions[0] <= 48) {
+                positions = getPositions();
+                telemetry.addData("x:", positions[0]);
+                telemetry.update();
+            }
+
+            telemetry.addLine("got to x=65");
+            telemetry.update();
+            setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
+            currOpmode.sleep(1000);
+
+            driveUtilities.diffTurn(90 - positions[5], 0.15);
+        }
     }
 }
