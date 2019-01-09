@@ -42,35 +42,37 @@ public class redCrater extends AutoMode {
         //LandInAuto();
 
 
-        if (opModeIsActive()) {
-            runTime.reset();
-            runTime.startTime();
-//        getOffTheClimb
-
-            int cubePosition = 0;
-            cubePosition = tsSampling.searchCube(0.35, 335, 20);
-
-            sleep(1000);
-            tsSampling.followCubeRecognision(0.15);//start power
-
-            if (tfod != null) {
-                tfod.shutdown();
-            }
-
-            driveUtils.driveByEncoderRoverRuckus(15, 15, 0.5);
-            sleep(2500);
-//            driveByEncoderRoverRuckus(-20, -20, 0.5);
-            DriveUtilities.setMotorPower(robot.driveTrain,new double[][]{{-0.4, -0.4}, {-0.4, -0.4}});
-            sleep(500);
-            DriveUtilities.setMotorPower(robot.driveTrain,new double[][]{{0, 0}, {0, 0}});
-            sleep(1500);
-            driveUtils.scaledTurn(60, 0.4);
-            sleep(1000);
-            targetNav.startTracking();
-            float[] pos = targetNav.getPositions();
-            if (pos == null)
-                targetNav.searchImage(cubePosition, 0.24);
-            targetNav.driveToImage(0.3);
+        while (opModeIsActive()) {
+            if(gamepad1.x)
+            vuforia.close();
+//            runTime.reset();
+//            runTime.startTime();
+////        getOffTheClimb
+//
+//            int cubePosition = 0;
+//            cubePosition = tsSampling.searchCube(0.35, 335, 20);
+//
+//            sleep(1000);
+//            tsSampling.followCubeRecognision(0.15);//start power
+//
+//            if (tfod != null) {
+//                tfod.shutdown();
+//            }
+//
+//            driveUtils.driveByEncoderRoverRuckus(15, 15, 0.5);
+//            sleep(2500);
+////            driveByEncoderRoverRuckus(-20, -20, 0.5);
+//            DriveUtilities.setMotorPower(robot.driveTrain,new double[][]{{-0.4, -0.4}, {-0.4, -0.4}});
+//            sleep(500);
+//            DriveUtilities.setMotorPower(robot.driveTrain,new double[][]{{0, 0}, {0, 0}});
+//            sleep(1500);
+//            driveUtils.scaledTurn(60, 0.4);
+//            sleep(1000);
+//            targetNav.startTracking();
+//            float[] pos = targetNav.getPositions();
+//            if (pos == null)
+//                targetNav.searchImage(cubePosition, 0.24);
+//            targetNav.driveToImage(0.3);
 //
 //            pos = getPositions();//למה להשתמש בPOS ולא פשוט בפונקציה?
 //            telemetry.addData("pos", pos == null);

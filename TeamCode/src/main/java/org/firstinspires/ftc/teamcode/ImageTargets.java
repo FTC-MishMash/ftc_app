@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import static org.firstinspires.ftc.teamcode.DriveUtilities.setMotorPower;
 public class ImageTargets {
     Robot robot;
     AutoMode currOpmode;
-    public VuforiaLocalizer vuforia;
+    public VuforiaLocalizerEx vuforia;
     Telemetry telemetry;
     DriveUtilities driveUtilities;
     /**

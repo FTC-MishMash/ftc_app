@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -25,6 +24,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
 import android.graphics.Color;
 import java.util.ArrayList;
@@ -60,8 +60,8 @@ public class AutoMode extends LinearOpMode {
     final double SCALE_FACTOR = 255;
 
     static final int PitchtargetAngleMin = -5;
-    static final int PitchtargetAngleMax = 5;    public VuforiaLocalizer vuforia;
-    Vuforia d;
+    static final int PitchtargetAngleMax = 5;
+    public VuforiaLocalizerEx vuforia;
 
     /**
      * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
@@ -102,8 +102,10 @@ public class AutoMode extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
+        targetNav=new ImageTargets(this);
         driveUtils=new DriveUtilities(this);
         tsSampling=new TensorflowUtils(this);
+
     }
 
     public int searchCube(double power, int turnAngleRight, int turnAngleLeft, DcMotor[][] motor, BNO055IMU imu) {
@@ -755,7 +757,7 @@ public class AutoMode extends LinearOpMode {
         //  Instantiate the Vuforia engine
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        vuforia = (VuforiaLocalizerEx) ClassFactory.getInstance().createVuforia(parameters);
 
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
@@ -770,7 +772,7 @@ public class AutoMode extends LinearOpMode {
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
         //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        vuforia = (VuforiaLocalizerEx) ClassFactory.getInstance().createVuforia(parameters);
 
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }

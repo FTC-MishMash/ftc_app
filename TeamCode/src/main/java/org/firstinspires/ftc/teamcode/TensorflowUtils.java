@@ -11,12 +11,13 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
 import java.util.List;
 
 public class TensorflowUtils {
     AutoMode currOpMode;
-    public VuforiaLocalizer vuforia;
+    public VuforiaLocalizerEx vuforia;
     Robot robot;
     public static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     public static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -58,7 +59,7 @@ DriveUtilities driveUtilities;
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraName = currOpMode.hardwareMap.get(WebcamName.class, "Webcam 1");
         //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        vuforia = (VuforiaLocalizerEx) ClassFactory.getInstance().createVuforia(parameters);
 
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
