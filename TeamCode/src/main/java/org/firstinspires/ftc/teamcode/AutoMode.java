@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -25,7 +26,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
-import java.awt.Color;
+import android.graphics.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * Created by user on 22/11/2018.
  */
 @Autonomous(name = "AutoMode")
-@Disabled
+//@Disabled
 public class AutoMode extends LinearOpMode {
     public static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     public static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -54,19 +55,19 @@ public class AutoMode extends LinearOpMode {
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
      */
-    public VuforiaLocalizer vuforia;
 
+    public ElapsedTime runTime = new ElapsedTime();
+    final double SCALE_FACTOR = 255;
+
+    static final int PitchtargetAngleMin = -5;
+    static final int PitchtargetAngleMax = 5;    public VuforiaLocalizer vuforia;
+    Vuforia d;
 
     /**
      * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
      */
     public TFObjectDetector tfod;
-    public ElapsedTime runTime = new ElapsedTime();
-    final double SCALE_FACTOR = 255;
-
-    static final int PitchtargetAngleMin = -5;
-    static final int PitchtargetAngleMax = 5;
     static final int RolltargetAngleMin = -10;
     static final int RolltargetAngleMax = 10;
 
@@ -91,6 +92,7 @@ public class AutoMode extends LinearOpMode {
     List<VuforiaTrackable> allTrackablesNav;
     ImageTargets targetNav;
     DriveUtilities driveUtils;
+    TensorflowUtils tsSampling;
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -101,11 +103,7 @@ public class AutoMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
         driveUtils=new DriveUtilities(this);
-        waitForStart();
-        if (opModeIsActive()){
-            driveUtils.diffTurn(140,0.4);
-        }
-
+        tsSampling=new TensorflowUtils(this);
     }
 
     public int searchCube(double power, int turnAngleRight, int turnAngleLeft, DcMotor[][] motor, BNO055IMU imu) {
