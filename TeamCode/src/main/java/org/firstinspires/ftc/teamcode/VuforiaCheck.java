@@ -7,10 +7,58 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 @Autonomous(name = "VuforiaCheck")
 public class VuforiaCheck extends autoMode {
 
-//    autoMode auto;
+//    autoMode auto;sx
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() 8+++++++++++++++++
+
+
+
+
+
+
+
+
+            3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            8throws InterruptedException {
 //        auto = new autoMode();
         robot = new Robot(hardwareMap);
 
