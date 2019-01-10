@@ -28,7 +28,7 @@ public class redCrater extends AutoMode {
     public void runOpMode() throws InterruptedException {
 //        auto = new autoMode();
         super.runOpMode();
-        tsSampling.initVuforiaWebCam();
+        tsSampling.initVuforiaWebCam(true);
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             tsSampling.initTfod();
@@ -43,8 +43,17 @@ public class redCrater extends AutoMode {
 
 
         while (opModeIsActive()) {
+            if(vuforia==null)
+                telemetry.addLine("null");
             if(gamepad1.x)
-            vuforia.close();
+            {
+                vuforia.close();
+            telemetry.addLine("closed");
+
+            }
+            if(gamepad1.a)
+                tsSampling.initVuforiaWebCam(false);
+            telemetry.update();
 //            runTime.reset();
 //            runTime.startTime();
 ////        getOffTheClimb

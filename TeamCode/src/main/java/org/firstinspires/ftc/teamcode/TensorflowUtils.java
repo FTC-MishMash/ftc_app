@@ -25,7 +25,7 @@ public class TensorflowUtils {
     //    private static final android.graphics.Color Color = ;
     public static final String VUFORIA_KEY = " ATgDONj/////AAABmW0G/nQirUMiumnzPc6Pl8oJhBOCC2qoUq0BWhir9YWcBFDlhZUfSwATcQArcyyLxIOV21sHaYJeeQEJZfIJ+4spBn3oJ/DfycsbPaNs87+TRpM46/vbUkj1Ok+NtZ/eqMhmMXjFC8dgdCfbCt0aMxoBNzDw4+v28abG+hjUCjVYf86Jq1m7R942XCjw0yhOZqTXWIp3WAZDXY/PdWGQGY/zWae0l6TAZ6Z27t1xYJdkkpLqEsbKM3ZprvtgIs8AsWS9Tri2892OHq2CnCL+1ZHHXKPdxON3fiC1Gd3oihwPhTUReNw0VAg9yeVsVa1UQg7ea9K6WpmVto0FG+T2/LV8uq/3Mp/NHWiNizw2DM4h";
     Telemetry telemetry;
-DriveUtilities driveUtilities;
+    DriveUtilities driveUtilities;
     /**
      * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
@@ -38,29 +38,34 @@ DriveUtilities driveUtilities;
         this.tfod = currOpMode.tfod;
         this.robot = currOpMode.robot;
         this.telemetry = currOpMode.telemetry;
-        this.driveUtilities=currOpMode.driveUtils;
+        this.driveUtilities = currOpMode.driveUtils;
     }
 
     public void initTfod() {
 
         int tfodMonitorViewId = currOpMode.hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id",currOpMode.hardwareMap.appContext.getPackageName());
+                "tfodMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
     }
 
-    public void initVuforiaWebCam() {
+    public void initVuforiaWebCam(boolean webcam) {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          */
 
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters( );
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = currOpMode.hardwareMap.get(WebcamName.class, "Webcam 1");
-        //  Instantiate the Vuforia engine
-        vuforia = (VuforiaLocalizerEx) ClassFactory.getInstance().createVuforia(parameters);
+        if(webcam) {
+            parameters.cameraName = currOpMode.hardwareMap.get(WebcamName.class, "Webcam 1");
 
+        }
+        //  Instantiate the Vuforia engine
+        //vuforia = (VuforiaLocalizer) ClassFactory.getInstance().createVuforia(parameters);
+        vuforia = new VuforiaLocalizerEx(parameters);
+        currOpMode.vuforia=this.vuforia;
+        int g=0;
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
 

@@ -8,7 +8,12 @@ public class VuforiaLocalizerEx extends VuforiaLocalizerImpl {
     }
 
     @Override
-    protected void close() {
+    protected void stopAR() {
+        super.stopAR();
+    }
+
+    @Override
+    public void close() {
         super.close();
     }
 }
