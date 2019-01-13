@@ -105,6 +105,22 @@ public class DriveRoverRuckus extends OpMode {
             robot.linear.setPower(-1);
 
         }
+        else if (gamepad2.a) {
+            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[0].setTargetPosition(157);
+            robot.shaft[1].setTargetPosition(157);
+            robot.shaft[0].setPower(0.6);
+            robot.shaft[1].setPower(0.6);
+                Sleep(300);
+            robot.shaft[0].setPower(0);
+            robot.shaft[1].setPower(0);
+            robot.linear.setTargetPosition(550);
+            robot.linear.setPower(0.8);
+            Sleep(250);
+            robot.linear.setPower(0);
+        }
 //        else if (gamepad2.a){
 //            robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //            robot.linear.setTargetPosition(10);
@@ -193,9 +209,9 @@ public class DriveRoverRuckus extends OpMode {
     }
 
 
-    void Sleep(int time) {
+    void Sleep(int milisecond) {
         try {
-            sleep(time);
+            sleep(milisecond);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

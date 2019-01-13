@@ -25,7 +25,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
-import java.awt.Color;
+import android.graphics.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +40,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * Created by user on 22/11/2018.
  */
 @Autonomous(name = "AutoMode")
-@Disabled
+//@Disabled
 public class AutoMode extends LinearOpMode {
     public static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     public static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -797,6 +797,7 @@ public class AutoMode extends LinearOpMode {
 
         int dRight = (goalDistRight * tixRound) / cmRound;
         int dLeft = (goalDistLeft * tixRound) / cmRound;
+//§ ß α
 
         robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
