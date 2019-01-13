@@ -28,6 +28,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
 import android.graphics.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,9 +104,9 @@ public class AutoMode extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
-        targetNav=new ImageTargets(this);
-        driveUtils=new DriveUtilities(this);
-        tsSampling=new TensorflowUtils(this);
+        targetNav = new ImageTargets(this);
+        driveUtils = new DriveUtilities(this);
+        tsSampling = new TensorflowUtils(this);
 
     }
 
@@ -176,17 +177,10 @@ public class AutoMode extends LinearOpMode {
         return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
 
-    public void LandInAuto() {
+    public void LandInAuto(double servoOPENPosition) {
         telemetry.addData("pitch", getAngularOriention().thirdAngle);
         telemetry.update();
 
-        /**
-         * here the robot using shafts and gyroscope to be parallel with the ground
-         */
-//        robot.linear.setTargetPosition(70);
-//        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        robot.linear.setPower(0.7);
-//        sleep(400);
         robot.linear.setTargetPosition(0);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.linear.setPower(0.7);
@@ -234,9 +228,6 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
 
-        /**
-         * here the robot using the linear and encoders to det to the ground
-         */
         robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition());
         robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition());
 
@@ -267,23 +258,7 @@ public class AutoMode extends LinearOpMode {
             telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
             telemetry.update();
         }
-//        if (!(getRuntime() - t1 <= 0.4)) {
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//            robot.shaft[0].setPower(0.7);
-//            robot.shaft[1].setPower(0.7);
-//            sleep(50);
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            robot.shaft[0].setPower(0);
-//            robot.shaft[1].setPower(0);
-//            robot.linear.setTargetPosition(robot.linear.getTargetPosition() + 50);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.linear.setPower(1);
-//            robot.linear.setTargetPosition(550);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.linear.setPower(1);
-//        }
+
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
 
@@ -291,10 +266,6 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
 
-        /**
-         * from here on the robot is on the ground
-         * and getting of the leander
-         */
 
         setMotorPower(new double[][]{{0.3, 0.3}, {0.3, 0.3}});
 
@@ -347,6 +318,10 @@ public class AutoMode extends LinearOpMode {
             telemetry.addData("pitch", getAngularOriention().thirdAngle);
             telemetry.update();
         }
+    }
+
+    public void servoLock(int positionServoLock) {
+        robot.linearLock.setPosition(positionServoLock);
     }
 
     public void driveByColor(int color, ColorSensor sensorColor, BNO055IMU imu, float hsvValues[], double heading, double power)//0=red, blue=1

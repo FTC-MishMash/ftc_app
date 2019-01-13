@@ -20,16 +20,17 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 
 @Autonomous(name = "Red cretar")
-public class redCrater extends autoMode {
+public class redCrater extends AutoMode {
 
 //    autoMode auto;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        super.runOpMode();
 //        auto = new autoMode();
-        robot = new Robot(hardwareMap);
+       // robot = new Robot(hardwareMap);
 
-        initVuforiaWebCam(hardwareMap);
+       tsSampling.initVuforiaWebCam(true);
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod(hardwareMap);
@@ -38,9 +39,9 @@ public class redCrater extends autoMode {
             telemetry.update();
         }
 
-        motorLock();
+        servoLock(1);
         waitForStart();
-        LandInAuto();
+        LandInAuto(0);
 
 
         if (opModeIsActive()) {
