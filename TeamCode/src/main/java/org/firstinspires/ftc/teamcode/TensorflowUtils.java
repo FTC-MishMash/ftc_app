@@ -17,6 +17,7 @@ import java.util.List;
 
 public class TensorflowUtils {
     AutoMode currOpMode;
+    static int count = 0;
     public VuforiaLocalizerEx vuforia;
     Robot robot;
     public static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
@@ -55,17 +56,24 @@ public class TensorflowUtils {
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          */
 
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters( );
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        if(webcam) {
+        VuforiaLocalizer.Parameters parameters;
+
+
+        if (count > 1)
+            parameters = new VuforiaLocalizer.Parameters(currOpMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName()));
+        else {
+            count++;
+            parameters = new VuforiaLocalizer.Parameters();
+        }        //  Instantiate the Vuforia engine
+        //vuforia = (VuforiaLocalizer) ClassFactory.getInstance().createVuforia(parameters);
+        if (webcam) {
             parameters.cameraName = currOpMode.hardwareMap.get(WebcamName.class, "Webcam 1");
 
         }
-        //  Instantiate the Vuforia engine
-        //vuforia = (VuforiaLocalizer) ClassFactory.getInstance().createVuforia(parameters);
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
         vuforia = new VuforiaLocalizerEx(parameters);
-        currOpMode.vuforia=this.vuforia;
-        int g=0;
+        currOpMode.vuforia = this.vuforia;
+        int g = 0;
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
 
