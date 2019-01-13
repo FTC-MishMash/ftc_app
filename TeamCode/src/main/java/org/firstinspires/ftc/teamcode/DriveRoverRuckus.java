@@ -115,14 +115,12 @@ public class DriveRoverRuckus extends OpMode {
                 robot.shaft[0].setPower(0);
                 robot.shaft[1].setPower(0);
             }
+            robot.linear.setTargetPosition(300);
             if (robot.linear.getCurrentPosition() <= 275) {
-                robot.linear.setTargetPosition(300);
                 robot.linear.setPower(0.8);
-
             }
-            if (!robot.linear.isBusy()) {
                 robot.linear.setPower(0);
-            }
+
         } else if (gamepad2.b) {
             robot.inTake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
