@@ -124,8 +124,7 @@ public class LandInAuto extends LinearOpMode {
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     public void servoLinear(){
-        robot.linearLock[0].setPosition(1);
-        robot.linearLock[1].setPosition(0);
+        robot.linearLock.setPosition(1);
     }
 
     public void setMotorPower(double[][] power) { //Stores the four drivetrain motors power in array

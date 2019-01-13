@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -26,75 +26,67 @@ public class redCrater extends AutoMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-//        auto = new autoMode();
         super.runOpMode();
-        tsSampling.initVuforiaWebCam(true);
+//        auto = new autoMode();
+       // robot = new Robot(hardwareMap);
+
+       tsSampling.initVuforiaWebCam(true);
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            tsSampling.initTfod();
+            initTfod(hardwareMap);
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
             telemetry.update();
         }
 
-        //motorLock();
+        servoLock(1);
         waitForStart();
-        //LandInAuto();
+        LandInAuto(0);
 
 
-        while (opModeIsActive()) {
-            if(vuforia==null)
-                telemetry.addLine("null");
-            if(gamepad1.x)
-            {
-                vuforia.close();
-            telemetry.addLine("closed");
+        if (opModeIsActive()) {
+            runTime.reset();
+            runTime.startTime();
+//        getOffTheClimb
 
+            int cubePosition = 0;
+            cubePosition = searchCube(0.35, 335, 20, robot.driveTrain, robot.imu);
+
+            sleep(1000);
+            followCubeRecognision(0.15);//start power
+
+            if (tfod != null) {
+                tfod.shutdown();
             }
-            if(gamepad1.a)
-                tsSampling.initVuforiaWebCam(false);
+
+            driveByEncoderRoverRuckus(15, 15, 0.5);
+            sleep(2500);
+//            driveByEncoderRoverRuckus(-20, -20, 0.5);
+            setMotorPower(new double[][]{{-0.4,-0.4},{-0.4,-0.4}});
+            sleep(500);
+            setMotorPower(new double[][]{{0,0},{0,0}});
+            sleep(2500);
+            ScaledTurn(60, robot.driveTrain, robot.imu, 0.4);
+            sleep(1000);
+//            צריך להשתמש בcubePosition
+//            פונקציות של מור
+            startTracking();
+            float[] pos = getPositions();
+            if (pos == null)
+                searchImage(cubePosition, 0.24);
+
+            pos = getPositions();//למה להשתמש בPOS ולא פשוט בפונקציה?
+            telemetry.addData("pos", pos == null);
             telemetry.update();
-//            runTime.reset();
-//            runTime.startTime();
-////        getOffTheClimb
-//
-//            int cubePosition = 0;
-//            cubePosition = tsSampling.searchCube(0.35, 335, 20);
-//
-//            sleep(1000);
-//            tsSampling.followCubeRecognision(0.15);//start power
-//
-//            if (tfod != null) {
-//                tfod.shutdown();
-//            }
-//
-//            driveUtils.driveByEncoderRoverRuckus(15, 15, 0.5);
-//            sleep(2500);
-////            driveByEncoderRoverRuckus(-20, -20, 0.5);
-//            DriveUtilities.setMotorPower(robot.driveTrain,new double[][]{{-0.4, -0.4}, {-0.4, -0.4}});
-//            sleep(500);
-//            DriveUtilities.setMotorPower(robot.driveTrain,new double[][]{{0, 0}, {0, 0}});
-//            sleep(1500);
-//            driveUtils.scaledTurn(60, 0.4);
-//            sleep(1000);
-//            targetNav.startTracking();
-//            float[] pos = targetNav.getPositions();
-//            if (pos == null)
-//                targetNav.searchImage(cubePosition, 0.24);
-//            targetNav.driveToImage(0.3);
-//
-//            pos = getPositions();//למה להשתמש בPOS ולא פשוט בפונקציה?
-//            telemetry.addData("pos", pos == null);
-//            telemetry.update();
-//            if (pos == null) {
-//                driveByEncoderRoverRuckus(20, 20, 0.4);
-//                ScaledTurn(135, robot.driveTrain, robot.imu, 0.3);
-//            } else {
-//                sleep(1000);
-//                driveToImage(-0.19);
-//            }
-//            sleep(1000);
-//            driveByEncoderRoverRuckus(60, 60, 0.5);
+            if (pos == null) {
+                driveByEncoderRoverRuckus(20, 20, 0.4);
+                ScaledTurn(135, robot.driveTrain, robot.imu, 0.3);
+            } else {
+                sleep(1000);
+                driveToImage(-0.19);
+            }
+            sleep(1000);
+            driveByEncoderRoverRuckus(60, 60, 0.5);
             //marker
             //go to crater
             //open shaft

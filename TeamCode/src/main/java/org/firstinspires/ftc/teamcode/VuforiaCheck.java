@@ -1,86 +1,47 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
 @Autonomous(name = "VuforiaCheck")
 public class VuforiaCheck extends AutoMode {
 
-//    autoMode auto;
-
     @Override
     public void runOpMode() throws InterruptedException {
-//        auto = new autoMode();
-        robot = new Robot(hardwareMap);
-
-        initVuforiaWebCam(hardwareMap);
+        super.runOpMode();
+        tsSampling.initVuforiaWebCam(true);
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            initTfod(hardwareMap);
+            tsSampling.initTfod();
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
             telemetry.update();
         }
 
-      //  motorLock();
-        Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
-        vuforia.setFrameQueueCapacity(1);
-        VuforiaLocalizer.CloseableFrame frame=vuforia.getFrameQueue().take();
-        startTracking();
-
+        //motorLock();
         waitForStart();
-      //  LandInAuto();
+        //LandInAuto();
 
-        if (opModeIsActive()) {
-frame.close();//            runTime.reset();
-//            runTime.startTime();
-////        getOffTheClimb
-//
-//            int cubePosition = 0;
-//            cubePosition = searchCube(0.35, 335, 20, robot.driveTrain, robot.imu);
-//
-//            sleep(1000);
-//            followCubeRecognision(0.15);//start power
-//
-//            if (tfod != null) {
-//                tfod.shutdown();
-//            }
-//
-//            driveByEncoderRoverRuckus(15, 15, 0.5);
-//            sleep(2000);
-////            driveByEncoderRoverRuckus(-20, -20, 0.5);
-//            setMotorPower(new double[][]{{-0.4,-0.4},{-0.4,-0.4}});
-//            sleep(500);
-//            setMotorPower(new double[][]{{0,0},{0,0}});
-//            sleep(2000);
-//            ScaledTurn(60, robot.driveTrain, robot.imu, 0.4);
-//            sleep(1000);
-////            צריך להשתמש בcubePosition
-////            פונקציות של מור
-//            startTracking();
-//            float[] pos = getPositions();
-//            if (pos == null)
-//                searchImage(cubePosition, 0.24);
-//
-//            pos = getPositions();//למה להשתמש בPOS ולא פשוט בפונקציה?
-//            telemetry.addData("pos", pos == null);
-//            telemetry.update();
-//            if (pos == null) {
-//                driveByEncoderRoverRuckus(20, 20, 0.4);
-//                ScaledTurn(135, robot.driveTrain, robot.imu, 0.3);
-//            } else {
-//                sleep(1000);
-//                driveToImage(-0.19);
-        //    }
-//            sleep(1000);
-//            driveByEncoderRoverRuckus(60, 60, 0.5);
-            //marker
-            //go to crater
-            //open shaft
+
+        while (opModeIsActive()) {
+            if (vuforia == null)
+                telemetry.addLine("null");
+            if (gamepad1.x) {
+                vuforia.close();
+//                VuforiaLocalizerImpl.CloseableFrame frame=vuforia.getFrameQueue().take();
+//                frame.close();
+                telemetry.addLine("closed");
+
+            }
+            if (gamepad1.a)
+                tsSampling.initVuforiaWebCam(false);
+            telemetry.update();
 
         }
     }
