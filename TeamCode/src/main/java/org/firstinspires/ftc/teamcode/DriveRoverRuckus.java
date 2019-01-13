@@ -136,7 +136,7 @@ public class DriveRoverRuckus extends OpMode {
             robot.linear.setTargetPosition(550);
             robot.linear.setPower(0.8);
             robot.inTake.setPower(1);
-
+//
         }
      else if (gamepad1.a) {
         speed = 0.5;
