@@ -775,6 +775,7 @@ public class AutoMode extends LinearOpMode {
 
         int dRight = (goalDistRight * tixRound) / cmRound;
         int dLeft = (goalDistLeft * tixRound) / cmRound;
+//§ ß α
 
         robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
