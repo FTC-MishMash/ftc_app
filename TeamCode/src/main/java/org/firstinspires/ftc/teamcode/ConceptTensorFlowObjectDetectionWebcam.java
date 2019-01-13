@@ -52,7 +52,7 @@ import java.util.List;
  * is explained below.
  */
 @TeleOp(name = "Concept: TensorFlow Object Detection Webcam", group = "Concept")
-@Disabled
+//@Disabled
 public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -137,6 +137,15 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
                                 }
                             }
                         }
+                        else
+                            if (updatedRecognitions.size()==1) {
+                                telemetry.addData("label: ", updatedRecognitions.get(0).getLabel());
+                                telemetry.addData("width", updatedRecognitions.get(0).getWidth());
+                                telemetry.addData("height", updatedRecognitions.get(0).getHeight());
+                                telemetry.addData("Top", updatedRecognitions.get(0).getTop());
+                                telemetry.addData("Confidence", updatedRecognitions.get(0).getConfidence());
+
+                            }
                         telemetry.update();
                     }
                 }

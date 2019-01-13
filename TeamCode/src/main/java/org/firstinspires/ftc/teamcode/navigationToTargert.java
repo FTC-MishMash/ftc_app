@@ -32,7 +32,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 @Autonomous(name = "ImageTesting")
 @Disabled
-public class navigationToTargert extends autoMode {
+public class navigationToTargert extends AutoMode {
 
     double power = -0.14;
     final double tixRound = 600;

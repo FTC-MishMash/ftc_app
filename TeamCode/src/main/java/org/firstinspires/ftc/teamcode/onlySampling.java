@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 
 @Autonomous(name = "only sampling")
-public class onlySampling extends autoMode {
+public class onlySampling extends AutoMode {
 
 //    autoMode auto;
 
