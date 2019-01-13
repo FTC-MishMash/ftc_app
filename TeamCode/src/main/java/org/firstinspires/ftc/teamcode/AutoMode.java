@@ -872,10 +872,10 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[1].setPower(0.3);
     }
 
-    public void Parking() {
+    public void Parking(int targetPositionEncoder) {
         driveByEncoderRoverRuckus(90, 90, -0.5);
-        robot.shaft[0].setTargetPosition(250);
-        robot.shaft[1].setTargetPosition(250);
+        robot.shaft[0].setTargetPosition(targetPositionEncoder);//250
+        robot.shaft[1].setTargetPosition(targetPositionEncoder);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[0].setPower(0.3);
