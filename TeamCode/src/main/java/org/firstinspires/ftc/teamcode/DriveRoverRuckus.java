@@ -35,9 +35,9 @@ public class DriveRoverRuckus extends OpMode {
 
         robot = new Robot(hardwareMap);
 
-        robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     double speed = 1;
@@ -110,19 +110,19 @@ public class DriveRoverRuckus extends OpMode {
             robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.shaft[0].setTargetPosition(157);
-            robot.shaft[1].setTargetPosition(157);
+            robot.shaft[0].setTargetPosition(2000);
+            robot.shaft[1].setTargetPosition(2000);
             robot.shaft[0].setPower(0.6);
             robot.shaft[1].setPower(0.6);
-            if (robot.shaft[0].isBusy() && robot.shaft[1].isBusy()) {
+            if (!robot.shaft[0].isBusy() && !robot.shaft[1].isBusy()) {
                 robot.shaft[0].setPower(0);
                 robot.shaft[1].setPower(0);
             }
-            robot.linear.setTargetPosition(300);
-            if (robot.linear.getCurrentPosition() <= 275) {
-                robot.linear.setPower(0.8);
-            }
+            robot.linear.setTargetPosition(400);
+            robot.linear.setPower(0.8);
+            if (robot.linear.getCurrentPosition() >= 375) {
                 robot.linear.setPower(0);
+            }
 
         } else if (gamepad2.b) {
             robot.inTake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -136,9 +136,11 @@ public class DriveRoverRuckus extends OpMode {
             robot.linear.setTargetPosition(550);
             robot.linear.setPower(0.8);
             robot.inTake.setPower(1);
-        } else if (gamepad1.a) {
-            speed = 0.5;
-        } else if (gamepad1.b) {
+
+        }
+     else if (gamepad1.a) {
+        speed = 0.5;
+    } else if (gamepad1.b) {
             speed = 1;
         }
 //        else if (gamepad2.a){
