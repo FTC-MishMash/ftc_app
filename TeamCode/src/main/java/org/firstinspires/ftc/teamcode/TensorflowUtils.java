@@ -59,44 +59,44 @@ public class TensorflowUtils {
         VuforiaLocalizer.Parameters parameters;
 
 
-                if (count > 1)
-                    parameters = new VuforiaLocalizer.Parameters(currOpMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName()));
-                else {
-                    count++;
-                    parameters = new VuforiaLocalizer.Parameters();
-                }        //  Instantiate the Vuforia engine
-                //vuforia = (VuforiaLocalizer) ClassFactory.getInstance().createVuforia(parameters);
-                if (webcam) {
-                    parameters.cameraName = currOpMode.hardwareMap.get(WebcamName.class, "Webcam 1");
+        if (count > 1)
+            parameters = new VuforiaLocalizer.Parameters(currOpMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName()));
+        else {
+            count++;
+            parameters = new VuforiaLocalizer.Parameters();
+        }        //  Instantiate the Vuforia engine
+        //vuforia = (VuforiaLocalizer) ClassFactory.getInstance().createVuforia(parameters);
+        if (webcam) {
+            parameters.cameraName = currOpMode.hardwareMap.get(WebcamName.class, "Webcam 1");
 
-                }
-                parameters.vuforiaLicenseKey = VUFORIA_KEY;
-                vuforia = new VuforiaLocalizerEx(parameters);
-                currOpMode.vuforia = this.vuforia;
-                int g = 0;
-                // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
-            }
+        }
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        vuforia = new VuforiaLocalizerEx(parameters);
+        currOpMode.vuforia = this.vuforia;
+        int g = 0;
+        // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
+    }
 
-        public void followCubeRecognision(double power) {
-            double runTime = 0;
-            telemetry.addLine("follow cube 1:");
-            telemetry.update();
+    public void followCubeRecognision(double power) {
+        double runTime = 0;
+        telemetry.addLine("follow cube 1:");
+        telemetry.update();
 
-            double distanceFromRight = 0;
-            double distanceFromLeft = 0;
-            double middleCubeX = 0;
-            double k = 0.0007; //EDEN
-            double[] addToMotors;
-            addToMotors = new double[2];
+        double distanceFromRight = 0;
+        double distanceFromLeft = 0;
+        double middleCubeX = 0;
+        double k = 0.0007; //EDEN
+        double[] addToMotors;
+        addToMotors = new double[2];
 
-            boolean breakLoop = false;
-            runTime = currOpMode.getRuntime();
+        boolean breakLoop = false;
+        runTime = currOpMode.getRuntime();
 
 //        RecognitionList.get(indexGold);
-            if (tfod != null)
-                do {
-                    List<Recognition> RecognitionList = tfod.getRecognitions();// I delete List<Recognition>
-                    Recognition goldReco = null;
+        if (tfod != null)
+            do {
+                List<Recognition> RecognitionList = tfod.getRecognitions();// I delete List<Recognition>
+                Recognition goldReco = null;
 
                 if (RecognitionList != null) {
                     for (Recognition recognition : RecognitionList) {

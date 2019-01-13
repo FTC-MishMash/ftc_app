@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @Autonomous
-@Disabled
+//@Disabled
 public class LandInAuto extends LinearOpMode {
     Robot robot;
 
@@ -123,6 +123,10 @@ public class LandInAuto extends LinearOpMode {
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+    public void servoLinear(){
+        robot.linearLock[0].setPosition(1);
+        robot.linearLock[1].setPosition(0);
+    }
 
     public void setMotorPower(double[][] power) { //Stores the four drivetrain motors power in array
         for (int row = 0; opModeIsActive() && row < 2; row++)
@@ -137,7 +141,8 @@ public class LandInAuto extends LinearOpMode {
      */
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
-        motorLock();
+//        motorLock();
+        servoLinear();
         waitForStart();
         LandInAuto();
     }

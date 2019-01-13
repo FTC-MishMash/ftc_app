@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Color;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -11,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -25,7 +25,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
+import android.graphics.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +35,6 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGR
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 
 
@@ -41,13 +42,13 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * Created by user on 22/11/2018.
  */
 @Autonomous(name = "AutoMode")
-@Disabled
-public class autoMode extends LinearOpMode {
+//@Disabled
+public class AutoMode extends LinearOpMode {
     public static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     public static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     public static final String LABEL_SILVER_MINERAL = "Silver Mineral";
     //    private static final android.graphics.Color Color = ;
-    Robot robot;
+    public Robot robot;
     public static final String VUFORIA_KEY = " ATgDONj/////AAABmW0G/nQirUMiumnzPc6Pl8oJhBOCC2qoUq0BWhir9YWcBFDlhZUfSwATcQArcyyLxIOV21sHaYJeeQEJZfIJ+4spBn3oJ/DfycsbPaNs87+TRpM46/vbUkj1Ok+NtZ/eqMhmMXjFC8dgdCfbCt0aMxoBNzDw4+v28abG+hjUCjVYf86Jq1m7R942XCjw0yhOZqTXWIp3WAZDXY/PdWGQGY/zWae0l6TAZ6Z27t1xYJdkkpLqEsbKM3ZprvtgIs8AsWS9Tri2892OHq2CnCL+1ZHHXKPdxON3fiC1Gd3oihwPhTUReNw0VAg9yeVsVa1UQg7ea9K6WpmVto0FG+T2/LV8uq/3Mp/NHWiNizw2DM4h";
 
 
@@ -55,20 +56,19 @@ public class autoMode extends LinearOpMode {
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
      */
-    public VuforiaLocalizer vuforia;
-    public VuforiaLocalizer vuforiaImage;
 
+    public ElapsedTime runTime = new ElapsedTime();
+    final double SCALE_FACTOR = 255;
+
+    static final int PitchtargetAngleMin = -5;
+    static final int PitchtargetAngleMax = 5;
+    public VuforiaLocalizerEx vuforia;
 
     /**
      * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
      */
     public TFObjectDetector tfod;
-    public ElapsedTime runTime = new ElapsedTime();
-    final double SCALE_FACTOR = 255;
-
-    static final int PitchtargetAngleMin = -5;
-    static final int PitchtargetAngleMax = 5;
     static final int RolltargetAngleMin = -10;
     static final int RolltargetAngleMax = 10;
 
@@ -91,7 +91,9 @@ public class autoMode extends LinearOpMode {
     private OpenGLMatrix lastLocation = null;
     private boolean targetVisible = false;
     List<VuforiaTrackable> allTrackablesNav;
-
+    ImageTargets targetNav;
+    DriveUtilities driveUtils;
+    TensorflowUtils tsSampling;
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -101,6 +103,9 @@ public class autoMode extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
+        targetNav=new ImageTargets(this);
+        driveUtils=new DriveUtilities(this);
+        tsSampling=new TensorflowUtils(this);
 
     }
 
@@ -117,7 +122,7 @@ public class autoMode extends LinearOpMode {
 
         double runTime0 = getRuntime();
         while (opModeIsActive() && getRuntime() - runTime0 < 3) {
-            List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
+            java.util.List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
             telemetry.addData("have cube?   ", RecognitionList != null);
             telemetry.update();
 
@@ -133,7 +138,7 @@ public class autoMode extends LinearOpMode {
         ScaledTurn(turnAngleRight, motor, imu, power);
         runTime0 = getRuntime();
         while (opModeIsActive() && getRuntime() - runTime0 < 2) {
-            List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
+            java.util.List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
             telemetry.addLine("have cube?   ");
             telemetry.update();
 
@@ -753,7 +758,7 @@ public class autoMode extends LinearOpMode {
         //  Instantiate the Vuforia engine
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        vuforia = (VuforiaLocalizerEx) ClassFactory.getInstance().createVuforia(parameters);
 
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
@@ -768,7 +773,8 @@ public class autoMode extends LinearOpMode {
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
         //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        vuforia = (VuforiaLocalizerEx) ClassFactory.getInstance().createVuforia(parameters);
 
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
@@ -783,6 +789,7 @@ public class autoMode extends LinearOpMode {
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+
     }
 
     public void driveByEncoderRoverRuckus(int goalDistRight, int goalDistLeft, double power) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
@@ -844,8 +851,11 @@ public class autoMode extends LinearOpMode {
 
     }
 
-    public void Marker() {
-        driveByEncoderRoverRuckus(75, 75, 0.5);
+    public void Marker(int color, ColorSensor sensorcColor, float hsvValue[], BNO055IMU imu, double heading, double power) {
+        driveByColor(color, sensorcColor, imu, hsvValue, heading, power);
+//        driveByEncoderRoverRuckus(75, 75, 0.5);
+
+        //open shaft
         robot.shaft[0].setTargetPosition(175);
         robot.shaft[1].setTargetPosition(175);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -853,6 +863,7 @@ public class autoMode extends LinearOpMode {
         robot.shaft[0].setPower(0.3);
         robot.shaft[1].setPower(0.3);
         sleep(750);
+        //marker
         robot.shaft[0].setTargetPosition(0);
         robot.shaft[1].setTargetPosition(0);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -861,10 +872,10 @@ public class autoMode extends LinearOpMode {
         robot.shaft[1].setPower(0.3);
     }
 
-    public void Parking() {
+    public void Parking(int targetPositionEncoder) {
         driveByEncoderRoverRuckus(90, 90, -0.5);
-        robot.shaft[0].setTargetPosition(250);
-        robot.shaft[1].setTargetPosition(250);
+        robot.shaft[0].setTargetPosition(targetPositionEncoder);//250
+        robot.shaft[1].setTargetPosition(targetPositionEncoder);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[0].setPower(0.3);
