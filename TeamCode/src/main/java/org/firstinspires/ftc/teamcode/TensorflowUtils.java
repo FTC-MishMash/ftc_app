@@ -49,6 +49,7 @@ public class TensorflowUtils {
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+        currOpMode.tfod=tfod;
     }
 
     public void initVuforiaWebCam(boolean webcam) {
@@ -73,7 +74,7 @@ else {
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         vuforia = new VuforiaLocalizerEx(parameters);
         currOpMode.vuforia = this.vuforia;
-        int g = 0;
+         int g =0;
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
 

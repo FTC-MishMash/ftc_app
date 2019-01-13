@@ -23,24 +23,28 @@ public class VuforiaCheck extends AutoMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
             telemetry.update();
         }
-
+        tfod.activate();
         //motorLock();
         waitForStart();
         //LandInAuto();
 
 
-        while (opModeIsActive()) {
-            if (vuforia == null)
+        if (opModeIsActive()) {
+
+                tsSampling.followCubeRecognision(0.5);
                 telemetry.addLine("null");
             if (gamepad1.x) {
+                tfod.deactivate();
                 vuforia.close();
 //                VuforiaLocalizerImpl.CloseableFrame frame=vuforia.getFrameQueue().take();
 //                frame.close();
                 telemetry.addLine("closed");
 
             }
-            if (gamepad1.a)
+            if (gamepad1.a){
                 tsSampling.initVuforiaWebCam(false);
+                tfod.activate();
+            }
             telemetry.update();
 
         }
