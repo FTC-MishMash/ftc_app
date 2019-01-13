@@ -18,7 +18,7 @@ public class Robot {
     public DcMotor[] shaft = new DcMotor[2];
     public DcMotor linear;
     public DcMotor inTake;
-    public Servo[] linearLock = new Servo[2];
+    public Servo linearLock;
     public ColorSensor colorRightFront;
     public ColorSensor colorLeftFront;
     float hsvValuesLeftFront[] = {0F, 0F, 0F};
@@ -41,8 +41,8 @@ public class Robot {
         linear = hardwareMap.get(DcMotor.class, "linearLeft");
         shaft[0] = hardwareMap.get(DcMotor.class, "shaftRight");
         shaft[1] = hardwareMap.get(DcMotor.class, "shaftLeft");
-        linearLock[0] = hardwareMap.get (Servo.class, "servoRight");
-        linearLock[1] = hardwareMap.get (Servo.class, "servoLeft");
+        linearLock = hardwareMap.get(Servo.class, "servoLock");
+
 //        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
 //        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
 
