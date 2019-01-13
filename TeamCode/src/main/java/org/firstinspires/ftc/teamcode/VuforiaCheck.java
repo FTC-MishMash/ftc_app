@@ -34,8 +34,8 @@ public class VuforiaCheck extends AutoMode {
                 telemetry.addLine("null");
             if (gamepad1.x) {
                 vuforia.close();
-                VuforiaLocalizerImpl.CloseableFrame frame=vuforia.getFrameQueue().take();
-                frame.close();
+//                VuforiaLocalizerImpl.CloseableFrame frame=vuforia.getFrameQueue().take();
+//                frame.close();
                 telemetry.addLine("closed");
 
             }

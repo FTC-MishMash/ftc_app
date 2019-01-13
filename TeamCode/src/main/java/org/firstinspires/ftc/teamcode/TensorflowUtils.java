@@ -60,10 +60,10 @@ public class TensorflowUtils {
         int cameraId = currOpMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
 
         if (count > 1)
-            parameters = new VuforiaLocalizer.Parameters();
+            parameters = new VuforiaLocalizer.Parameters(cameraId);
 else {
             count++;
-            parameters = new VuforiaLocalizer.Parameters(cameraId);
+            parameters = new VuforiaLocalizer.Parameters();
         }        //  Instantiate the Vuforia engine
         //vuforia = (VuforiaLocalizer) ClassFactory.getInstance().createVuforia(parameters);
         if (webcam) {
