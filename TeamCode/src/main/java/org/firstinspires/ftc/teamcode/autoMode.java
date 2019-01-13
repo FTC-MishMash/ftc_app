@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -844,8 +845,11 @@ public class autoMode extends LinearOpMode {
 
     }
 
-    public void Marker() {
-        driveByEncoderRoverRuckus(75, 75, 0.5);
+    public void Marker(int color, ColorSensor sensorcColor, float hsvValue[], BNO055IMU imu, double heading, double power) {
+        driveByColor(color, sensorcColor, imu, hsvValue, heading, power);
+//        driveByEncoderRoverRuckus(75, 75, 0.5);
+
+        //open shaft
         robot.shaft[0].setTargetPosition(175);
         robot.shaft[1].setTargetPosition(175);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -853,6 +857,7 @@ public class autoMode extends LinearOpMode {
         robot.shaft[0].setPower(0.3);
         robot.shaft[1].setPower(0.3);
         sleep(750);
+        //marker
         robot.shaft[0].setTargetPosition(0);
         robot.shaft[1].setTargetPosition(0);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);

@@ -10,55 +10,7 @@ public class VuforiaCheck extends autoMode {
 //    autoMode auto;sx
 
     @Override
-    public void runOpMode() 8+++++++++++++++++
-
-
-
-
-
-
-
-
-            3
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            8throws InterruptedException {
+    public void runOpMode() throws InterruptedException {
 //        auto = new autoMode();
         robot = new Robot(hardwareMap);
 
