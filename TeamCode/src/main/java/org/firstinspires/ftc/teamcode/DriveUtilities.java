@@ -87,6 +87,64 @@ public class DriveUtilities {
 
         setMotorPower(motors,new double[][]{{0, 0}, {0, 0}});
     }
+    public void driveByEncoderRoverRuckus(int goalDistRight, int goalDistLeft, double power) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
+//direction 0 is forword, 1 is backword
+        final int tixRound = 600;
+        final int cmRound = 27;
+
+
+        int dRight = (goalDistRight * tixRound) / cmRound;
+        int dLeft = (goalDistLeft * tixRound) / cmRound;
+
+        robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.driveTrain[1][1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        robot.driveTrain[0][0].setTargetPosition(robot.driveTrain[0][0].getCurrentPosition() + dLeft);
+        robot.driveTrain[1][0].setTargetPosition(robot.driveTrain[1][0].getCurrentPosition() + dLeft);
+//        robot.driveTrain[0][1].setTargetPosition(robot.driveTrain[0][1].getCurrentPosition() + dRight);
+//        robot.driveTrain[1][1].setTargetPosition(robot.driveTrain[1][1].getCurrentPosition() + dRight);
+
+
+        robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.driveTrain[1][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                robot.driveTrain[i][j].setPower(power);
+
+        telemetry.addLine("go to target");
+        telemetry.update();
+
+        double runTime =currOpmode.getRuntime();
+        while (currOpmode.opModeIsActive() &&
+                robot.driveTrain[0][0].isBusy()
+                && robot.driveTrain[1][0].isBusy()
+//                && robot.driveTrain[0][1].isBusy()
+//                && robot.driveTrain[1][1].isBusy()
+                && currOpmode.getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10)) {
+            currOpmode.sleep(0);
+        }
+
+
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                robot.driveTrain[i][j].setPower(0);
+
+        telemetry.addLine("end move encoder");
+        telemetry.update();
+
+
+        robot.driveTrain[0][0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.driveTrain[1][0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+    }
     public static double normalizedAngle(double angle) {
         if (angle < 0) {
             while (angle < 0)

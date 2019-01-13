@@ -24,6 +24,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
 import android.graphics.Color;
 import java.util.ArrayList;
@@ -54,19 +55,19 @@ public class AutoMode extends LinearOpMode {
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
      */
-    public VuforiaLocalizer vuforia;
 
+    public ElapsedTime runTime = new ElapsedTime();
+    final double SCALE_FACTOR = 255;
+
+    static final int PitchtargetAngleMin = -5;
+    static final int PitchtargetAngleMax = 5;
+    public VuforiaLocalizerEx vuforia;
 
     /**
      * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
      */
     public TFObjectDetector tfod;
-    public ElapsedTime runTime = new ElapsedTime();
-    final double SCALE_FACTOR = 255;
-
-    static final int PitchtargetAngleMin = -5;
-    static final int PitchtargetAngleMax = 5;
     static final int RolltargetAngleMin = -10;
     static final int RolltargetAngleMax = 10;
 
@@ -91,6 +92,7 @@ public class AutoMode extends LinearOpMode {
     List<VuforiaTrackable> allTrackablesNav;
     ImageTargets targetNav;
     DriveUtilities driveUtils;
+    TensorflowUtils tsSampling;
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -100,11 +102,9 @@ public class AutoMode extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
+        targetNav=new ImageTargets(this);
         driveUtils=new DriveUtilities(this);
-        waitForStart();
-        if (opModeIsActive()){
-            driveUtils.diffTurn(140,0.4);
-        }
+        tsSampling=new TensorflowUtils(this);
 
     }
 
@@ -757,7 +757,7 @@ public class AutoMode extends LinearOpMode {
         //  Instantiate the Vuforia engine
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        vuforia = (VuforiaLocalizerEx) ClassFactory.getInstance().createVuforia(parameters);
 
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
@@ -772,7 +772,8 @@ public class AutoMode extends LinearOpMode {
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
         //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        vuforia = (VuforiaLocalizerEx) ClassFactory.getInstance().createVuforia(parameters);
 
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
@@ -787,6 +788,7 @@ public class AutoMode extends LinearOpMode {
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+
     }
 
     public void driveByEncoderRoverRuckus(int goalDistRight, int goalDistLeft, double power) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
