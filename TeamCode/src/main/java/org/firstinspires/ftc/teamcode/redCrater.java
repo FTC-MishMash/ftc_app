@@ -58,7 +58,7 @@ public class redCrater extends AutoMode {
             vuforia.close();
 
             sleep(1000);
-            driveUtils.driveByEncoderRoverRuckus(9, 9, 0.35, false);
+            driveUtils.driveByEncoderRoverRuckus(7, 7, 0.35, false);
             sleep(1000);
             driveUtils.driveByEncoderRoverRuckus(35, 35, -0.35, false);
 
