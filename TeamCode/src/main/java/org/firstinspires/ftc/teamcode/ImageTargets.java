@@ -65,13 +65,13 @@ public class ImageTargets {
     private boolean targetVisible = false;
     List<VuforiaTrackable> allTrackablesNav;
 
+
     public ImageTargets(AutoMode currOpmode) {
         this.currOpmode = currOpmode;
         this.robot = currOpmode.robot;
         this.vuforia = currOpmode.vuforia;
         this.telemetry = currOpmode.telemetry;
         this.motors = robot.driveTrain;
-        this.driveUtilities=currOpmode.driveUtils;
     }
 
     public void startTracking() {
@@ -170,48 +170,61 @@ public class ImageTargets {
     }
 
     public void searchImage(int cubePos, double power) {
-
-        runtime.reset();//TODO: delete this
-        double time0 = runtime.seconds();
-        double currTime = time0;
-
-        int count = 2;
-        double maxTime = 5;
-        if (cubePos == 1) {
-            maxTime += 0.6;
-            count = 0;
-        } else if (cubePos == 2) {
-            maxTime += 0.3;
-            count = 1;
+        this.driveUtilities = currOpmode.driveUtils;
+        switch (cubePos) {
+            case 1:
+                driveUtilities.driveByEncoderRoverRuckus(160, 160, 0.5, true);
+                break;
+            case 2:
+                driveUtilities.driveByEncoderRoverRuckus(120, 120, 0.5, true);
+                break;
+            case 3:
+                driveUtilities.driveByEncoderRoverRuckus(80, 80, 0.5, true);
         }
-
-
-        boolean per = true;
-        while (currOpmode.opModeIsActive() && currTime - time0 < maxTime && getPositions() == null /*&& count < 10*/) {
-            if (per) {
-                setMotorPower(motors, new double[][]{{power, power - 0.17}, {power, power - 0.17}});
-                telemetry.addLine("side 1");
-                telemetry.update();
-            } else {
-                setMotorPower(motors, new double[][]{{power - 0.17, power}, {power - 0.17, power}});
-                telemetry.addLine("side 2");
-                telemetry.update();
-            }
-            currTime = runtime.seconds();
-            if (currTime - time0 >= 0.28) {
-                runtime.reset();
-                count++;
-                per = !per;
-                setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
-                currOpmode.sleep(25);
-
-            }
-
-            telemetry.addData("time passed: ", currTime - time0);
-            telemetry.update();
-        }
-        setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
+//
+//        runtime.reset();//TODO: delete this
+//        double time0 = runtime.seconds();
+//        double currTime = time0;
+//
+//        int count = 2;
+//        double maxTime = 5;
+//        if (cubePos == 1) {
+//            maxTime += 0.6;
+//            count = 0;
+//        } else if (cubePos == 2) {
+//            maxTime += 0.3;
+//            count = 1;
+//        }
+//
+//
+//        boolean per = true;
+//
+//        while (currOpmode.opModeIsActive() && currTime - time0 < maxTime && getPositions() == null /*&& count < 10*/) {
+//            if (per) {
+//                setMotorPower(motors, new double[][]{{power, power - 0.17}, {power, power - 0.17}});
+//                telemetry.addLine("side 1");
+//                telemetry.update();
+//            } else {
+//                setMotorPower(motors, new double[][]{{power - 0.17, power}, {power - 0.17, power}});
+//                telemetry.addLine("side 2");
+//                telemetry.update();
+//            }
+//            currTime = runtime.seconds();
+//            if (currTime - time0 >= 0.28) {
+//                runtime.reset();
+//                count++;
+//                per = !per;
+//                setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
+//                currOpmode.sleep(25);
+//
+//            }
+//
+//            telemetry.addData("time passed: ", currTime - time0);
+//            telemetry.update();
+//        }
+//        setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
     }
+
 
     public void driveToImage(double power) {
         //  Driving.Driving.setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});

@@ -16,13 +16,14 @@ public class DriveUtilities {
     BNO055IMU imu;
     DcMotor[][] motors;
     Telemetry telemetry;
+    ImageTargets targetsNav;
 
     public DriveUtilities(AutoMode currOpmode) {
         this.currOpmode = currOpmode;
         this.robot = currOpmode.robot;
         this.imu = robot.imu;
         this.motors = robot.driveTrain;
-        this.telemetry=currOpmode.telemetry;
+        this.telemetry = currOpmode.telemetry;
     }
 
     public static void setMotorPower(DcMotor[][] driveTrain, double[][] power) { //Stores the four drivetrain motors power in array
@@ -36,7 +37,7 @@ public class DriveUtilities {
         double deltaAngle = 0;
 
         boolean directTurn = true;
-        double currentAngle =normalizedAngle(getAngularOriention(imu).firstAngle);
+        double currentAngle = normalizedAngle(getAngularOriention(imu).firstAngle);
         double angle0 = currentAngle;
         if (currentAngle < goalAngle) {
             if (goalAngle - currentAngle <= 360 - (goalAngle - currentAngle)) {
@@ -85,12 +86,14 @@ public class DriveUtilities {
             }
 
 
-        setMotorPower(motors,new double[][]{{0, 0}, {0, 0}});
+        setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
     }
-    public void driveByEncoderRoverRuckus(int goalDistRight, int goalDistLeft, double power) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
+
+    public void driveByEncoderRoverRuckus(int goalDistRight, int goalDistLeft, double power, boolean targets) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
 //direction 0 is forword, 1 is backword
         final int tixRound = 600;
         final int cmRound = 27;
+        this.targetsNav=currOpmode.targetNav;
 
 
         int dRight = (goalDistRight * tixRound) / cmRound;
@@ -120,13 +123,15 @@ public class DriveUtilities {
         telemetry.addLine("go to target");
         telemetry.update();
 
-        double runTime =currOpmode.getRuntime();
+        double runTime = currOpmode.getRuntime();
         while (currOpmode.opModeIsActive() &&
                 robot.driveTrain[0][0].isBusy()
                 && robot.driveTrain[1][0].isBusy()
 //                && robot.driveTrain[0][1].isBusy()
 //                && robot.driveTrain[1][1].isBusy()
                 && currOpmode.getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10)) {
+            if(targets&&targetsNav.getPositions()!=null)
+                break;
             currOpmode.sleep(0);
         }
 
@@ -145,6 +150,7 @@ public class DriveUtilities {
         robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
+
     public static double normalizedAngle(double angle) {
         if (angle < 0) {
             while (angle < 0)
@@ -155,6 +161,7 @@ public class DriveUtilities {
         }
         return angle;
     }
+
     public void diffTurn(double diffAngle, double power) {
         double currAngle = robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
                 AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
@@ -162,6 +169,7 @@ public class DriveUtilities {
         scaledTurn(goalAngle, 0.4);
 
     }
+
     public static Orientation getAngularOriention(BNO055IMU imu) {
         return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }

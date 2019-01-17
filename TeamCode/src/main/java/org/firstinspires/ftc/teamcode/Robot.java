@@ -41,7 +41,7 @@ public class Robot {
         linear = hardwareMap.get(DcMotor.class, "linearLeft");
         shaft[0] = hardwareMap.get(DcMotor.class, "shaftRight");
         shaft[1] = hardwareMap.get(DcMotor.class, "shaftLeft");
-        linearLock = hardwareMap.get(Servo.class, "servoLock");
+        linearLock = hardwareMap.get(Servo.class, "LinearServoLock");
 
 //        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
 //        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
