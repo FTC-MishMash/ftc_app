@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.robotcore.internal.system.ClassFactoryImpl;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -29,66 +30,67 @@ public class redCrater extends AutoMode {
         super.runOpMode();
 //        auto = new autoMode();
         // robot = new Robot(hardwareMap);
-
-        tsSampling.initVuforiaWebCam(false);
-
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             tsSampling.initTfod();
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-        telemetry.update();
-        }  servoLock(1);
-            waitForStart();
-            // LandInAuto(0);
+            telemetry.update();
+        }
+        servoLock(1);
+        waitForStart();
+        // LandInAuto(0);
 
 
-            if (opModeIsActive()) {
-                runTime.reset();
-                runTime.startTime();
+        if (opModeIsActive()) {
+            runTime.reset();
+            runTime.startTime();
 //        getOffTheClimb
 
-                int cubePosition = 0;
-             //     cubePosition = tsSampling.searchCube(0.35, 335, 20);
+            int cubePosition = 0;
+            cubePosition = tsSampling.searchCube(0.35, 335, 25);
 
-                sleep(1000);
-                //  tsSampling.followCubeRecognision(0.15);//start power
+            sleep(1000);
+            tsSampling.followCubeRecognision(0.17);//start power
 
-                if (tfod != null) {
-                    tfod.shutdown();
-                }
-                vuforia.close();
-                //   driveUtils.driveByEncoderRoverRuckus(15, 15, 0.5);
-                driveUtils.setMotorPower(robot.driveTrain, new double[][]{{-0.4, -0.4}, {-0.4, -0.4}});
-                sleep(500);
-                driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
-                sleep(2500);
-                // driveUtils.scaledTurn(60, 0.4);
-                tsSampling.initVuforiaWebCam(false);
-                sleep(1000);
+            if (tfod != null) {
+                tfod.shutdown();
+            }
+            vuforia.close();
+
+            sleep(1000);
+            driveUtils.driveByEncoderRoverRuckus(9, 9, 0.35, false);
+            sleep(1000);
+            driveUtils.driveByEncoderRoverRuckus(35, 35, -0.35, false);
+
+            driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
+            sleep(2500);
+            driveUtils.scaledTurn(320, 0.4);
+            tsSampling.initVuforiaWebCam(false);
+            targetNav.startTracking();
+
 //            צריך להשתמש בcubePosition
 //            פונקציות של מור
-             //   targetNav.vuforia = vuforia;
-                targetNav.startTracking();
-                float[] pos = targetNav.getPositions();
-                if (pos == null)
-                    targetNav.searchImage(cubePosition, 0.24);
+            //   targetNav.vuforia = vuforia;
+            float[] pos = targetNav.getPositions();
+            if (pos == null)
+                targetNav.searchImage(cubePosition, 0.20);
 
-                pos = targetNav.getPositions();//למה להשתמש בPOS ולא פשוט בפונקציה?
-                telemetry.addData("pos", pos == null);
-                telemetry.update();
+            pos = targetNav.getPositions();//למה להשתמש בPOS ולא פשוט בפונקציה?
+            telemetry.addData("pos CHECKING!!0:", pos == null);
+            telemetry.update();
 //            if (pos == null) {
 //                driveUtils.driveByEncoderRoverRuckus(20, 20, 0.4);
 //                driveUtils.scaledTurn(135, 0.3);
 //            } else {
-                sleep(1000);
-                targetNav.driveToImage(-0.19);
+            sleep(1000);
+            targetNav.driveToImage(-0.19);
 //            }
 //            sleep(1000);
-                driveUtils.driveByEncoderRoverRuckus(60, 60, 0.5,false);
-                //marker
-                //go to crater
-                //open shaft
+            //       driveUtils.driveByEncoderRoverRuckus(60, 60, 0.5,false);
+            //marker
+            //go to crater
+            //open shaft
 
-            }
         }
     }
+}

@@ -25,6 +25,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.internal.system.ClassFactoryImpl;
+import org.firstinspires.ftc.robotcore.internal.tfod.TFObjectDetectorImpl;
 import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
 import android.graphics.Color;
@@ -107,6 +109,8 @@ public class AutoMode extends LinearOpMode {
         targetNav = new ImageTargets(this);
         driveUtils = new DriveUtilities(this);
         tsSampling = new TensorflowUtils(this);
+        tsSampling.initVuforiaWebCam(true);
+
 
     }
 
@@ -762,7 +766,7 @@ public class AutoMode extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+       // tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
 
     }

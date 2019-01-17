@@ -171,16 +171,35 @@ public class ImageTargets {
 
     public void searchImage(int cubePos, double power) {
         this.driveUtilities = currOpmode.driveUtils;
-        telemetry.addData("on search",currOpmode.targetNav==null);
+        telemetry.addData("on search", currOpmode.targetNav == null);
         switch (cubePos) {
-            case 1:
-                driveUtilities.driveByEncoderRoverRuckus(160, 160, 0.5, true);
+            case 1: {
+                telemetry.addLine("case1");
+                telemetry.update();
+                currOpmode.sleep(1000);
+                driveUtilities.driveByEncoderRoverRuckus(60, 30, power, true);
+                if(getPositions()==null)
+                driveUtilities.driveByEncoderRoverRuckus(30, 60, power, true);
+
                 break;
-            case 2:
-                driveUtilities.driveByEncoderRoverRuckus(120, 120, 0.5, true);
+            }
+            case 2: {
+                telemetry.addLine("case2");
+                telemetry.update();
+                currOpmode.sleep(1000);
+                driveUtilities.driveByEncoderRoverRuckus(40, 15, power, true);
+                if(getPositions()==null)
+                    driveUtilities.driveByEncoderRoverRuckus(15, 40, power, true);
+
                 break;
-            case 3:
-                driveUtilities.driveByEncoderRoverRuckus(80, 80, 0.5, true);
+            }
+            case 3: {
+                telemetry.addLine("case3");
+                telemetry.update();
+                currOpmode.sleep(1000);
+                driveUtilities.driveByEncoderRoverRuckus(25, 5, power, true);
+                if(getPositions()==null)
+                    driveUtilities.driveByEncoderRoverRuckus(5, 25, power, true);            }
         }
 //
 //        runtime.reset();//TODO: delete this
@@ -232,7 +251,8 @@ public class ImageTargets {
 
         float[] positions = getPositions();//למה לקרוא פעמים לאותה הפונקציה?
         if (positions != null) {
-
+            telemetry.addLine("On DriveToImage()");
+            telemetry.update();
             currOpmode.sleep(1000);
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
             while (currOpmode.opModeIsActive() && positions[0] <= 48) {
