@@ -74,7 +74,7 @@ else {
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         vuforia = new VuforiaLocalizerEx(parameters);
         currOpMode.vuforia = this.vuforia;
-         int g =0;
+        currOpMode.targetNav.vuforia=this.vuforia;
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
 

@@ -130,6 +130,8 @@ public class DriveUtilities {
 //                && robot.driveTrain[0][1].isBusy()
 //                && robot.driveTrain[1][1].isBusy()
                 && currOpmode.getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10)) {
+            telemetry.addData("pos drive: ",currOpmode.targetNav.currOpmode==null);
+            telemetry.update();
             if(targets&&targetsNav.getPositions()!=null)
                 break;
             currOpmode.sleep(0);

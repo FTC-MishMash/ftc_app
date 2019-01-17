@@ -30,7 +30,7 @@ public class redCrater extends AutoMode {
 //        auto = new autoMode();
         // robot = new Robot(hardwareMap);
 
-        tsSampling.initVuforiaWebCam(true);
+        tsSampling.initVuforiaWebCam(false);
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             tsSampling.initTfod();
@@ -48,10 +48,10 @@ public class redCrater extends AutoMode {
 //        getOffTheClimb
 
                 int cubePosition = 0;
-                  cubePosition = tsSampling.searchCube(0.35, 335, 20);
+             //     cubePosition = tsSampling.searchCube(0.35, 335, 20);
 
                 sleep(1000);
-                  tsSampling.followCubeRecognision(0.15);//start power
+                //  tsSampling.followCubeRecognision(0.15);//start power
 
                 if (tfod != null) {
                     tfod.shutdown();
@@ -67,7 +67,7 @@ public class redCrater extends AutoMode {
                 sleep(1000);
 //            צריך להשתמש בcubePosition
 //            פונקציות של מור
-                targetNav.vuforia = vuforia;
+             //   targetNav.vuforia = vuforia;
                 targetNav.startTracking();
                 float[] pos = targetNav.getPositions();
                 if (pos == null)

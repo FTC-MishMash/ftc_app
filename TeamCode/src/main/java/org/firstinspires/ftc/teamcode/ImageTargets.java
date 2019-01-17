@@ -171,6 +171,7 @@ public class ImageTargets {
 
     public void searchImage(int cubePos, double power) {
         this.driveUtilities = currOpmode.driveUtils;
+        telemetry.addData("on search",currOpmode.targetNav==null);
         switch (cubePos) {
             case 1:
                 driveUtilities.driveByEncoderRoverRuckus(160, 160, 0.5, true);
