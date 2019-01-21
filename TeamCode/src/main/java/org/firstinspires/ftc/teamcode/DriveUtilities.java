@@ -131,15 +131,15 @@ public class DriveUtilities {
 //                && robot.driveTrain[1][1].isBusy()
                 && currOpmode.getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10)) {
 
-            if(targets&&targetsNav.getPositions()!=null)
-            setMotorPower(robot.driveTrain,new double[][]{{0,0},{0,0}});
-            telemetry.addData("pos drive null: ",currOpmode.targetNav.currOpmode==null);
-            telemetry.update();
-            currOpmode.sleep(2000);
-            break;
+            if (targets && targetsNav.getPositions() != null) {
+                setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
+                telemetry.addData("pos drive null: ", currOpmode.targetNav.currOpmode == null);
+                telemetry.update();
+                currOpmode.sleep(2000);
+                break;
+            }
         }
-
-        setMotorPower(robot.driveTrain,new double[][]{{0,0},{0,0}});
+              setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
 
 //        for (int i = 0; i < 2; i++)
 //            for (int j = 0; j < 2; j++)

@@ -47,43 +47,64 @@ public class redCrater extends AutoMode {
 //        getOffTheClimb
 
             int cubePosition = 0;
-            cubePosition = tsSampling.searchCube(0.35, 335, 25);
-
+            cubePosition = tsSampling.searchCube(0.33, 335, 23);
+            int dist = 8;
             sleep(1000);
-            tsSampling.followCubeRecognision(0.17);//start power
+            tsSampling.followCubeRecognision(0.16);//start power
 
             if (tfod != null) {
                 tfod.shutdown();
             }
             vuforia.close();
-
-            sleep(1000);
-            driveUtils.driveByEncoderRoverRuckus(7, 7, 0.35, false);
-            sleep(1000);
-            driveUtils.driveByEncoderRoverRuckus(35, 35, -0.35, false);
-
+            telemetry.addLine("finished following");
+            telemetry.update();
+            sleep(1500);
+            driveUtils.driveByEncoderRoverRuckus(9, 9, 0.32, false);
+            telemetry.addLine("finished driving into cube");
+            telemetry.update();
+            sleep(2000);
+            driveUtils.driveByEncoderRoverRuckus(-23, -23, -0.32, false);
+            telemetry.addLine("finished driving out of cube");
+            telemetry.update();
+            sleep(2000);
+//
             driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
             sleep(2500);
-            driveUtils.scaledTurn(320, 0.4);
+            double angleTurn=270;
+            if(cubePosition==1)
+            angleTurn+=12;
+            else if(cubePosition==3)
+                angleTurn-=12;
+            driveUtils.scaledTurn(angleTurn, 0.4);
+            sleep(2500);
             tsSampling.initVuforiaWebCam(false);
             targetNav.startTracking();
-
-//            צריך להשתמש בcubePosition
-//            פונקציות של מור
-            //   targetNav.vuforia = vuforia;
-            float[] pos = targetNav.getPositions();
-            if (pos == null)
-                targetNav.searchImage(cubePosition, 0.20);
-
-            pos = targetNav.getPositions();//למה להשתמש בPOS ולא פשוט בפונקציה?
-            telemetry.addData("pos CHECKING!!0:", pos == null);
-            telemetry.update();
-//            if (pos == null) {
-//                driveUtils.driveByEncoderRoverRuckus(20, 20, 0.4);
-//                driveUtils.scaledTurn(135, 0.3);
-//            } else {
             sleep(1000);
-            targetNav.driveToImage(-0.19);
+//
+////            צריך להשתמש בcubePosition
+////            פונקציות של מור
+//            //   targetNav.vuforia = vuforia;
+            float[] pos = targetNav.getPositions();
+            telemetry.addData("pos null: ", pos == null);
+            telemetry.update();
+            sleep(3500);
+            if (pos == null) {
+
+                telemetry.addData("start searching wait for click",cubePosition);
+                telemetry.update();
+                     sleep(1200);
+                targetNav.searchImage(cubePosition, -0.20);
+            }
+
+//            pos = targetNav.getPositions();//למה להשתמש בPOS ולא פשוט בפונקציה?
+//            telemetry.addData("pos CHECKING!!0:", pos == null);
+//            telemetry.update();
+////            if (pos == null) {
+////                driveUtils.driveByEncoderRoverRuckus(20, 20, 0.4);
+////                driveUtils.scaledTurn(135, 0.3);
+////            } else {
+            sleep(1000);
+            targetNav.driveToImage(-0.21);
 //            }
 //            sleep(1000);
             //       driveUtils.driveByEncoderRoverRuckus(60, 60, 0.5,false);

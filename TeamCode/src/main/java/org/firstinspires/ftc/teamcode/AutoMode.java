@@ -62,7 +62,6 @@ public class AutoMode extends LinearOpMode {
 
     public ElapsedTime runTime = new ElapsedTime();
     final double SCALE_FACTOR = 255;
-
     static final int PitchtargetAngleMin = -5;
     static final int PitchtargetAngleMax = 5;
     public VuforiaLocalizerEx vuforia;
