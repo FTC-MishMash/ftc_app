@@ -115,8 +115,8 @@ public class ImageTargets {
         backSpace.setLocation(backSpaceLocationOnField);
 
 
-        final int CAMERA_FORWARD_DISPLACEMENT = 110;   // eg: Camera is 110 mm in front of robot center
-        final int CAMERA_VERTICAL_DISPLACEMENT = 200;   // eg: Camera is 200 mm above ground
+        final int CAMERA_FORWARD_DISPLACEMENT = 300;   // eg: Camera is 110 mm in front of robot center
+        final int CAMERA_VERTICAL_DISPLACEMENT = 250;   // eg: Camera is 200 mm above ground
         final int CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
@@ -171,16 +171,36 @@ public class ImageTargets {
 
     public void searchImage(int cubePos, double power) {
         this.driveUtilities = currOpmode.driveUtils;
-        telemetry.addData("on search",currOpmode.targetNav==null);
+        telemetry.addData("on search", currOpmode.targetNav == null);
+        telemetry.update();
         switch (cubePos) {
-            case 1:
-                driveUtilities.driveByEncoderRoverRuckus(160, 160, 0.5, true);
+            case 1: {
+                telemetry.addLine("case1");
+                telemetry.update();
+                currOpmode.sleep(1000);
+                driveUtilities.driveByEncoderRoverRuckus(-60, -50, power, true);
+                if(getPositions()==null)
+                driveUtilities.driveByEncoderRoverRuckus(-50, -60, power, true);
+
                 break;
-            case 2:
-                driveUtilities.driveByEncoderRoverRuckus(120, 120, 0.5, true);
+            }
+            case 2: {
+                telemetry.addLine("case2");
+                telemetry.update();
+                currOpmode.sleep(1000);
+                driveUtilities.driveByEncoderRoverRuckus(-40, -35, power, true);
+                if(getPositions()==null)
+                    driveUtilities.driveByEncoderRoverRuckus(-35, -40, power, true);
+
                 break;
-            case 3:
-                driveUtilities.driveByEncoderRoverRuckus(80, 80, 0.5, true);
+            }
+            case 3: {
+                telemetry.addLine("case3");
+                telemetry.update();
+                currOpmode.sleep(1000);
+                driveUtilities.driveByEncoderRoverRuckus(-25, -10, power, true);
+                if(getPositions()==null)
+                    driveUtilities.driveByEncoderRoverRuckus(-10, -25, power, true);            }
         }
 //
 //        runtime.reset();//TODO: delete this
@@ -232,10 +252,11 @@ public class ImageTargets {
 
         float[] positions = getPositions();//למה לקרוא פעמים לאותה הפונקציה?
         if (positions != null) {
-
+            telemetry.addLine("On DriveToImage()");
+            telemetry.update();
             currOpmode.sleep(1000);
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
-            while (currOpmode.opModeIsActive() && positions[0] <= 48) {
+            while (currOpmode.opModeIsActive() && positions[0] <= 54) {
                 positions = getPositions();
                 telemetry.addData("x:", positions[0]);
                 telemetry.update();
@@ -245,8 +266,15 @@ public class ImageTargets {
             telemetry.update();
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
             currOpmode.sleep(1000);
-
-            driveUtilities.diffTurn(90 - positions[5], 0.15);
+            double heading=0;
+            if(positions!=null);
+            {
+                heading = positions[5];
+                telemetry.addData("got to heading: ",heading);
+                telemetry.update();
+                currOpmode.sleep(2000);
+            }
+            driveUtilities.diffTurn(90+ heading, 0.15);
         }
     }
 }

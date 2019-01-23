@@ -130,17 +130,20 @@ public class DriveUtilities {
 //                && robot.driveTrain[0][1].isBusy()
 //                && robot.driveTrain[1][1].isBusy()
                 && currOpmode.getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10)) {
-            telemetry.addData("pos drive: ",currOpmode.targetNav.currOpmode==null);
-            telemetry.update();
-            if(targets&&targetsNav.getPositions()!=null)
+
+            if (targets && targetsNav.getPositions() != null) {
+                setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
+                telemetry.addData("pos drive null: ", currOpmode.targetNav.currOpmode == null);
+                telemetry.update();
+                currOpmode.sleep(2000);
                 break;
-            currOpmode.sleep(0);
+            }
         }
+              setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
 
-
-        for (int i = 0; i < 2; i++)
-            for (int j = 0; j < 2; j++)
-                robot.driveTrain[i][j].setPower(0);
+//        for (int i = 0; i < 2; i++)
+//            for (int j = 0; j < 2; j++)
+//                robot.driveTrain[i][j].setPower(0);
 
         telemetry.addLine("end move encoder");
         telemetry.update();

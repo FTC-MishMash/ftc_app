@@ -46,7 +46,7 @@ public class TensorflowUtils {
 
         int tfodMonitorViewId = currOpMode.hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters();
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
         currOpMode.tfod=tfod;
@@ -59,13 +59,14 @@ public class TensorflowUtils {
 
         VuforiaLocalizer.Parameters parameters;
         int cameraId = currOpMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
+          parameters = new VuforiaLocalizer.Parameters(cameraId);
 
-        if (count > 1)
-            parameters = new VuforiaLocalizer.Parameters(cameraId);
-else {
-            count++;
-            parameters = new VuforiaLocalizer.Parameters();
-        }        //  Instantiate the Vuforia engine
+//        if (count > 1)
+//            parameters = new VuforiaLocalizer.Parameters(cameraId);
+//else {
+//            count++;
+//            parameters = new VuforiaLocalizer.Parameters(cameraId);
+//        }        //  Instantiate the Vuforia engine
         //vuforia = (VuforiaLocalizer) ClassFactory.getInstance().createVuforia(parameters);
         if (webcam) {
             parameters.cameraName = currOpMode.hardwareMap.get(WebcamName.class, "Webcam 1");
