@@ -174,7 +174,7 @@ public class ImageTargets {
         telemetry.addData("on search", currOpmode.targetNav == null);
         telemetry.update();
         switch (cubePos) {
-            case 1: {
+            case 2: {
                 telemetry.addLine("case1");
                 telemetry.update();
                 currOpmode.sleep(1000);
@@ -184,7 +184,7 @@ public class ImageTargets {
 
                 break;
             }
-            case 2: {
+            case 1: {
                 telemetry.addLine("case2");
                 telemetry.update();
                 currOpmode.sleep(1000);

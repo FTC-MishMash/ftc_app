@@ -21,7 +21,7 @@ public class DriveUtilities {
     public DriveUtilities(AutoMode currOpmode) {
         this.currOpmode = currOpmode;
         this.robot = currOpmode.robot;
-        this.imu = robot.imu;
+        this.imu = currOpmode.robot.imu;
         this.motors = robot.driveTrain;
         this.telemetry = currOpmode.telemetry;
     }

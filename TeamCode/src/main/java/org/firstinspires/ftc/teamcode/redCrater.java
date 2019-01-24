@@ -73,10 +73,10 @@ public class redCrater extends AutoMode {
             driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
             sleep(2500);
             double angleTurn=270;
-            if(cubePosition==1)
-            angleTurn+=12;
-            else if(cubePosition==3)
-                angleTurn-=12;
+//            if(cubePosition==2)
+//            angleTurn+=12;
+//            else if(cubePosition==3)
+//                angleTurn-=12;
             driveUtils.scaledTurn(angleTurn, 0.4);
             sleep(2500);
             tsSampling.initVuforiaWebCam(false);

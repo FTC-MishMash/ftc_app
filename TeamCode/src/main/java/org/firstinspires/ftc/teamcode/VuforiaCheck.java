@@ -18,8 +18,8 @@ public class VuforiaCheck extends AutoMode {
         targetNav = new ImageTargets(this);
         driveUtils = new DriveUtilities(this);
         tsSampling = new TensorflowUtils(this);
-        tsSampling.initVuforiaWebCam(false);
-        targetNav.startTracking();
+//        tsSampling.initVuforiaWebCam(false);
+//        targetNav.startTracking();
 //        tsSampling.initVuforiaWebCam(true);
 //
 //        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
@@ -38,17 +38,17 @@ double power=0.3;
         double angle=280;
         while (opModeIsActive()) {
 //            telemetry.addData("pos",targetNav.getPositions());
-//            telemetry.addData("left: ", distLeft);
-//            telemetry.addData("right: ", distRight);
-//            telemetry.addData("pow: ", power);
-            float[] pos=targetNav.getPositions();
-            telemetry.addData("pos: ",targetNav.getPositions()==null);
-            if(pos!=null){
-                telemetry.addData("x: ",pos[0]);
-                telemetry.addData("Heading: ",pos[5]);
-
-            }
-            telemetry.addData("ANGLE: ",angle);
+            telemetry.addData("left: ", distLeft);
+            telemetry.addData("right: ", distRight);
+            telemetry.addData("pow: ", power);
+           //float[] pos=targetNav.getPositions();
+//            telemetry.addData("pos: ",targetNav.getPositions()==null);
+//            if(pos!=null){
+//                telemetry.addData("x: ",pos[0]);
+//                telemetry.addData("Heading: ",pos[5]);
+//
+//            }
+//            telemetry.addData("ANGLE: ",angle);
             telemetry.update();
             if (gamepad1.dpad_up) {
 
@@ -82,10 +82,9 @@ double power=0.3;
                 sleep(40);
             }
             if (gamepad1.a)
-                driveUtils.scaledTurn(angle,0.35);
-//                driveUtils.driveByEncoderRoverRuckus(distRight, distLeft, power, false);
-            if(gamepad1.left_bumper)
-                          targetNav.searchImage(2, -0.23);
+                driveUtils.driveByEncoderRoverRuckus(distRight, distLeft, power, false);
+//            if(gamepad1.left_bumper)
+//                          targetNav.searchImage(2, -0.23);
 
 
 //                tsSampling.followCubeRecognision(0.5);
