@@ -44,7 +44,9 @@ public class DriveRoverRuckus extends OpMode {
     int a = 0;
     boolean auto = false;
     boolean lock = false;
+    boolean linear = false;
     public int[] shaftEncoder = new int[2];
+    int linearEncoder = 0;
 
     /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
@@ -80,13 +82,31 @@ public class DriveRoverRuckus extends OpMode {
 
         //   else
         if (gamepad2.right_stick_y > 0) {
+            linear = true;
             robot.linear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.linear.setPower(1);
+            linearEncoder = robot.linear.getCurrentPosition();
         } else if (gamepad2.right_stick_y < 0) {
+            linear = true;
             robot.linear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.linear.setPower(-1);
+            linearEncoder = robot.linear.getCurrentPosition();
 
-        } else if (gamepad2.y) {
+        } else if (gamepad2.right_stick_y == 0) {
+            linear = false;
+
+
+        }
+
+        else if (linear == false) {
+
+            robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.linear.setTargetPosition(linearEncoder);
+            robot.linear.setPower(0.7);
+
+        } else if (gamepad2.a) {
+
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -98,21 +118,16 @@ public class DriveRoverRuckus extends OpMode {
             if (robot.shaft[0].getCurrentPosition() >= 2380 && robot.shaft[1].getCurrentPosition() >= 2380) {
                 robot.shaft[0].setPower(0);
                 robot.shaft[1].setPower(0);
-            }
-
-
-            else if (gamepad2.a) {
-                auto = true;
+            } else if (gamepad2.y) {
                 robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.shaft[0].setTargetPosition(2300);
-                robot.shaft[1].setTargetPosition(2300);
+                robot.shaft[0].setTargetPosition(200);
+                robot.shaft[1].setTargetPosition(200);
                 robot.shaft[0].setPower(1);
                 robot.shaft[1].setPower(1);
                 if (robot.shaft[0].getCurrentPosition() >= 2280 && robot.shaft[0].getCurrentPosition() >= 2280) {
-                    robot.linear.setTargetPosition(-650);
-                    robot.linear.setPower(1);
+
                 }
 
 
@@ -143,9 +158,9 @@ public class DriveRoverRuckus extends OpMode {
             shaftEncoder[0] = robot.shaft[0].getCurrentPosition();
             shaftEncoder[1] = robot.shaft[1].getCurrentPosition();
 
-        }
-
-        else if (lock = false) {
+        } else if (lock = false) {
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[0].setTargetPosition(shaftEncoder[0]);
