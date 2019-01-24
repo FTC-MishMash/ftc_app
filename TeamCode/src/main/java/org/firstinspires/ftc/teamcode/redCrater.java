@@ -49,7 +49,9 @@ public class redCrater extends AutoMode {
             int cubePosition = 0;
             cubePosition = tsSampling.searchCube(0.33, 335, 23);
             int dist = 8;
-            sleep(1000);
+            telemetry.addData("Gold mineral position: ",cubePosition);
+            telemetry.update();
+            sleep(1200);
             tsSampling.followCubeRecognision(0.16);//start power
 
             if (tfod != null) {
@@ -80,10 +82,7 @@ public class redCrater extends AutoMode {
             tsSampling.initVuforiaWebCam(false);
             targetNav.startTracking();
             sleep(1000);
-//
-////            צריך להשתמש בcubePosition
-////            פונקציות של מור
-//            //   targetNav.vuforia = vuforia;
+
             float[] pos = targetNav.getPositions();
             telemetry.addData("pos null: ", pos == null);
             telemetry.update();
