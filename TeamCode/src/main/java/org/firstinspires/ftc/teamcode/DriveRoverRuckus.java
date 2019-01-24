@@ -44,7 +44,7 @@ public class DriveRoverRuckus extends OpMode {
     int a = 0;
     boolean auto = false;
     boolean lock = false;
-    public int [] shaftEncoder = new int[2] ;
+    public int[] shaftEncoder = new int[2];
 
     /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
@@ -78,27 +78,6 @@ public class DriveRoverRuckus extends OpMode {
         telemetry.update();
 
 
-//        if (gamepad2.a) {
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            robot.shaft[0].setTargetPosition(1500);
-//            robot.shaft[1].setTargetPosition(1500);
-//            robot.shaft[0].setPower(1);
-//            robot.shaft[1].setPower(1);
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//        } else if (gamepad2.b) {
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            robot.shaft[0].setTargetPosition(700);
-//            robot.shaft[1].setTargetPosition(700);
-//            robot.shaft[0].setPower(0.6);
-//            robot.shaft[1].setPower(0.6);
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//        }
         //   else
         if (gamepad2.right_stick_y > 0) {
             robot.linear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -121,12 +100,7 @@ public class DriveRoverRuckus extends OpMode {
                 robot.shaft[1].setPower(0);
             }
 
-//            else if (gamepad2.a){
-//                int a = 1;
-//            }
-//            else if (gamepad2.b && a == 1){
-//                int a = 0;
-//            }
+
             else if (gamepad2.a) {
                 auto = true;
                 robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -137,7 +111,8 @@ public class DriveRoverRuckus extends OpMode {
                 robot.shaft[0].setPower(1);
                 robot.shaft[1].setPower(1);
                 if (robot.shaft[0].getCurrentPosition() >= 2280 && robot.shaft[0].getCurrentPosition() >= 2280) {
-
+                    robot.linear.setTargetPosition(-650);
+                    robot.linear.setPower(1);
                 }
 
 
@@ -154,7 +129,7 @@ public class DriveRoverRuckus extends OpMode {
             robot.shaft[0].setPower(1);
             robot.shaft[1].setPower(1);
             robot.inTake.setPower(1);
-            if (robot.shaft[0].getCurrentPosition() <= 300 && robot.shaft[1].getCurrentPosition() <= 300) {
+            if (robot.shaft[0].getCurrentPosition() <= 200 && robot.shaft[1].getCurrentPosition() <= 200) {
                 robot.linear.setPower(1);
             }
 //
@@ -162,21 +137,15 @@ public class DriveRoverRuckus extends OpMode {
             speed = 0.5;
         } else if (gamepad1.b) {
             speed = 1;
-        }
-//        else if (gamepad2.a){
-//            robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            robot.linear.setTargetPosition(10);
-//            robot.linear.setPower(1);
-//            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        }else if(gamepad2.b){
-//            robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            robot.linear.setTargetPosition(950);
-//            robot.linear.setPower(1);
-//            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        else if (lock =true) {
+        } else if (lock = true) {
+
+
             shaftEncoder[0] = robot.shaft[0].getCurrentPosition();
             shaftEncoder[1] = robot.shaft[1].getCurrentPosition();
-        } else if (lock =false) {
+
+        }
+
+        else if (lock = false) {
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[0].setTargetPosition(shaftEncoder[0]);
@@ -186,16 +155,16 @@ public class DriveRoverRuckus extends OpMode {
 
 
         } else if (gamepad2.left_stick_y < 0) {
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-             lock = true;
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            lock = true;
             robot.shaft[0].setPower(1);
             robot.shaft[1].setPower(1);
 
         } else if (gamepad2.left_stick_y > 0) {
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-             lock = true;
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            lock = true;
             robot.shaft[0].setPower(-1);
             robot.shaft[1].setPower(-1);
 
@@ -234,15 +203,7 @@ public class DriveRoverRuckus extends OpMode {
             robot.shaft[1].setTargetPosition(2550);
             robot.shaft[0].setPower(1);
             robot.shaft[1].setPower(1);
-        }
-//        } else if (gamepad2.y) {
-//            robot.shaft[0].setTargetPosition(7666);
-//            robot.shaft[1].setTargetPosition(7666);
-//            robot.shaft[0].setPower(1);
-//            robot.shaft[1].setPower(1);
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        else {
+        } else {
             if (robot.shaft[0].getCurrentPosition() > 20 &&
                     robot.shaft[1].getCurrentPosition() > 20 &&
                     gamepad2.left_stick_y == 0) {
@@ -264,14 +225,6 @@ public class DriveRoverRuckus extends OpMode {
 
     }
 
-
-    void Sleep(int milisecond) {
-        try {
-            sleep(milisecond);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void stop() {

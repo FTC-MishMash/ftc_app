@@ -33,6 +33,7 @@ public class VuforiaCheck extends AutoMode {
         waitForStart();
         //LandInAuto();
 double power=0.3;
+int motor=0;
         int distLeft = 10;
         int distRight = 10;
         double angle=280;
@@ -41,7 +42,9 @@ double power=0.3;
             telemetry.addData("left: ", distLeft);
             telemetry.addData("right: ", distRight);
             telemetry.addData("pow: ", power);
-           //float[] pos=targetNav.getPositions();
+            telemetry.addData("motor: ", motor);
+
+            //float[] pos=targetNav.getPositions();
 //            telemetry.addData("pos: ",targetNav.getPositions()==null);
 //            if(pos!=null){
 //                telemetry.addData("x: ",pos[0]);
@@ -57,6 +60,13 @@ double power=0.3;
                 sleep(40);
                 angle+=5;
             }
+            if(gamepad1.left_bumper) {
+                motor++;
+                sleep(70);
+            }
+            if(gamepad1.right_bumper) {
+                motor--;
+            sleep(70);}
             if (gamepad1.dpad_down) {
                 distLeft -= 1;
                 distRight -= 1;
@@ -82,7 +92,7 @@ double power=0.3;
                 sleep(40);
             }
             if (gamepad1.a)
-                driveUtils.driveByEncoderRoverRuckus(distRight, distLeft, power, false);
+                driveUtils.driveByEncoderRoverRuckus(distRight, distLeft, power, false,motor);
 //            if(gamepad1.left_bumper)
 //                          targetNav.searchImage(2, -0.23);
 
