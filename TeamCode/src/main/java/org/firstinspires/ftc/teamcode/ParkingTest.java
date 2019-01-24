@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @Autonomous (name = "ParkingTest")
 
 public class ParkingTest extends LinearOpMode  {
+
     Robot robot;
     AutoMode auto;
     public void Parking(int targetPositionEncoder) {
@@ -22,8 +23,10 @@ public class ParkingTest extends LinearOpMode  {
         robot.shaft[1].setPower(0.6);
     }
     @Override
+
     public void runOpMode() throws InterruptedException {
      waitForStart();
      Parking(3000);
+
     }
 }
