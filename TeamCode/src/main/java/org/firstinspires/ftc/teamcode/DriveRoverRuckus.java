@@ -43,7 +43,9 @@ public class DriveRoverRuckus extends OpMode {
     double speed = 1;
     int a = 0;
     boolean auto = false;
-    int l = 0;
+    boolean lock = false;
+    public int [] shaftEncoder = new int[2] ;
+
     /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
      */
@@ -114,7 +116,7 @@ public class DriveRoverRuckus extends OpMode {
             robot.shaft[1].setTargetPosition(2400);
             robot.shaft[0].setPower(1);
             robot.shaft[1].setPower(1);
-            if (robot.shaft[0].getCurrentPosition() >=2380 && robot.shaft[1].getCurrentPosition() >= 2380) {
+            if (robot.shaft[0].getCurrentPosition() >= 2380 && robot.shaft[1].getCurrentPosition() >= 2380) {
                 robot.shaft[0].setPower(0);
                 robot.shaft[1].setPower(0);
             }
@@ -125,7 +127,7 @@ public class DriveRoverRuckus extends OpMode {
 //            else if (gamepad2.b && a == 1){
 //                int a = 0;
 //            }
-            else if (gamepad2.a){
+            else if (gamepad2.a) {
                 auto = true;
                 robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -134,7 +136,7 @@ public class DriveRoverRuckus extends OpMode {
                 robot.shaft[1].setTargetPosition(2300);
                 robot.shaft[0].setPower(1);
                 robot.shaft[1].setPower(1);
-                if (robot.shaft[0].getCurrentPosition()>= 2280 && robot.shaft[0].getCurrentPosition()>= 2280){
+                if (robot.shaft[0].getCurrentPosition() >= 2280 && robot.shaft[0].getCurrentPosition() >= 2280) {
 
                 }
 
@@ -152,14 +154,13 @@ public class DriveRoverRuckus extends OpMode {
             robot.shaft[0].setPower(1);
             robot.shaft[1].setPower(1);
             robot.inTake.setPower(1);
-            if (robot.shaft[0].getCurrentPosition() <= 300 && robot.shaft[1].getCurrentPosition() <= 300){
+            if (robot.shaft[0].getCurrentPosition() <= 300 && robot.shaft[1].getCurrentPosition() <= 300) {
                 robot.linear.setPower(1);
             }
 //
-        }
-     else if (gamepad1.a) {
-        speed = 0.5;
-    } else if (gamepad1.b) {
+        } else if (gamepad1.a) {
+            speed = 0.5;
+        } else if (gamepad1.b) {
             speed = 1;
         }
 //        else if (gamepad2.a){
@@ -172,19 +173,34 @@ public class DriveRoverRuckus extends OpMode {
 //            robot.linear.setTargetPosition(950);
 //            robot.linear.setPower(1);
 //            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        }
-        else if (gamepad2.left_stick_y < 0) {
+        else if (lock =true) {
+            shaftEncoder[0] = robot.shaft[0].getCurrentPosition();
+            shaftEncoder[1] = robot.shaft[1].getCurrentPosition();
+        } else if (lock =false) {
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[0].setTargetPosition(shaftEncoder[0]);
+            robot.shaft[1].setTargetPosition(shaftEncoder[1]);
+            robot.shaft[0].setPower(0.5);
+            robot.shaft[1].setPower(0.5);
+
+
+        } else if (gamepad2.left_stick_y < 0) {
 //            robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //            robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+             lock = true;
             robot.shaft[0].setPower(1);
             robot.shaft[1].setPower(1);
-            int l = 1;
+
         } else if (gamepad2.left_stick_y > 0) {
 //            robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //            robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+             lock = true;
             robot.shaft[0].setPower(-1);
             robot.shaft[1].setPower(-1);
-            int l = 1;
+
+        } else if (gamepad2.left_stick_y == 0) {
+            lock = false;
         } else if (gamepad2.right_bumper) {
             robot.inTake.setPower(1);
         } else if (gamepad2.right_trigger != 0) {
