@@ -42,10 +42,10 @@ public class DriveRoverRuckus extends OpMode {
 
     double speed = 1;
     int a = 0;
-    boolean auto = false;
-    boolean lock = false;
+
+    boolean shaft = false;
     boolean linear = false;
-    public int[] shaftEncoder = new int[2];
+    int shaftEncoder = 0;
     int linearEncoder = 0;
 
     /*
@@ -96,9 +96,7 @@ public class DriveRoverRuckus extends OpMode {
             linear = false;
 
 
-        }
-
-        else if (linear == false) {
+        } else if (linear == false) {
 
             robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -134,11 +132,12 @@ public class DriveRoverRuckus extends OpMode {
             }
 
         } else if (gamepad2.b) {
-            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
             robot.inTake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.linear.setTargetPosition(-1000);
+            linearEncoder = -1000;
+
             robot.shaft[0].setTargetPosition(200);
             robot.shaft[1].setTargetPosition(200);
             robot.shaft[0].setPower(1);
@@ -152,19 +151,17 @@ public class DriveRoverRuckus extends OpMode {
             speed = 0.5;
         } else if (gamepad1.b) {
             speed = 1;
-        } else if (lock = true) {
+        } else if (shaft = true) {
 
+            shaftEncoder = robot.shaft[0].getCurrentPosition();
 
-            shaftEncoder[0] = robot.shaft[0].getCurrentPosition();
-            shaftEncoder[1] = robot.shaft[1].getCurrentPosition();
-
-        } else if (lock = false) {
+        } else if (shaft = false) {
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.shaft[0].setTargetPosition(shaftEncoder[0]);
-            robot.shaft[1].setTargetPosition(shaftEncoder[1]);
+            robot.shaft[0].setTargetPosition(shaftEncoder);
+            robot.shaft[1].setTargetPosition(shaftEncoder);
             robot.shaft[0].setPower(0.5);
             robot.shaft[1].setPower(0.5);
 
@@ -172,45 +169,34 @@ public class DriveRoverRuckus extends OpMode {
         } else if (gamepad2.left_stick_y < 0) {
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            lock = true;
+            shaft = true;
             robot.shaft[0].setPower(1);
             robot.shaft[1].setPower(1);
 
         } else if (gamepad2.left_stick_y > 0) {
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            lock = true;
+            shaft = true;
             robot.shaft[0].setPower(-1);
             robot.shaft[1].setPower(-1);
 
         } else if (gamepad2.left_stick_y == 0) {
-            lock = false;
+            shaft = false;
         } else if (gamepad2.right_bumper) {
             robot.inTake.setPower(1);
         } else if (gamepad2.right_trigger != 0) {
             robot.inTake.setPower(-1);
+
         } else if (gamepad2.left_bumper) {
-            robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.shaft[0].setTargetPosition(0);
-            robot.shaft[1].setTargetPosition(0);
-            robot.shaft[0].setPower(1);
-            robot.shaft[1].setPower(1);
-            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.linear.setTargetPosition(6700);
-//            robot.linear.setPower(1);
-//            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            shaftEncoder = 0;
+
+            linearEncoder=6700;
+
 
         } else if (gamepad2.x) {
-            robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.shaft[0].setTargetPosition(0);
-            robot.shaft[1].setTargetPosition(0);
-            robot.shaft[0].setPower(1);
-            robot.shaft[1].setPower(1);
-            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            shaftEncoder=0;
+
         } else if (gamepad2.left_trigger != 0) {
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);

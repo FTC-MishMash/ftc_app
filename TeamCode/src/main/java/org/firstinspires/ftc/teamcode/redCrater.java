@@ -61,7 +61,7 @@ public class redCrater extends AutoMode {
             telemetry.addLine("finished following");
             telemetry.update();
             sleep(1500);
-            driveUtils.driveByEncoderRoverRuckus(9, 9, 0.32, false);
+            driveUtils.driveByEncoderRoverRuckus(9, 9, -0.32, false);
             telemetry.addLine("finished driving into cube");
             telemetry.update();
             sleep(2000);
