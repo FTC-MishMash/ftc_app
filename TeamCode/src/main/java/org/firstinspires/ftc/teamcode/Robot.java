@@ -13,12 +13,13 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 
 public class Robot {
-    public static String drive;
-    public DcMotor[][] driveTrain;
+
+    public DcMotor[][] driveTrain = new DcMotor[2][2];
     public DcMotor[] shaft = new DcMotor[2];
     public DcMotor linear;
     public DcMotor inTake;
     public Servo linearLock;
+    public Servo hanging;
     public ColorSensor colorRightFront;
     public ColorSensor colorLeftFront;
     float hsvValuesLeftFront[] = {0F, 0F, 0F};
@@ -33,24 +34,26 @@ public class Robot {
 
 
     public Robot(HardwareMap hardwareMap) {
-        driveTrain = new DcMotor[2][2];
-//        shaft = new DcMotor[2];
-//        linear = new DcMotor[2];
+
         inTake = hardwareMap.get(DcMotor.class, "inTake");
+
+        hanging = hardwareMap.get(Servo.class, "hanging");
 
         linear = hardwareMap.get(DcMotor.class, "linearLeft");
         shaft[0] = hardwareMap.get(DcMotor.class, "shaftRight");
         shaft[1] = hardwareMap.get(DcMotor.class, "shaftLeft");
         linearLock = hardwareMap.get(Servo.class, "LinearServoLock");
 
-//        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
-//        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
+        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
+        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
 
         driveTrain[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
         driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
         driveTrain[0][1] = hardwareMap.get(DcMotor.class, "rightFront");
         driveTrain[1][1] = hardwareMap.get(DcMotor.class, "rightBack");
 
+        linear.setDirection(DcMotorSimple.Direction.FORWARD);
+        inTake.setDirection(DcMotorSimple.Direction.FORWARD);
         shaft[0].setDirection(DcMotorSimple.Direction.FORWARD);
         shaft[1].setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -72,14 +75,7 @@ public class Robot {
         shaft[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         linear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
-//        shaft[0].setTargetPosition(0);
-//        shaft[1].setTargetPosition(0);
-//        linear.setTargetPosition(0);
-//
-//        shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        inTake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
