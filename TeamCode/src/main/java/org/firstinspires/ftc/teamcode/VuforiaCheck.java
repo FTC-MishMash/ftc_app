@@ -33,7 +33,7 @@ public class VuforiaCheck extends AutoMode {
 //        //motorLock();
         waitForStart();
         //LandInAuto();
-        double power = 0.3;
+        double power = 0.45;
         int motor = 0;
         int distLeft = 10;
         int distRight = 10;
@@ -56,7 +56,10 @@ public class VuforiaCheck extends AutoMode {
 //            telemetry.addData("ANGLE: ",angle);
             telemetry.update();
             if (gamepad1.left_stick_button){
-                driveUtils.scaledTurn(angle,0.4);
+                driveUtils.TurnWithEncoder(angle,power);
+            }
+            if (gamepad1.right_stick_button){
+                driveUtils.scaledTurn(angle,power);
             }
             if (gamepad1.dpad_up) {
 

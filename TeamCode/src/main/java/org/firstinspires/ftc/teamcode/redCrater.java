@@ -47,10 +47,12 @@ public class redCrater extends AutoMode {
 //        getOffTheClimb
 
             int cubePosition = 0;
-            cubePosition = tsSampling.searchCube(0.33, 300, 23);
+            cubePosition = tsSampling.searchCube(0.33, 335, 23);
 
             telemetry.addData("Gold mineral position: ", cubePosition);
             telemetry.update();
+            if (tfod != null)
+                tfod.activate();
             sleep(1200);
             tsSampling.followCubeRecognision(0.16);//start power
 
@@ -61,7 +63,7 @@ public class redCrater extends AutoMode {
             telemetry.addLine("finished following");
             telemetry.update();
             sleep(1500);
-            driveUtils.driveByEncoderRoverRuckus(9, 9, 0.36, false);
+            driveUtils.driveByEncoderRoverRuckus(14, 14, 0.36, false);
             telemetry.addLine("finished driving into cube");
             telemetry.update();
             sleep(2500);
@@ -69,15 +71,15 @@ public class redCrater extends AutoMode {
             telemetry.addLine("finished driving out of cube");
             telemetry.update();
             sleep(2000);
-//
+
             driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
             sleep(2500);
-            double angleTurn = 270;
+            double angleTurn = 265;
 //            if(cubePosition==2)
 //            angleTurn+=12;
 //            else if(cubePosition==3)
 //                angleTurn-=12;
-            driveUtils.scaledTurn(angleTurn, 0.4);
+            driveUtils.TurnWithEncoder(angleTurn, 0.4);
             sleep(2500);
             tsSampling.initVuforiaWebCam(false);
             targetNav.startTracking();
