@@ -37,15 +37,15 @@ public class Robot {
 
         inTake = hardwareMap.get(DcMotor.class, "inTake");
 
-        hanging = hardwareMap.get(Servo.class, "hanging");
+//        hanging = hardwareMap.get(Servo.class, "hanging");
+//        linearLock = hardwareMap.get(Servo.class, "LinearServoLock");
 
         linear = hardwareMap.get(DcMotor.class, "linearLeft");
         shaft[0] = hardwareMap.get(DcMotor.class, "shaftRight");
         shaft[1] = hardwareMap.get(DcMotor.class, "shaftLeft");
-        linearLock = hardwareMap.get(Servo.class, "LinearServoLock");
 
-        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
-        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
+//        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
+//        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
 
         driveTrain[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
         driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
@@ -54,12 +54,12 @@ public class Robot {
 
         linear.setDirection(DcMotorSimple.Direction.FORWARD);
         inTake.setDirection(DcMotorSimple.Direction.FORWARD);
-        shaft[0].setDirection(DcMotorSimple.Direction.FORWARD);
-        shaft[1].setDirection(DcMotorSimple.Direction.REVERSE);
+        shaft[0].setDirection(DcMotorSimple.Direction.REVERSE);
+        shaft[1].setDirection(DcMotorSimple.Direction.FORWARD);
 
-        driveTrain[0][0].setDirection(DcMotorSimple.Direction.FORWARD);
+        driveTrain[0][0].setDirection(DcMotorSimple.Direction.REVERSE);
         driveTrain[1][0].setDirection(DcMotorSimple.Direction.FORWARD);
-        driveTrain[0][1].setDirection(DcMotorSimple.Direction.REVERSE);
+        driveTrain[0][1].setDirection(DcMotorSimple.Direction.FORWARD);
         driveTrain[1][1].setDirection(DcMotorSimple.Direction.FORWARD);
 
         driveTrain[0][0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
