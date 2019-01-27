@@ -138,8 +138,8 @@ public class DriveRoverRuckus extends OpMode {
             shaft = true;
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            robot.shaft[0].setPower(1);
-            robot.shaft[1].setPower(1);
+            robot.shaft[0].setPower(-1);
+            robot.shaft[1].setPower(-1);
             shaftEncoder = robot.shaft[1].getCurrentPosition();
 
 
@@ -147,8 +147,8 @@ public class DriveRoverRuckus extends OpMode {
             shaft = true;
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            robot.shaft[0].setPower(-1);
-            robot.shaft[1].setPower(-1);
+            robot.shaft[0].setPower(1);
+            robot.shaft[1].setPower(1);
             shaftEncoder = robot.shaft[1].getCurrentPosition();
 
 
@@ -183,21 +183,21 @@ public class DriveRoverRuckus extends OpMode {
         if (!shaft) {//in progress when AUTO mode shaft turn ON
 //            robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //            robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.shaft[0].setTargetPosition(shaftEncoder);
-//            robot.shaft[1].setTargetPosition(shaftEncoder);
-//            robot.shaft[0].setPower(0.7);
-//            robot.shaft[1].setPower(0.7);
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[0].setTargetPosition(shaftEncoder);
+            robot.shaft[1].setTargetPosition(shaftEncoder);
+            robot.shaft[0].setPower(0.7);
+            robot.shaft[1].setPower(0.7);
             robot.shaft[0].setPower(0);
             robot.shaft[1].setPower(0);
         }
         if (!linear) {//in progress when AUTO mode turn ON
 
-//            robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            robot.linear.setTargetPosition(linearEncoder);
-//            robot.linear.setPower(0.7);
+            robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.linear.setTargetPosition(linearEncoder);
+            robot.linear.setPower(0.7);
            robot.linear.setPower(0);
 
         }
