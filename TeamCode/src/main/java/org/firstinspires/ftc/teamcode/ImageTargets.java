@@ -178,9 +178,9 @@ public class ImageTargets {
                 telemetry.addLine("case1");
                 telemetry.update();
                 currOpmode.sleep(1000);
-                driveUtilities.driveByEncoderRoverRuckus(-60, -50, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(-70, -60, power, true);
                 if (getPositions() == null)
-                    driveUtilities.driveByEncoderRoverRuckus(-50, -60, power, true);
+                    driveUtilities.driveByEncoderRoverRuckus(-50, -70, power, true);
 
                 break;
             }
@@ -188,9 +188,9 @@ public class ImageTargets {
                 telemetry.addLine("case2");
                 telemetry.update();
                 currOpmode.sleep(1000);
-                driveUtilities.driveByEncoderRoverRuckus(-40, -35, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(-50, -35, power, true);
                 if (getPositions() == null)
-                    driveUtilities.driveByEncoderRoverRuckus(-35, -40, power, true);
+                    driveUtilities.driveByEncoderRoverRuckus(-35, -50, power, true);
 
                 break;
             }
@@ -198,9 +198,9 @@ public class ImageTargets {
                 telemetry.addLine("case3");
                 telemetry.update();
                 currOpmode.sleep(1000);
-                driveUtilities.driveByEncoderRoverRuckus(-25, -10, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(-30, -12, power, true);
                 if (getPositions() == null)
-                    driveUtilities.driveByEncoderRoverRuckus(-10, -25, power, true);
+                    driveUtilities.driveByEncoderRoverRuckus(-12, -30, power, true);
             }
         }
 //
@@ -257,7 +257,7 @@ public class ImageTargets {
             telemetry.update();
             currOpmode.sleep(1000);
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
-            while (currOpmode.opModeIsActive() && positions[0] <= 45) {
+            while (currOpmode.opModeIsActive() && positions[0] <= 60) {
                 positions = getPositions();
                 telemetry.addData("x:", positions[0]);
                 telemetry.update();

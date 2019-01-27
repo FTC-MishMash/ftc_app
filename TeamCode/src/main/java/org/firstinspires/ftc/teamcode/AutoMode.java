@@ -113,6 +113,7 @@ public class AutoMode extends LinearOpMode {
 
     }
 
+
     public int searchCube(double power, int turnAngleRight, int turnAngleLeft, DcMotor[][] motor, BNO055IMU imu) {
         int cubePosition = 0;
         if (tfod == null) {

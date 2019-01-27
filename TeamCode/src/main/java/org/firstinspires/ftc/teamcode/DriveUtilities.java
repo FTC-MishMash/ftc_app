@@ -307,6 +307,10 @@ public class DriveUtilities {
         }
         return angle;
     }
+    public void back_up_driveByImage(double power, int turnAngle, int driveDist) {
+        driveByEncoderRoverRuckus(driveDist,driveDist,power,false);
+        TurnWithEncoder(turnAngle,power);
+    }
 
     public void diffTurn(double diffAngle, double power) {
         double currAngle = robot.imu.getAngularOrientation(AxesReference.INTRINSIC,

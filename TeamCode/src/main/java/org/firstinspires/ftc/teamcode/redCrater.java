@@ -63,18 +63,18 @@ public class redCrater extends AutoMode {
             telemetry.addLine("finished following");
             telemetry.update();
             sleep(1500);
-            driveUtils.driveByEncoderRoverRuckus(14, 14, 0.36, false);
+            driveUtils.driveByEncoderRoverRuckus(35, 35, 0.36, false);
             telemetry.addLine("finished driving into cube");
             telemetry.update();
             sleep(2500);
-            driveUtils.driveByEncoderRoverRuckus(-20, -20, -0.36, false);
+            driveUtils.driveByEncoderRoverRuckus(-40, -40, -0.36, false);
             telemetry.addLine("finished driving out of cube");
             telemetry.update();
             sleep(2000);
 
             driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
             sleep(2500);
-            double angleTurn = 265;
+            double angleTurn = 245;
 //            if(cubePosition==2)
 //            angleTurn+=12;
 //            else if(cubePosition==3)
@@ -94,7 +94,7 @@ public class redCrater extends AutoMode {
                 telemetry.addData("start searching wait for click", cubePosition);
                 telemetry.update();
                 sleep(1200);
-                targetNav.searchImage(cubePosition, -0.20);
+                targetNav.searchImage(cubePosition, -0.25);
             }
 
 //            pos = targetNav.getPositions();//למה להשתמש בPOS ולא פשוט בפונקציה?
@@ -104,8 +104,9 @@ public class redCrater extends AutoMode {
 ////                driveUtils.driveByEncoderRoverRuckus(20, 20, 0.4);
 ////                driveUtils.scaledTurn(135, 0.3);
 ////            } else {
+            driveUtils.back_up_driveByImage(0.35, 135, 20 + cubePosition * 15);
             sleep(1000);
-            targetNav.driveToImage(-0.21);
+            targetNav.driveToImage(-0.25);
 //            }
 //            sleep(1000);
             //       driveUtils.driveByEncoderRoverRuckus(60, 60, 0.5,false);
