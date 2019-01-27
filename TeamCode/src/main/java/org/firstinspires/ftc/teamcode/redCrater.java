@@ -47,7 +47,7 @@ public class redCrater extends AutoMode {
 //        getOffTheClimb
 
             int cubePosition = 0;
-            cubePosition = tsSampling.searchCube(0.33, 335, 23);
+            cubePosition = tsSampling.searchCube(0.33, 300, 23);
 
             telemetry.addData("Gold mineral position: ", cubePosition);
             telemetry.update();
@@ -61,11 +61,11 @@ public class redCrater extends AutoMode {
             telemetry.addLine("finished following");
             telemetry.update();
             sleep(1500);
-            driveUtils.driveByEncoderRoverRuckus(9, 9, -0.32, false);
+            driveUtils.driveByEncoderRoverRuckus(9, 9, 0.36, false);
             telemetry.addLine("finished driving into cube");
             telemetry.update();
-            sleep(2000);
-            driveUtils.driveByEncoderRoverRuckus(-23, -23, -0.32, false);
+            sleep(2500);
+            driveUtils.driveByEncoderRoverRuckus(-20, -20, -0.36, false);
             telemetry.addLine("finished driving out of cube");
             telemetry.update();
             sleep(2000);
