@@ -193,14 +193,14 @@ public class AutoMode extends LinearOpMode {
 //        robot.shaft[0].setPower(1);
 //        robot.shaft[1].setPower(1);
 
-//        telemetry.addData("pitch", getAngularOriention().thirdAngle);
-//        telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
-//        telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
-//        telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
-//        telemetry.update();
+        telemetry.addData("pitch", getAngularOriention().thirdAngle);
+        telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
+        telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
+        telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
+        telemetry.update();
         while (opModeIsActive() && getAngularOriention().thirdAngle <= 0) {
-            if (robot.linear.getCurrentPosition() <= 175)
-                robot.linear.setPower(0);
+//            if (robot.linear.getCurrentPosition() <= 175)
+//                robot.linear.setPower(0);
 
             robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 400);
             robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 400);
@@ -216,8 +216,8 @@ public class AutoMode extends LinearOpMode {
 
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setTargetPosition(2450);
-        robot.shaft[1].setTargetPosition(2450);
+        robot.shaft[0].setTargetPosition(2700);
+        robot.shaft[1].setTargetPosition(2700);
         robot.shaft[0].setPower(1);
         robot.shaft[1].setPower(1);
 
@@ -241,7 +241,7 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[0].setPower(1);
         robot.shaft[1].setPower(1);
 
-        robot.linear.setTargetPosition(-1000);
+        robot.linear.setTargetPosition(-750);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.linear.setPower(0.6);
         sleep(300);
@@ -251,11 +251,11 @@ public class AutoMode extends LinearOpMode {
         robot.linear.setPower(1);
         sleep(250);
 
-        robot.linear.setTargetPosition(-1000);
+        robot.linear.setTargetPosition(-750);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.linear.setPower(1);
         double t1 = getRuntime();
-        while (opModeIsActive() && robot.linear.getCurrentPosition() >= -550 && getRuntime() - t1 <= 0.4) {
+        while (opModeIsActive() && robot.linear.getCurrentPosition() >= -725 && getRuntime() - t1 <= 0.4) {
             telemetry.addData("pitch", getAngularOriention().thirdAngle);
             telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
             telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
@@ -269,6 +269,7 @@ public class AutoMode extends LinearOpMode {
         robot.linear.setPower(0);
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
+        robot.hanging.setPosition(0);
 
 
         setMotorPower(new double[][]{{0.3, 0.3}, {0.3, 0.3}});
@@ -301,28 +302,30 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
-    public void motorLock() {
-        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.linear.setTargetPosition(0);
-        robot.shaft[0].setTargetPosition(0);
-        robot.shaft[1].setTargetPosition(0);
-
-        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        robot.linear.setPower(0.7);
-        robot.shaft[0].setPower(1);
-        robot.shaft[1].setPower(1);
-        while (!isStarted()) {
-            telemetry.addData("pitch", getAngularOriention().thirdAngle);
-            telemetry.update();
-        }
+    public void servo(){
+        robot.hanging.setPosition(0.5);
     }
+//    public void motorLock() {
+//        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//
+//        robot.linear.setTargetPosition(0);
+//        robot.shaft[0].setTargetPosition(0);
+//        robot.shaft[1].setTargetPosition(0);
+//
+//        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//        robot.linear.setPower(0.7);
+//        robot.shaft[0].setPower(1);
+//        robot.shaft[1].setPower(1);
+//        while (!isStarted()) {
+//            telemetry.addData("pitch", getAngularOriention().thirdAngle);
+//            telemetry.update();
+//        }
+//    }
 
     public void servoLock(int positionServoLock) {
         robot.linearLock.setPosition(positionServoLock);
@@ -839,7 +842,7 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[0].setTargetPosition(175);
         robot.shaft[1].setTargetPosition(175);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[1].setMode(DcMotor.RunMode.RUN_ TO_POSITION);
         robot.shaft[0].setPower(0.3);
         robot.shaft[1].setPower(0.3);
         sleep(750);

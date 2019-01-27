@@ -76,16 +76,27 @@ public class DriveRoverRuckus extends OpMode {
         } else if (gamepad1.b) {
             speed = 1;
         }
-        if (gamepad2.back && gamepad2.y){
-            robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
+// SHAFT MANUAL MOVEMENT
+        if (gamepad2.left_stick_y != 0) {//hand mode shaft turn ON
+            shaft = true;
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            if (gamepad2.right_trigger>0) {
+                robot.shaft[0].setPower(Math.signum(gamepad2.left_stick_y)*(0.5));
+                robot.shaft[1].setPower(Math.signum(gamepad2.left_stick_y)*(0.5));
+            }
+            else
+            {
+                robot.shaft[0].setPower(Math.signum(gamepad2.left_stick_y));
+                robot.shaft[1].setPower(Math.signum(gamepad2.left_stick_y));
+            }
+            shaftEncoder = robot.shaft[1].getCurrentPosition();
         }
-        if (gamepad2.back && gamepad2.x){
-            robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        else
+            shaft = false;
+
+        if (gamepad2.x) {
+            shaftEncoder = 0;
 
         }
            if (gamepad2.right_stick_y > 0) {//hand - linear
@@ -116,15 +127,15 @@ public class DriveRoverRuckus extends OpMode {
         }
         if (gamepad2.a) {
 
-            shaftEncoder = -2400;
+            shaftEncoder = -2700;
 
         }  else if (gamepad2.y) {
-            shaftEncoder = 200;
+            shaftEncoder = -200;
 
 
         }else if (gamepad2.b) {
 
-            shaftEncoder = 200;
+            shaftEncoder = -200;
 
             if (robot.shaft[0].getCurrentPosition() <= 185) {
                 linearEncoder = -1000;
@@ -141,33 +152,12 @@ public class DriveRoverRuckus extends OpMode {
 
 
 
-        }  if (gamepad2.left_stick_y < 0) {//hand mode shaft turn ON
-            shaft = true;
-            robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            robot.shaft[0].setPower(-1);
-            robot.shaft[1].setPower(-1);
-            shaftEncoder = robot.shaft[1].getCurrentPosition();
-
-
-        } else if (gamepad2.left_stick_y > 0) {//hand mode shaft turn ON
-            shaft = true;
-            robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            robot.shaft[0].setPower(1);
-            robot.shaft[1].setPower(1);
-            shaftEncoder = robot.shaft[1].getCurrentPosition();
-
-
-        } else if (gamepad2.left_stick_y == 0) {
-
-            shaft = false;
 
 
         }  if (gamepad2.right_bumper) {
             robot.inTake.setPower(1);
         }  if (gamepad2.right_trigger != 0) {
-            robot.inTake.setPower(-1);
+            //robot.inTake.setPower(-1);
 
         }  if (gamepad2.left_bumper) {
 
@@ -176,11 +166,13 @@ public class DriveRoverRuckus extends OpMode {
             linearEncoder = 6700;
 
 
-        }  if (gamepad2.x) {
+        }    if (gamepad2.left_trigger != 0) {
+            DcMotor.RunMode currMode = robot.shaft[0].getMode();
+            robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.shaft[0].setMode(currMode);
+            robot.shaft[1].setMode(currMode);
             shaftEncoder = 0;
-
-        }  if (gamepad2.left_trigger != 0) {
-            shaftEncoder = 2550;
         }
 
         if (!gamepad2.right_bumper && gamepad2.right_trigger == 0 && !gamepad2.y)//TODO: add all the button that use intake
@@ -237,6 +229,12 @@ public class DriveRoverRuckus extends OpMode {
     }
 
     private void tankDriveTrainSetPower(double speed) {
+
+        if (gamepad1.right_trigger>0)
+            speed = 0.7;
+        else
+            speed = 1;
+
         robot.driveTrain[0][1].setPower(speed * (-gamepad1.left_stick_y));
         robot.driveTrain[0][0].setPower(speed * (-gamepad1.right_stick_y));
         robot.driveTrain[1][1].setPower(speed * (-gamepad1.left_stick_y));

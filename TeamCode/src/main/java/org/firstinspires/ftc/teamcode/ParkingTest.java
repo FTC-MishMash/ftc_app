@@ -14,25 +14,27 @@ public class ParkingTest extends AutoMode {
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        driveUtils.driveByEncoderRoverRuckus(175, 175, 0.5, false);
+        driveUtils.driveByEncoderRoverRuckus(160, 160, 0.5, false);
         robot.shaft[0].setTargetPosition(targetPositionEncoder);//250
         robot.shaft[1].setTargetPosition(targetPositionEncoder);
 
+        robot.shaft[0].setTargetPosition(750);
+        robot.shaft[1].setTargetPosition(750);
         robot.shaft[0].setPower(0.6);
         robot.shaft[1].setPower(0.6);
-        if (robot.shaft[0].getCurrentPosition() >= 2950 && robot.shaft[1].getCurrentPosition() >= 2950){
+        while (robot.shaft[0].isBusy() && robot.shaft[1].isBusy()) ;
+            robot.linear.setTargetPosition(-750);
+            while (robot.linear.isBusy());
 
-            robot.shaft[0].setPower(0);
-            robot.shaft[1].setPower(0);
 
-        }
     }
+
 
     @Override
 
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
-        driveUtils=new DriveUtilities(this);
+        driveUtils = new DriveUtilities(this);
 
         waitForStart();
         Parking(3000);
