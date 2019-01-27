@@ -179,8 +179,8 @@ public class ImageTargets {
                 telemetry.update();
                 currOpmode.sleep(1000);
                 driveUtilities.driveByEncoderRoverRuckus(-60, -50, power, true);
-                if(getPositions()==null)
-                driveUtilities.driveByEncoderRoverRuckus(-50, -60, power, true);
+                if (getPositions() == null)
+                    driveUtilities.driveByEncoderRoverRuckus(-50, -60, power, true);
 
                 break;
             }
@@ -189,7 +189,7 @@ public class ImageTargets {
                 telemetry.update();
                 currOpmode.sleep(1000);
                 driveUtilities.driveByEncoderRoverRuckus(-40, -35, power, true);
-                if(getPositions()==null)
+                if (getPositions() == null)
                     driveUtilities.driveByEncoderRoverRuckus(-35, -40, power, true);
 
                 break;
@@ -199,8 +199,9 @@ public class ImageTargets {
                 telemetry.update();
                 currOpmode.sleep(1000);
                 driveUtilities.driveByEncoderRoverRuckus(-25, -10, power, true);
-                if(getPositions()==null)
-                    driveUtilities.driveByEncoderRoverRuckus(-10, -25, power, true);            }
+                if (getPositions() == null)
+                    driveUtilities.driveByEncoderRoverRuckus(-10, -25, power, true);
+            }
         }
 //
 //        runtime.reset();//TODO: delete this
@@ -256,7 +257,7 @@ public class ImageTargets {
             telemetry.update();
             currOpmode.sleep(1000);
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
-            while (currOpmode.opModeIsActive() && positions[0] <= 54) {
+            while (currOpmode.opModeIsActive() && positions[0] <= 45) {
                 positions = getPositions();
                 telemetry.addData("x:", positions[0]);
                 telemetry.update();
@@ -266,15 +267,15 @@ public class ImageTargets {
             telemetry.update();
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
             currOpmode.sleep(1000);
-            double heading=0;
-            if(positions!=null);
+            double heading = 0;
+            if (positions != null) ;
             {
                 heading = positions[5];
-                telemetry.addData("got to heading: ",heading);
+                telemetry.addData("got to heading: ", heading);
                 telemetry.update();
-                currOpmode.sleep(2000);
+                currOpmode.sleep(3000);
             }
-            driveUtilities.diffTurn(90+ heading, 0.15);
+            driveUtilities.diffTurn(90 + heading, 0.15);
         }
     }
 }

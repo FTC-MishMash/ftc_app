@@ -765,7 +765,7 @@ public class AutoMode extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-       // tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        // tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
 
     }
@@ -860,6 +860,7 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[0].setPower(0.3);
         robot.shaft[1].setPower(0.3);
     }
+
 
     public void ScaledTurn(double goalAngle, DcMotor[][] driveMotors, BNO055IMU imu,
                            double power) {
