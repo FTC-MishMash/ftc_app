@@ -48,7 +48,7 @@ public class redCrater extends AutoMode {
 
             int cubePosition = 0;
             cubePosition = tsSampling.searchCube(0.33, 335, 23);
-            int dist = 8;
+
             telemetry.addData("Gold mineral position: ",cubePosition);
             telemetry.update();
             sleep(1200);
