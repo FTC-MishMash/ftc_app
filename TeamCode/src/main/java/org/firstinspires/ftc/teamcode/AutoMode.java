@@ -176,7 +176,7 @@ public class AutoMode extends LinearOpMode {
         return cubePosition;
     }
 
-    private Orientation getAngularOriention() {
+    public Orientation getAngularOriention() {
         return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
 

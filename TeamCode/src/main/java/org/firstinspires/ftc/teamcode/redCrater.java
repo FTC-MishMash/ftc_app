@@ -36,7 +36,7 @@ public class redCrater extends AutoMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
             telemetry.update();
         }
-        servoLock(1);
+//        servoLock(1);
         waitForStart();
         // LandInAuto(0);
 
@@ -49,7 +49,7 @@ public class redCrater extends AutoMode {
             int cubePosition = 0;
             cubePosition = tsSampling.searchCube(0.33, 335, 23);
 
-            telemetry.addData("Gold mineral position: ",cubePosition);
+            telemetry.addData("Gold mineral position: ", cubePosition);
             telemetry.update();
             sleep(1200);
             tsSampling.followCubeRecognision(0.16);//start power
@@ -72,7 +72,7 @@ public class redCrater extends AutoMode {
 //
             driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
             sleep(2500);
-            double angleTurn=270;
+            double angleTurn = 270;
 //            if(cubePosition==2)
 //            angleTurn+=12;
 //            else if(cubePosition==3)
@@ -89,9 +89,9 @@ public class redCrater extends AutoMode {
             sleep(3500);
             if (pos == null) {
 
-                telemetry.addData("start searching wait for click",cubePosition);
+                telemetry.addData("start searching wait for click", cubePosition);
                 telemetry.update();
-                     sleep(1200);
+                sleep(1200);
                 targetNav.searchImage(cubePosition, -0.20);
             }
 
