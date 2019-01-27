@@ -36,9 +36,9 @@ public class redCrater extends AutoMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
             telemetry.update();
         }
-//        servoLock(1);
+        servo();
         waitForStart();
-        // LandInAuto(0);
+        LandInAuto(0);
 
 
         if (opModeIsActive()) {

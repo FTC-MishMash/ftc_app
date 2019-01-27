@@ -37,15 +37,15 @@ public class Robot {
 
         inTake = hardwareMap.get(DcMotor.class, "inTake");
 
-//        hanging = hardwareMap.get(Servo.class, "hanging");
-//        linearLock = hardwareMap.get(Servo.class, "LinearServoLock");
+        hanging = hardwareMap.get(Servo.class, "hanging");
+        linearLock = hardwareMap.get(Servo.class, "LinearServoLock");
 
         linear = hardwareMap.get(DcMotor.class, "linearLeft");
         shaft[0] = hardwareMap.get(DcMotor.class, "shaftRight");
         shaft[1] = hardwareMap.get(DcMotor.class, "shaftLeft");
 
-//        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
-//        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
+        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
+        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
 
         driveTrain[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
         driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");

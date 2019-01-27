@@ -268,6 +268,7 @@ public class AutoMode extends LinearOpMode {
         robot.linear.setPower(0);
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
+        robot.hanging.setPosition(0);
 
 
         setMotorPower(new double[][]{{0.3, 0.3}, {0.3, 0.3}});
@@ -300,7 +301,9 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
+    public void servo(){
+        robot.hanging.setPosition(0.5);
+    }
 //    public void motorLock() {
 //        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -838,7 +841,7 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[0].setTargetPosition(175);
         robot.shaft[1].setTargetPosition(175);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[1].setMode(DcMotor.RunMode.RUN_ TO_POSITION);
         robot.shaft[0].setPower(0.3);
         robot.shaft[1].setPower(0.3);
         sleep(750);
