@@ -76,6 +76,18 @@ public class DriveRoverRuckus extends OpMode {
         } else if (gamepad1.b) {
             speed = 1;
         }
+        if (gamepad2.back && gamepad2.y){
+            robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        }
+        if (gamepad2.back && gamepad2.x){
+            robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        }
            if (gamepad2.right_stick_y > 0) {//hand - linear
 
             linear = true;
@@ -104,7 +116,7 @@ public class DriveRoverRuckus extends OpMode {
         }
         if (gamepad2.a) {
 
-            shaftEncoder = 2400;
+            shaftEncoder = -2400;
 
         }  else if (gamepad2.y) {
             shaftEncoder = 200;
