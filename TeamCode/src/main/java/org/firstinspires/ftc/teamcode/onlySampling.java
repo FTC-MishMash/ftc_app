@@ -42,10 +42,10 @@ public class onlySampling extends AutoMode {
                 tfod.shutdown();
             }
 
-            driveByEncoderRoverRuckus(20, 20, 0.5);
+            driveUtils.driveByEncoderRoverRuckus(20, 20, 0.5,false);
             sleep(1000);
             ScaledTurn(0, robot.driveTrain, robot.imu, 0.35);
-            driveByEncoderRoverRuckus(50, 50, 0.35);
+            driveUtils.driveByEncoderRoverRuckus(50, 50, 0.35,false);
 //            driveByEncoderRoverRuckus(-20, -20, 0.5);
 //            setMotorPower(new double[][]{{-0.4, -0.4}, {-0.4, -0.4}});
 //            sleep(500);

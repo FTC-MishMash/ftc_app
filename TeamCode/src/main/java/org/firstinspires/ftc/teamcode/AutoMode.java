@@ -96,7 +96,7 @@ public class AutoMode extends LinearOpMode {
     ImageTargets targetNav;
     DriveUtilities driveUtils;
     TensorflowUtils tsSampling;
-
+    public double angleTurn = 240;
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
@@ -269,7 +269,7 @@ public class AutoMode extends LinearOpMode {
         robot.linear.setPower(0);
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
-        robot.hanging.setPosition(0);
+        robot.hanging.setPosition(servoOPENPosition);
 
 
         setMotorPower(new double[][]{{0.3, 0.3}, {0.3, 0.3}});
@@ -302,9 +302,7 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-    public void servo(){
-        robot.hanging.setPosition(0.5);
-    }
+
 //    public void motorLock() {
 //        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -774,65 +772,65 @@ public class AutoMode extends LinearOpMode {
 
     }
 
-    public void driveByEncoderRoverRuckus(int goalDistRight, int goalDistLeft, double power) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
-//direction 0 is forword, 1 is backword
-        final int tixRound = 600;
-        final int cmRound = 27;
-
-
-        int dRight = (goalDistRight * tixRound) / cmRound;
-        int dLeft = (goalDistLeft * tixRound) / cmRound;
-//§ ß α
-
-        robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.driveTrain[1][1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
-        robot.driveTrain[0][0].setTargetPosition(robot.driveTrain[0][0].getCurrentPosition() + dLeft);
-        robot.driveTrain[1][0].setTargetPosition(robot.driveTrain[1][0].getCurrentPosition() + dLeft);
-//        robot.driveTrain[0][1].setTargetPosition(robot.driveTrain[0][1].getCurrentPosition() + dRight);
-//        robot.driveTrain[1][1].setTargetPosition(robot.driveTrain[1][1].getCurrentPosition() + dRight);
-
-
-        robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        robot.driveTrain[1][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        for (int i = 0; i < 2; i++)
-            for (int j = 0; j < 2; j++)
-                robot.driveTrain[i][j].setPower(power);
-
-        telemetry.addLine("go to target");
-        telemetry.update();
-
-        double runTime = getRuntime();
-        while (opModeIsActive() &&
-                robot.driveTrain[0][0].isBusy()
-                && robot.driveTrain[1][0].isBusy()
-//                && robot.driveTrain[0][1].isBusy()
-//                && robot.driveTrain[1][1].isBusy()
-                && getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10)) {
-            sleep(0);
-        }
-
-
-        for (int i = 0; i < 2; i++)
-            for (int j = 0; j < 2; j++)
-                robot.driveTrain[i][j].setPower(0);
-
-        telemetry.addLine("end move encoder");
-        telemetry.update();
-
-
-        robot.driveTrain[0][0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.driveTrain[1][0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-    }
+//    public void driveByEncoderRoverRuckus(int goalDistRight, int goalDistLeft, double power) {// Drive by encoders and converts incoders ticks to distance in cm and drives until distance is completed.
+////direction 0 is forword, 1 is backword
+//        final int tixRound = 600;
+//        final int cmRound = 27;
+//
+//
+//        int dRight = (goalDistRight * tixRound) / cmRound;
+//        int dLeft = (goalDistLeft * tixRound) / cmRound;
+////§ ß α
+//
+//        robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+////        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+////        robot.driveTrain[1][1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//
+//
+//        robot.driveTrain[0][0].setTargetPosition(robot.driveTrain[0][0].getCurrentPosition() + dLeft);
+//        robot.driveTrain[1][0].setTargetPosition(robot.driveTrain[1][0].getCurrentPosition() + dLeft);
+////        robot.driveTrain[0][1].setTargetPosition(robot.driveTrain[0][1].getCurrentPosition() + dRight);
+////        robot.driveTrain[1][1].setTargetPosition(robot.driveTrain[1][1].getCurrentPosition() + dRight);
+//
+//
+//        robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+////        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+////        robot.driveTrain[1][1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//        for (int i = 0; i < 2; i++)
+//            for (int j = 0; j < 2; j++)
+//                robot.driveTrain[i][j].setPower(power);
+//
+//        telemetry.addLine("go to target");
+//        telemetry.update();
+//
+//        double runTime = getRuntime();
+//        while (opModeIsActive() &&
+//                robot.driveTrain[0][0].isBusy()
+//                && robot.driveTrain[1][0].isBusy()
+////                && robot.driveTrain[0][1].isBusy()
+////                && robot.driveTrain[1][1].isBusy()
+//                && getRuntime() - runTime < Math.abs((dRight + dLeft / 2) / 10)) {
+//            sleep(0);
+//        }
+//
+//
+//        for (int i = 0; i < 2; i++)
+//            for (int j = 0; j < 2; j++)
+//                robot.driveTrain[i][j].setPower(0);
+//
+//        telemetry.addLine("end move encoder");
+//        telemetry.update();
+//
+//
+//        robot.driveTrain[0][0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.driveTrain[1][0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//
+//    }
 
     public void Marker(int color, ColorSensor sensorcColor, float hsvValue[], BNO055IMU imu, double heading, double power) {
         driveByColor(color, sensorcColor, imu, hsvValue, heading, power);
@@ -842,7 +840,7 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[0].setTargetPosition(175);
         robot.shaft[1].setTargetPosition(175);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[1].setMode(DcMotor.RunMode.RUN_ TO_POSITION);
+        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[0].setPower(0.3);
         robot.shaft[1].setPower(0.3);
         sleep(750);
@@ -856,7 +854,7 @@ public class AutoMode extends LinearOpMode {
     }
 
     public void Parking(int targetPositionEncoder) {
-        driveByEncoderRoverRuckus(90, 90, -0.5);
+        driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5,false);
         robot.shaft[0].setTargetPosition(targetPositionEncoder);//250
         robot.shaft[1].setTargetPosition(targetPositionEncoder);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);

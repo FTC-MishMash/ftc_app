@@ -36,7 +36,9 @@ public class redCrater extends AutoMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
             telemetry.update();
         }
-        servo();
+        robot.hanging.setPosition(0.5);
+        telemetry.addLine("wait for start");
+        telemetry.update();
         waitForStart();
         LandInAuto(0);
 
@@ -94,7 +96,7 @@ public class redCrater extends AutoMode {
                 telemetry.addData("start searching wait for click", cubePosition);
                 telemetry.update();
                 sleep(1200);
-                targetNav.searchImage(cubePosition, -0.25);
+                targetNav.searchImage(cubePosition, -0.20);
             }
 
 //            pos = targetNav.getPositions();//למה להשתמש בPOS ולא פשוט בפונקציה?
@@ -104,7 +106,7 @@ public class redCrater extends AutoMode {
 ////                driveUtils.driveByEncoderRoverRuckus(20, 20, 0.4);
 ////                driveUtils.scaledTurn(135, 0.3);
 ////            } else {
-            driveUtils.back_up_driveByImage(0.35, 135, 20 + cubePosition * 15);
+//            driveUtils.back_up_driveByImage(0.35, 135, 20 + cubePosition * 15);
             sleep(1000);
             targetNav.driveToImage(-0.25);
 //            }
