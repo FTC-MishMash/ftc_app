@@ -180,8 +180,7 @@ public class DriveRoverRuckus extends OpMode {
 //TODO: check if Aviad prefer button TURN OFF for the intake
 
         if (!shaft) {//in progress when AUTO mode shaft turn ON
-//            robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[0].setTargetPosition(shaftEncoder);

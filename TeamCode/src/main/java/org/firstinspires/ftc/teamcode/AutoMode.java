@@ -97,6 +97,7 @@ public class AutoMode extends LinearOpMode {
     DriveUtilities driveUtils;
     TensorflowUtils tsSampling;
     public double angleTurn = 240;
+
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
@@ -303,27 +304,6 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-//    public void motorLock() {
-//        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//
-//        robot.linear.setTargetPosition(0);
-//        robot.shaft[0].setTargetPosition(0);
-//        robot.shaft[1].setTargetPosition(0);
-//
-//        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//        robot.linear.setPower(0.7);
-//        robot.shaft[0].setPower(1);
-//        robot.shaft[1].setPower(1);
-//        while (!isStarted()) {
-//            telemetry.addData("pitch", getAngularOriention().thirdAngle);
-//            telemetry.update();
-//        }
-//    }
 
     public void servoLock(int positionServoLock) {
         robot.linearLock.setPosition(positionServoLock);
@@ -832,8 +812,8 @@ public class AutoMode extends LinearOpMode {
 //
 //    }
 
-    public void Marker(int color, ColorSensor sensorcColor, float hsvValue[], BNO055IMU imu, double heading, double power) {
-        driveByColor(color, sensorcColor, imu, hsvValue, heading, power);
+    public void Marker(double power) {
+//        driveByColor(color, sensorcColor, imu, hsvValue, heading, power);
 //        driveByEncoderRoverRuckus(75, 75, 0.5);
 
         //open shaft
@@ -841,26 +821,53 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[1].setTargetPosition(175);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setPower(0.3);
-        robot.shaft[1].setPower(0.3);
-        sleep(750);
+        robot.shaft[0].setPower(power);
+        robot.shaft[1].setPower(power);
+        while (opModeIsActive() &&
+                robot.shaft[0].isBusy() &&
+                robot.shaft[1].isBusy()) {
+            telemetry.addData("shaft move  ", robot.shaft[0].isBusy());
+            telemetry.update();
+        }
         //marker
         robot.shaft[0].setTargetPosition(0);
         robot.shaft[1].setTargetPosition(0);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setPower(0.3);
-        robot.shaft[1].setPower(0.3);
+        robot.shaft[0].setPower(power);
+        robot.shaft[1].setPower(power);
+        while (opModeIsActive() &&
+                robot.shaft[0].isBusy() &&
+                robot.shaft[1].isBusy()) {
+            telemetry.addData("shaft move 2 ", robot.shaft[0].isBusy());
+            telemetry.update();
+        }
+        robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.shaft[0].setPower(0);
+        robot.shaft[1].setPower(0);
     }
 
-    public void Parking(int targetPositionEncoder) {
-        driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5,false);
-        robot.shaft[0].setTargetPosition(targetPositionEncoder);//250
-        robot.shaft[1].setTargetPosition(targetPositionEncoder);
+    public void Parking(int targetShaftParkingPositionEncoder, double shaftPower, int linearTargetEncoder,double linearPower) {
+
+
+        robot.shaft[0].setTargetPosition(targetShaftParkingPositionEncoder);//250
+        robot.shaft[1].setTargetPosition(targetShaftParkingPositionEncoder);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setPower(0.3);
-        robot.shaft[1].setPower(0.3);
+        robot.shaft[0].setPower(shaftPower);
+        robot.shaft[1].setPower(shaftPower);
+
+        robot.shaft[0].setTargetPosition(linearTargetEncoder);
+
+        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.linear.setPower(linearPower);
+        while (opModeIsActive()&&
+                robot.linear.isBusy()){
+            telemetry.addData("linear move",robot.linear.isBusy());
+            telemetry.update();
+        }
+
     }
 
 

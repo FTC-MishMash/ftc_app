@@ -59,9 +59,13 @@ public class redCrater_Encoder extends AutoMode {
             driveUtils.TurnWithEncoder(angleTurn, 0.5);
             sleep(2500);
 
-
-            driveUtils.back_up_driveByImage(0.45, 135, -(30 + cubePosition * 15));
-
+            int AngleToDepot = 135;
+            driveUtils.back_up_driveByImage(0.45, AngleToDepot, -(30 + cubePosition * 15));
+            driveUtils.driveByEncoderRoverRuckus(-80, -80, -0.4, false);
+            Marker(0.5);
+            driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5, false);
+            Parking(230,0.4);
+//            driveByColor(0,robot.colorRightFront,robot.imu,robot.hsvValuesRightFront,AngleToDepot,0.35);
 //            }
 //            sleep(1000);
             //       driveUtils.driveByEncoderRoverRuckus(60, 60, 0.5,false);
