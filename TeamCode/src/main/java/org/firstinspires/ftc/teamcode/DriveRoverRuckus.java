@@ -81,25 +81,22 @@ public class DriveRoverRuckus extends OpMode {
             shaft = true;
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            if (gamepad2.right_trigger>0) {
-                robot.shaft[0].setPower(Math.signum(gamepad2.left_stick_y)*(0.5));
-                robot.shaft[1].setPower(Math.signum(gamepad2.left_stick_y)*(0.5));
-            }
-            else
-            {
+            if (gamepad2.right_trigger > 0) {
+                robot.shaft[0].setPower(Math.signum(gamepad2.left_stick_y) * (0.5));
+                robot.shaft[1].setPower(Math.signum(gamepad2.left_stick_y) * (0.5));
+            } else {
                 robot.shaft[0].setPower(Math.signum(gamepad2.left_stick_y));
                 robot.shaft[1].setPower(Math.signum(gamepad2.left_stick_y));
             }
             shaftEncoder = robot.shaft[1].getCurrentPosition();
-        }
-        else
+        } else
             shaft = false;
 
         if (gamepad2.x) {
             shaftEncoder = 0;
 
         }
-           if (gamepad2.right_stick_y > 0) {//hand - linear
+        if (gamepad2.right_stick_y > 0) {//hand - linear
 
             linear = true;
             robot.linear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -121,7 +118,7 @@ public class DriveRoverRuckus extends OpMode {
 //            linearEncoder = robot.linear.getCurrentPosition();
 //        }
 
-       else   if (gamepad2.right_stick_y == 0) {//hand mode turn OFF
+        else if (gamepad2.right_stick_y == 0) {//hand mode turn OFF
             linear = false;
 
         }
@@ -129,11 +126,11 @@ public class DriveRoverRuckus extends OpMode {
 
             shaftEncoder = -2700;
 
-        }  else if (gamepad2.y) {
+        } else if (gamepad2.y) {
             shaftEncoder = -200;
 
 
-        }else if (gamepad2.b) {
+        } else if (gamepad2.b) {
 
             shaftEncoder = -200;
 
@@ -150,23 +147,23 @@ public class DriveRoverRuckus extends OpMode {
 //            linearEncoder = robot.linear.getCurrentPosition();
 
 
-
-
-
-
-        }  if (gamepad2.right_bumper) {
+        }
+        if (gamepad2.right_bumper) {
             robot.inTake.setPower(1);
-        }  if (gamepad2.right_trigger != 0) {
+        }
+        if (gamepad2.right_trigger != 0) {
             //robot.inTake.setPower(-1);
 
-        }  if (gamepad2.left_bumper) {
+        }
+        if (gamepad2.dpad_right) {
 
-            shaftEncoder = 100;
-
-            linearEncoder = 6700;
+            robot.hanging.setPosition(0.5);
 
 
-        }    if (gamepad2.left_trigger != 0) {
+        } else if (gamepad2.dpad_left){
+            robot.hanging.setPosition(0);
+
+    }if (gamepad2.left_trigger != 0) {
             DcMotor.RunMode currMode = robot.shaft[0].getMode();
             robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
