@@ -62,14 +62,15 @@ public class redCrater_Encoder extends AutoMode {
             int AngleToDepot = 135;
             driveUtils.back_up_driveByImage(0.45, AngleToDepot, -(30 + cubePosition * 15));
             driveUtils.driveByEncoderRoverRuckus(-80, -80, -0.4, false);
-            Marker(0.5);
+            Marker(0.5);  //marker
             driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5, false);
-            Parking(230,0.4);
+            Parking(230,0.4,0,0.4);
+            //TODO: to change linear target encoder!!
 //            driveByColor(0,robot.colorRightFront,robot.imu,robot.hsvValuesRightFront,AngleToDepot,0.35);
 //            }
 //            sleep(1000);
             //       driveUtils.driveByEncoderRoverRuckus(60, 60, 0.5,false);
-            //marker
+
             //go to crater
             //open shaft
 

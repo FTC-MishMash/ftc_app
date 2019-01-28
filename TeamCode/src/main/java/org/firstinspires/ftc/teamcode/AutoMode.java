@@ -812,7 +812,7 @@ public class AutoMode extends LinearOpMode {
 //
 //    }
 
-    public void Marker(double power) {
+    public void Marker(double powerShaft) {
 //        driveByColor(color, sensorcColor, imu, hsvValue, heading, power);
 //        driveByEncoderRoverRuckus(75, 75, 0.5);
 
@@ -821,8 +821,8 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[1].setTargetPosition(175);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setPower(power);
-        robot.shaft[1].setPower(power);
+        robot.shaft[0].setPower(powerShaft);
+        robot.shaft[1].setPower(powerShaft);
         while (opModeIsActive() &&
                 robot.shaft[0].isBusy() &&
                 robot.shaft[1].isBusy()) {
@@ -834,8 +834,8 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[1].setTargetPosition(0);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setPower(power);
-        robot.shaft[1].setPower(power);
+        robot.shaft[0].setPower(powerShaft);
+        robot.shaft[1].setPower(powerShaft);
         while (opModeIsActive() &&
                 robot.shaft[0].isBusy() &&
                 robot.shaft[1].isBusy()) {
