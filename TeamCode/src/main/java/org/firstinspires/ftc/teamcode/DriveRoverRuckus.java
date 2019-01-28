@@ -126,8 +126,8 @@ public class DriveRoverRuckus extends OpMode {
 
             shaftEncoder = -2700;
 
-        } else if (gamepad2.y) {
-            shaftEncoder = -200;
+//        } else if (gamepad2.y) {
+//            shaftEncoder = -200;
 
 
         } else if (gamepad2.b) {
@@ -155,15 +155,15 @@ public class DriveRoverRuckus extends OpMode {
             //robot.inTake.setPower(-1);
 
         }
-        if (gamepad2.dpad_right) {
+        if (gamepad2.left_trigger >0) {
 
             robot.hanging.setPosition(0.5);
 
 
-        } else if (gamepad2.dpad_left){
+        } else if (gamepad2.left_bumper){
             robot.hanging.setPosition(0);
 
-    }if (gamepad2.left_trigger != 0) {
+    }if (gamepad2.y) {
             DcMotor.RunMode currMode = robot.shaft[0].getMode();
             robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
