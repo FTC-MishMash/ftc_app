@@ -131,13 +131,35 @@ public class LandInAuto extends LinearOpMode {
         for (int row = 0; opModeIsActive() && row < 2; row++)
             for (int col = 0; opModeIsActive() && col < 2; col++)
                 robot.driveTrain[row][col].setPower(power[row][col]);
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
 
     @Override
 
     /**
      * here the robot lock the motors to hanging
-     */
+    0 */
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap);
 //        motorLock();
