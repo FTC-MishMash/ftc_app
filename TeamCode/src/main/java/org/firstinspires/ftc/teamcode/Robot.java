@@ -31,6 +31,8 @@ public class Robot {
     public double redColorRightSensor = 42;
     public double blueColorLeftSensor = 135;
     public double redColorLeftSensor = 65;
+    public double hangingLockPosition = 0.5;
+    public double hangingOpenPosition = 0;
 
 
     public Robot(HardwareMap hardwareMap) {

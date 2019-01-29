@@ -22,7 +22,6 @@ public class DriveRoverRuckus extends OpMode {
 
     Robot robot;
     /*
-
      * Code to run ONCE when the driver hits INIT
      */
 
@@ -157,13 +156,13 @@ public class DriveRoverRuckus extends OpMode {
         }
         if (gamepad2.left_trigger >0) {
 
-            robot.hanging.setPosition(0.5);
+            robot.hanging.setPosition(robot.hangingOpenPosition);
 
 
         } else if (gamepad2.left_bumper){
-            robot.hanging.setPosition(0);
+            robot.hanging.setPosition(robot.hangingLockPosition);
 
-    }if (gamepad2.y) {
+        }if (gamepad2.y) {
             DcMotor.RunMode currMode = robot.shaft[0].getMode();
             robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

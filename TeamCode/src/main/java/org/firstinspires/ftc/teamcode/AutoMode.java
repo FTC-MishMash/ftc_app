@@ -270,7 +270,7 @@ public class AutoMode extends LinearOpMode {
         robot.linear.setPower(0);
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
-        robot.hanging.setPosition(servoOPENPosition);
+        robot.hanging.setPosition(robot.hangingOpenPosition);
 
 
         setMotorPower(new double[][]{{0.3, 0.3}, {0.3, 0.3}});
