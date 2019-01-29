@@ -155,8 +155,13 @@ public class DriveUtilities {
 
         robot.driveTrain[0][0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.driveTrain[1][0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.driveTrain[0][1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.driveTrain[1][1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         robot.driveTrain[0][0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.driveTrain[1][0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.driveTrain[0][1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.driveTrain[1][1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
 
