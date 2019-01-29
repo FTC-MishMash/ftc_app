@@ -36,19 +36,22 @@ public class redCrater extends AutoMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
             telemetry.update();
         }
-
-        robot.hanging.setPosition(robot.hangingLockPosition);
+        robot.hanging.setPosition(0.5);
         telemetry.addLine("wait for start");
         telemetry.update();
+        //servoLock(0.2);
         waitForStart();
-//        LandInAuto(0);
+        //  LandInAuto(0);
 
 
         if (opModeIsActive()) {
             runTime.reset();
             runTime.startTime();
 //        getOffTheClimb
-
+//            driveUtils.TurnWithEncoder(50, 0.6);
+//            sleep(1500);
+//            driveUtils.TurnWithEncoder(0, 0.6);
+//            sleep(1000);
             int cubePosition = 0;
             cubePosition = tsSampling.searchCube(0.33, 335, 23);
 
@@ -66,23 +69,28 @@ public class redCrater extends AutoMode {
             telemetry.addLine("finished following");
             telemetry.update();
             sleep(1500);
-            driveUtils.driveByEncoderRoverRuckus(35, 35, 0.36, false);
+            driveUtils.driveByEncoderRoverRuckus(32, 32, 0.36, false);
             telemetry.addLine("finished driving into cube");
             telemetry.update();
             sleep(2500);
-            driveUtils.driveByEncoderRoverRuckus(-40, -40, -0.36, false);
+            driveUtils.driveByEncoderRoverRuckus(-35, -35, -0.36, false);
             telemetry.addLine("finished driving out of cube");
             telemetry.update();
             sleep(2000);
 
-            driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
+          //  driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
             sleep(2500);
-            double angleTurn = 245;
+            double angleTurn = 210;
 //            if(cubePosition==2)
 //            angleTurn+=12;
 //            else if(cubePosition==3)
 //                angleTurn-=12;
-            driveUtils.TurnWithEncoder(angleTurn, 0.4);
+            for (int i = 0; i < 2; i++)
+                for (int j = 0; j < 2; j++)
+                    telemetry.addData("motor:"+i+j+": ",robot.driveTrain[i][j].getMode().toString());
+            telemetry.update();
+sleep(3000);
+            driveUtils.TurnWithEncoder(angleTurn, 0.5);
             sleep(2500);
             tsSampling.initVuforiaWebCam(false);
             targetNav.startTracking();
