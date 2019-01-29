@@ -40,10 +40,10 @@ public class VuforiaCheck extends AutoMode {
         double angle = 280;
         while (opModeIsActive()) {
 //            telemetry.addData("pos",targetNav.getPositions());
-            telemetry.addData("left: ", distLeft);
-            telemetry.addData("right: ", distRight);
-            telemetry.addData("pow: ", power);
-            telemetry.addData("motor: ", motor);
+//            telemetry.addData("left: ", distLeft);
+//            telemetry.addData("right: ", distRight);
+//            telemetry.addData("pow: ", power);
+//            telemetry.addData("motor: ", motor);
             telemetry.addData("angle:   ", angle);
             telemetry.addData("imu", DriveUtilities.normalizedAngle(getAngularOriention().firstAngle));
             float[] pos = targetNav.getPositions();

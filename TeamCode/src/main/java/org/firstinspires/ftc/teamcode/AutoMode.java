@@ -217,8 +217,8 @@ public class AutoMode extends LinearOpMode {
 
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setTargetPosition(2700);
-        robot.shaft[1].setTargetPosition(2700);
+        robot.shaft[0].setTargetPosition(-2700);
+        robot.shaft[1].setTargetPosition(-2700);
         robot.shaft[0].setPower(1);
         robot.shaft[1].setPower(1);
 
@@ -233,43 +233,43 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
 
-        robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition());
-        robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition());
-
-        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        robot.shaft[0].setPower(1);
-        robot.shaft[1].setPower(1);
-
-        robot.linear.setTargetPosition(-750);
-        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.linear.setPower(0.6);
-        sleep(300);
-
-        robot.linear.setTargetPosition(robot.linear.getCurrentPosition() + 300);
-        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.linear.setPower(1);
-        sleep(250);
-
-        robot.linear.setTargetPosition(-750);
-        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.linear.setPower(1);
-        double t1 = getRuntime();
-        while (opModeIsActive() && robot.linear.getCurrentPosition() >= -725 && getRuntime() - t1 <= 0.4) {
-            telemetry.addData("pitch", getAngularOriention().thirdAngle);
-            telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
-            telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
-            telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
-            telemetry.update();
-        }
-
-        robot.shaft[0].setPower(0);
-        robot.shaft[1].setPower(0);
-
-        robot.linear.setPower(0);
-        robot.shaft[0].setPower(0);
-        robot.shaft[1].setPower(0);
+//        robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition());
+//        robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition());
+//
+//        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//        robot.shaft[0].setPower(1);
+//        robot.shaft[1].setPower(1);
+//
+//        robot.linear.setTargetPosition(-750);
+//        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.linear.setPower(0.6);
+//        sleep(300);
+//
+//        robot.linear.setTargetPosition(robot.linear.getCurrentPosition() + 300);
+//        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.linear.setPower(1);
+//        sleep(250);
+//
+//        robot.linear.setTargetPosition(-750);
+//        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.linear.setPower(1);
+//        double t1 = getRuntime();
+//        while (opModeIsActive() && robot.linear.getCurrentPosition() >= -725 && getRuntime() - t1 <= 0.4) {
+//            telemetry.addData("pitch", getAngularOriention().thirdAngle);
+//            telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
+//            telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
+//            telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
+//            telemetry.update();
+//        }
+//
+//        robot.shaft[0].setPower(0);
+//        robot.shaft[1].setPower(0);
+//
+//        robot.linear.setPower(0);
+//        robot.shaft[0].setPower(0);
+//        robot.shaft[1].setPower(0);
         robot.hanging.setPosition(robot.hangingOpenPosition);
 
 
@@ -305,8 +305,8 @@ public class AutoMode extends LinearOpMode {
     }
 
 
-    public void servoLock(int positionServoLock) {
-        robot.linearLock.setPosition(positionServoLock);
+    public void servoLock(double positionServoLock) {
+        robot.hanging.setPosition(robot.hangingLockPosition);
     }
 
     public void driveByColor(int color, ColorSensor sensorColor, BNO055IMU imu, float hsvValues[], double heading, double power)//0=red, blue=1

@@ -38,6 +38,9 @@ public class DriveUtilities {
 
         boolean directTurn = true;
         double currentAngle = normalizedAngle(getAngularOriention(imu).firstAngle);
+        telemetry.addData("start angle: ",currentAngle);
+        telemetry.update();
+        currOpmode.sleep(3000);
         double angle0 = currentAngle;
         if (currentAngle < goalAngle) {
             if (goalAngle - currentAngle <= 360 - (goalAngle - currentAngle)) {
