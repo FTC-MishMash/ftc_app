@@ -72,17 +72,17 @@ public class DriveRoverRuckus extends OpMode {
 
 
 // SHAFT MANUAL MOVEMENT
-        if (gamepad2.left_stick_y != 0) {//hand mode shaft turn ON
+        if (gamepad2.right_stick_y != 0) {//hand mode shaft turn ON
             shaft = true;
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             if (gamepad2.b) {
-                robot.shaft[0].setPower(Math.signum(gamepad2.left_stick_y) * (0.5));
-                robot.shaft[1].setPower(Math.signum(gamepad2.left_stick_y) * (0.5));
+                robot.shaft[0].setPower(Math.signum(gamepad2.right_stick_y) * (0.5));
+                robot.shaft[1].setPower(Math.signum(gamepad2.right_stick_y) * (0.5));
             }
             else {
-                robot.shaft[0].setPower(Math.signum(gamepad2.left_stick_y));
-                robot.shaft[1].setPower(Math.signum(gamepad2.left_stick_y));
+                robot.shaft[0].setPower(Math.signum(gamepad2.right_stick_y));
+                robot.shaft[1].setPower(Math.signum(gamepad2.right_stick_y));
             }
             shaftEncoder = robot.shaft[1].getCurrentPosition();
         } else
@@ -92,14 +92,14 @@ public class DriveRoverRuckus extends OpMode {
             shaftEncoder = -300;
 
         }
-        if (gamepad2.right_stick_y > 0) {//hand - linear
+        if (gamepad2.left_stick_y > 0) {//hand - linear
 
             linear = true;
             robot.linear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.linear.setPower(-1);
             linearEncoder = robot.linear.getCurrentPosition();
 
-        } else if (gamepad2.right_stick_y < 0) {
+        } else if (gamepad2.left_stick_y < 0) {
             linear = true;
             robot.linear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.linear.setPower(1);
@@ -114,7 +114,7 @@ public class DriveRoverRuckus extends OpMode {
 //            linearEncoder = robot.linear.getCurrentPosition();
 //        }
 
-        else if (gamepad2.right_stick_y == 0) {//hand mode turn OFF
+        else if (gamepad2.left_stick_y == 0) {//hand mode turn OFF
             linear = false;
 
         }
