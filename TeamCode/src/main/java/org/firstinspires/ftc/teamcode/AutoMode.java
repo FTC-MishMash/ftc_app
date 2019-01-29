@@ -270,6 +270,8 @@ public class AutoMode extends LinearOpMode {
 //        robot.linear.setPower(0);
 //        robot.shaft[0].setPower(0);
 //        robot.shaft[1].setPower(0);
+
+
         robot.hanging.setPosition(robot.hangingOpenPosition);
 
 
@@ -278,8 +280,8 @@ public class AutoMode extends LinearOpMode {
         sleep(300);
         setMotorPower(new double[][]{{0, 0}, {0, 0}});
         robot.linear.setTargetPosition(0);
-        robot.shaft[0].setTargetPosition(140);
-        robot.shaft[1].setTargetPosition(140);
+        robot.shaft[0].setTargetPosition(-250);
+        robot.shaft[1].setTargetPosition(-250);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -305,9 +307,6 @@ public class AutoMode extends LinearOpMode {
     }
 
 
-    public void servoLock(double positionServoLock) {
-        robot.hanging.setPosition(robot.hangingLockPosition);
-    }
 
     public void driveByColor(int color, ColorSensor sensorColor, BNO055IMU imu, float hsvValues[], double heading, double power)//0=red, blue=1
     {

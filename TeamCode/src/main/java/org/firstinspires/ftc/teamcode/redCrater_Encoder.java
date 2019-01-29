@@ -20,7 +20,7 @@ public class redCrater_Encoder extends AutoMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
             telemetry.update();
         }
-        robot.hanging.setPosition(0.5);
+        robot.hanging.setPosition(robot.hangingLockPosition);
         waitForStart();
 //        LandInAuto(0);
 
