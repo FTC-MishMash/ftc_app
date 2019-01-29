@@ -221,7 +221,7 @@ public class DriveRoverRuckus extends OpMode {
     }
 
     private void tankDriveTrainSetPower(double speed) {
-//
+
         if (gamepad1.right_trigger>0)
             speed = 0.7;
         else
