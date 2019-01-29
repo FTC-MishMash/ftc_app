@@ -84,11 +84,12 @@ public class redCrater extends AutoMode {
 //            if(cubePosition==2)
 //            angleTurn+=12;
 //            else if(cubePosition==3)
-//                angleTurn-=12;
+//                angleTurn-=12;=
             for (int i = 0; i < 2; i++)
                 for (int j = 0; j < 2; j++)
-                    telemetry.addData("motor:"+i+j+": ",robot.driveTrain[i][j].getMode().toString());
+                    telemetry.addData("motor:"+i+""+j+": ",robot.driveTrain[i][j].getMode().toString());
             telemetry.update();
+            
 sleep(3000);
             driveUtils.TurnWithEncoder(angleTurn, 0.5);
             sleep(2500);
