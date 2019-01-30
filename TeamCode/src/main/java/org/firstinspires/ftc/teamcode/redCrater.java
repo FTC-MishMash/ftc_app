@@ -64,13 +64,13 @@ public class redCrater extends AutoMode {
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingForward, robot.driveEncoderSamplingForward , 0.4, false);
             if (cubePosition!=1)
             {
-                driveUtils.driveByEncoderRoverRuckus(30, 30, 0.36, false);
-                driveUtils.driveByEncoderRoverRuckus(-30, -30, -0.36, false);
+                driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionSide, robot.driveEncoderSamplingPositionSide, 0.36, false);
+                driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionSideBackward, robot.driveEncoderSamplingPositionSideBackward, -0.36, false);
             }
             else
             {
-                driveUtils.driveByEncoderRoverRuckus(10, 10, 0.36, false);
-                driveUtils.driveByEncoderRoverRuckus(-10, -10, -0.36, false);
+                driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddle, robot.driveEncoderSamplingPositionMiddle, 0.36, false);
+                driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddleBackward, robot.driveEncoderSamplingPositionMiddleBackward, -0.36, false);
             }
             if (tfod != null) {
                 tfod.shutdown();

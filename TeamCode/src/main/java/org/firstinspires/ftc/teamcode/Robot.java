@@ -37,7 +37,10 @@ public class Robot {
     public int SamplingAngleRight = 328;
 
     public int driveEncoderSamplingForward = 40;
-    public int driveEncoderSamplingPositio = 40;
+    public int driveEncoderSamplingPositionSide = 40;
+    public int driveEncoderSamplingPositionMiddle = 10;
+    public int driveEncoderSamplingPositionSideBackward = -30;
+    public int driveEncoderSamplingPositionMiddleBackward = -30;
     public int driveEncoderSamplingBackward = -36;
     public int SamplingAngleLeft = 26;
     int AngleToDepot = 135;
