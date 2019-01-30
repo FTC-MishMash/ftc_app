@@ -74,7 +74,7 @@ public class AutoMode extends LinearOpMode {
     static final int RolltargetAngleMin = -10;
     static final int RolltargetAngleMax = 10;
 
-
+//test1
     final double minAngleToTarget = 35;
     static final int XtargetPosition = 63;
     static final int YtargetPosition = 6;

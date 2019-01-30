@@ -24,7 +24,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 public class redCrater extends AutoMode {
 
 //    autoMode auto;
-
+//test2
     @Override
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
