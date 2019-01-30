@@ -33,8 +33,8 @@ public class Robot {
     public double redColorLeftSensor = 65;
     public double hangingOpenPosition = 0.7;
     public double hangingLockPosition = 0.2;
-    public double angleTurnToImage = 180;
-    int AngleToDepot = 310;
+    public double angleTurnToImage = 90;
+    int AngleToDepot = 140;
     public Robot(HardwareMap hardwareMap) {
 
         inTake = hardwareMap.get(DcMotor.class, "inTake");

@@ -22,13 +22,12 @@ public class redCrater_Encoder extends AutoMode {
         }
         robot.hanging.setPosition(robot.hangingLockPosition);
         waitForStart();
-//        LandInAuto(0);
-
 
         if (opModeIsActive()) {
             runTime.reset();
             runTime.startTime();
-//        getOffTheClimb
+//            LandInAuto(robot.hangingOpenPosition);
+//            shaftGoDown(0.4,-250);
 
             int cubePosition = 0;
             cubePosition = tsSampling.searchCube(0.33, 335, 23);
@@ -56,7 +55,7 @@ public class redCrater_Encoder extends AutoMode {
 //            angleTurn+=12;
 //            else if(cubePosition==3)
 //                angleTurn-=12;
-            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5);
+            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5,0.3);
             sleep(2500);
 
 

@@ -91,7 +91,7 @@ public class redCrater extends AutoMode {
             telemetry.update();
 
             sleep(3000);
-            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5);
+            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5,0.3);
             sleep(2500);
             tsSampling.initVuforiaWebCam(false);
             targetNav.startTracking();

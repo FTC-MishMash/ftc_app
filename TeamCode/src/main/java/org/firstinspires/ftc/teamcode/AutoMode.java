@@ -197,38 +197,37 @@ public class AutoMode extends LinearOpMode {
         telemetry.addData("pitch", getAngularOriention().thirdAngle);
         telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
         telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
-        telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
+
         telemetry.update();
         while (opModeIsActive() && getAngularOriention().thirdAngle <= 0) {
-//            if (robot.linear.getCurrentPosition() <= 175)
-//                robot.linear.setPower(0);
 
-            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 400);
-            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 400);
+
+            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 300);
+            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 300);
             sleep(150);
             robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 10);
             robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 10);
             telemetry.addData("pitch", getAngularOriention().thirdAngle);
             telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
             telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
-            telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
+
             telemetry.update();
         }
-
-        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setTargetPosition(-2700);
-        robot.shaft[1].setTargetPosition(-2700);
-        robot.shaft[0].setPower(1);
-        robot.shaft[1].setPower(1);
-
-        while (opModeIsActive() && robot.shaft[0].isBusy() && robot.shaft[1].isBusy()) {
-            telemetry.addData("pitch", getAngularOriention().thirdAngle);
-            telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
-            telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
-            telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
-            telemetry.update();
-        }
+        //TODO: add this
+//        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.shaft[0].setTargetPosition(-2700);
+//        robot.shaft[1].setTargetPosition(-2700);
+//        robot.shaft[0].setPower(1);
+//        robot.shaft[1].setPower(1);
+//
+//        while (opModeIsActive() && robot.shaft[0].isBusy() && robot.shaft[1].isBusy()) {
+//            telemetry.addData("pitch", getAngularOriention().thirdAngle);
+//            telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
+//            telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
+//
+//            telemetry.update();
+//        }
 
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
@@ -272,41 +271,46 @@ public class AutoMode extends LinearOpMode {
 //        robot.shaft[1].setPower(0);
 
 
-        robot.hanging.setPosition(robot.hangingOpenPosition);
+        robot.hanging.setPosition(servoOPENPosition);
 
 
+    }
+
+
+    public void shaftGoDown(double shaftPower, int shaftDownPosition) {
         setMotorPower(new double[][]{{0.3, 0.3}, {0.3, 0.3}});
 
         sleep(300);
         setMotorPower(new double[][]{{0, 0}, {0, 0}});
-        robot.linear.setTargetPosition(0);
-        robot.shaft[0].setTargetPosition(-250);
-        robot.shaft[1].setTargetPosition(-250);
-        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.shaft[0].setTargetPosition(shaftDownPosition);
+        robot.shaft[1].setTargetPosition(shaftDownPosition);
+
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.linear.setPower(1);
+
 //        sleep(400);
         /**
          * here the robot fold his arms to its original shape
          */
-        robot.shaft[0].setPower(1);
-        robot.shaft[1].setPower(1);
+        robot.shaft[0].setPower(shaftPower);
+        robot.shaft[1].setPower(shaftPower);
         double t0 = getRuntime();
         while (opModeIsActive() &&
                 robot.shaft[0].isBusy() &&
                 robot.shaft[1].isBusy() &&
-                getRuntime() - t0 < 1) ;
+                getRuntime() - t0 < 1) {
+            telemetry.addData("shaft go down", robot.shaft[0].isBusy());
+            telemetry.update();
+        }
 
-        robot.linear.setPower(0);
+
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
-        robot.linear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
-
 
     public void driveByColor(int color, ColorSensor sensorColor, BNO055IMU imu, float hsvValues[], double heading, double power)//0=red, blue=1
     {
@@ -847,7 +851,7 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[1].setPower(0);
     }
 
-    public void Parking(int targetShaftParkingPositionEncoder, double shaftPower, int linearTargetEncoder,double linearPower) {
+    public void Parking(int targetShaftParkingPositionEncoder, double shaftPower, int linearTargetEncoder, double linearPower) {
 
 
         robot.shaft[0].setTargetPosition(targetShaftParkingPositionEncoder);//250
@@ -861,9 +865,9 @@ public class AutoMode extends LinearOpMode {
 
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.linear.setPower(linearPower);
-        while (opModeIsActive()&&
-                robot.linear.isBusy()){
-            telemetry.addData("linear move",robot.linear.isBusy());
+        while (opModeIsActive() &&
+                robot.linear.isBusy()) {
+            telemetry.addData("linear move", robot.linear.isBusy());
             telemetry.update();
         }
 

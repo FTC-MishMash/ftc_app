@@ -38,7 +38,7 @@ public class DriveUtilities {
 
         boolean directTurn = true;
         double currentAngle = normalizedAngle(getAngularOriention(imu).firstAngle);
-        telemetry.addData("start angle: ",currentAngle);
+        telemetry.addData("start angle: ", currentAngle);
         telemetry.update();
         currOpmode.sleep(3000);
         double angle0 = currentAngle;
@@ -165,10 +165,11 @@ public class DriveUtilities {
 
     }
 
-    public void TurnWithEncoder(double goalAngle, double power) {
+    public void TurnWithEncoder(double goalAngle, double power, double encoderPower) {
         DcMotor[][] driveMotors = robot.driveTrain;
         boolean sideOfTurn = true;
         double deltaAngle = 0;
+        double leftToTurn;
         int motorsCurrentEncoder[][] = new int[2][2];
         boolean directTurn = true;
         double currentAngle = normalizedAngle(getAngularOriention(robot.imu).firstAngle);
@@ -194,31 +195,74 @@ public class DriveUtilities {
                 directTurn = false;
             }
         }
-        if (sideOfTurn)
-            setMotorPower(robot.driveTrain, new double[][]{{-power, power}, {-power, power}});
-
-        else
-            setMotorPower(robot.driveTrain, new double[][]{{power, -power}, {power, -power}});
+//        if (sideOfTurn)
+//            setMotorPower(robot.driveTrain, new double[][]{{-power, power}, {-power, power}});
+//
+//        else
+//            setMotorPower(robot.driveTrain, new double[][]{{power, -power}, {power, -power}});
         if (directTurn)
             while (currOpmode.opModeIsActive() && Math.abs(angle0 - currentAngle) < deltaAngle) {  //motors running
                 currentAngle = normalizedAngle(getAngularOriention(robot.imu).firstAngle);
                 telemetry.addData("angle case 3:", currentAngle);
                 telemetry.update();
+                leftToTurn = deltaAngle - Math.abs(angle0 - currentAngle);
+
+                if (leftToTurn < 20) {
+                    power = 20/60;
+                } else if (leftToTurn<60)
+                    power = leftToTurn/60 ;
+                else power =1;
+                telemetry.addData("angle case 1:", currentAngle);
+                telemetry.update();
+                if (sideOfTurn)
+                    setMotorPower(robot.driveTrain, new double[][]{{-power, power}, {-power, power}});
+
+                else
+                    setMotorPower(robot.driveTrain, new double[][]{{power, -power}, {power, -power}});
             }
         else if (goalAngle > 180 && currentAngle < 180)
             while (currOpmode.opModeIsActive() &&
                     (currentAngle <= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle > 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
                 currentAngle = normalizedAngle(getAngularOriention(robot.imu).firstAngle);
+                leftToTurn = deltaAngle - Math.abs(angle0 - currentAngle);
+
+                if (leftToTurn < 20) {
+                    power = 20/60;
+                } else if (leftToTurn<60)
+                    power = leftToTurn/60 ;
+                else power =1;
                 telemetry.addData("angle case 1:", currentAngle);
                 telemetry.update();
+                if (sideOfTurn)
+                    setMotorPower(robot.driveTrain, new double[][]{{-power, power}, {-power, power}});
+
+                else
+                    setMotorPower(robot.driveTrain, new double[][]{{power, -power}, {power, -power}});
             }
 
         else if (goalAngle < 180 && currentAngle > 180)
             while (currOpmode.opModeIsActive() && (currentAngle >= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle < 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
                 currentAngle = normalizedAngle(getAngularOriention(robot.imu).firstAngle);
+
+                leftToTurn = deltaAngle - Math.abs(angle0 - currentAngle);
+
+                if (leftToTurn < 20) {
+                    power = 20/60;
+                } else if (leftToTurn<60)
+                    power = leftToTurn/60 ;
+                else power =1;
+                telemetry.addData("angle case 1:", currentAngle);
+                telemetry.update();
+                if (sideOfTurn)
+                    setMotorPower(robot.driveTrain, new double[][]{{-power, power}, {-power, power}});
+
+                else
+                    setMotorPower(robot.driveTrain, new double[][]{{power, -power}, {power, -power}});
                 telemetry.addData("angle case 2:", currentAngle);
                 telemetry.update();
             }
+
+
         setMotorPower(driveMotors, new double[][]{{0, 0}, {0, 0}});
         for (int i = 0; i < 2; i++)
             for (int j = 0; j < 2; j++)
@@ -228,8 +272,9 @@ public class DriveUtilities {
                 driveMotors[i][j].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 driveMotors[i][j].setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 driveMotors[i][j].setTargetPosition(motorsCurrentEncoder[i][j]);
-                setMotorPower(driveMotors, new double[][]{{power, power}, {power, power}});
+
             }
+        setMotorPower(driveMotors, new double[][]{{encoderPower, encoderPower}, {encoderPower, encoderPower}});
         while (currOpmode.opModeIsActive() &&
                 driveMotors[0][0].isBusy()
                 && driveMotors[1][0].isBusy()
@@ -255,16 +300,17 @@ public class DriveUtilities {
         }
         return angle;
     }
+
     public void back_up_driveByImage(double power, int turnAngle, int driveDist) {
-        driveByEncoderRoverRuckus(driveDist,driveDist,power,false);
-        TurnWithEncoder(turnAngle,power);
+        driveByEncoderRoverRuckus(driveDist, driveDist, power, false);
+        TurnWithEncoder(turnAngle, power, 0.3);
     }
 
     public void diffTurn(double diffAngle, double power) {
         double currAngle = robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
                 AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         double goalAngle = normalizedAngle(diffAngle + currAngle);
-        TurnWithEncoder(goalAngle, 0.4);
+        TurnWithEncoder(goalAngle, 0.4, 0.3);
 
     }
 

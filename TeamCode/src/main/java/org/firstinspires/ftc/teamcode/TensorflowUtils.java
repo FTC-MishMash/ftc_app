@@ -178,7 +178,7 @@ public class TensorflowUtils {
                 }
         }
         //only if dont have cube in middle
-        driveUtilities.TurnWithEncoder(turnAngleRight, power);
+        driveUtilities.TurnWithEncoder(turnAngleRight, power,0.3);
         runTime0 = currOpMode.getRuntime();
         while (currOpMode.opModeIsActive() && currOpMode.getRuntime() - runTime0 < 2) {
             java.util.List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
@@ -196,7 +196,7 @@ public class TensorflowUtils {
 
         // cubePosition != 1 && cubePosition != 2
         cubePosition = 3;//LEFT
-        driveUtilities.TurnWithEncoder(turnAngleLeft, power);
+        driveUtilities.TurnWithEncoder(turnAngleLeft, power,0.3);
         runTime0 = currOpMode.getRuntime();
         while (currOpMode.opModeIsActive() && currOpMode.getRuntime() - runTime0 < 2) {
             List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
@@ -211,7 +211,7 @@ public class TensorflowUtils {
                     }
                 }
         }
-        driveUtilities.TurnWithEncoder(0, power);
+        driveUtilities.TurnWithEncoder(0, power,0.3);
         return cubePosition;
     }
 
