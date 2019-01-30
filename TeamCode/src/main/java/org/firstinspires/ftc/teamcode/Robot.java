@@ -33,7 +33,7 @@ public class Robot {
     public double redColorLeftSensor = 65;
     public double hangingOpenPosition = 0.7;
     public double hangingLockPosition = 0.2;
-    public double angleTurnToImage = 90;
+    public double angleTurnToImage = 110;
     int AngleToDepot = 135;
     public Robot(HardwareMap hardwareMap) {
 

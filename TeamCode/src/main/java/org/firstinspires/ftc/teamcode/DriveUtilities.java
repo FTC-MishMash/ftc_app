@@ -303,14 +303,14 @@ encoderPower=0.5;
 
     public void back_up_driveByImage(double power, int turnAngle, int driveDist) {
         driveByEncoderRoverRuckus(driveDist, driveDist, power, false);
-        TurnWithEncoder(turnAngle, power, 0.3);
+        TurnWithEncoder(turnAngle, power, 0.5);
     }
 
     public void diffTurn(double diffAngle, double power) {
         double currAngle = robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
                 AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         double goalAngle = normalizedAngle(diffAngle + currAngle);
-        TurnWithEncoder(goalAngle, 0.4, 0.3);
+        scaledTurn(goalAngle, 0.4);
 
     }
 

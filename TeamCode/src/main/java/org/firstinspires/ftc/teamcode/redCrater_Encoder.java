@@ -67,7 +67,7 @@ public class redCrater_Encoder extends AutoMode {
 //            angleTurn+=12;
 //            else if(cubePosition==3)
 //                angleTurn-=12;
-            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5,0.3);
+            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5,0.5);
             sleep(2500);
 
 
