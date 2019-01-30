@@ -41,7 +41,8 @@ public class redCrater extends AutoMode {
         telemetry.update();
         //servoLock(0.2);
         waitForStart();
-        //  LandInAuto(0);
+//          LandInAuto(0);
+
 
 
         if (opModeIsActive()) {
@@ -81,18 +82,9 @@ public class redCrater extends AutoMode {
             //  driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
 
 
-//            if(cubePosition==2)
-//            angleTurn+=12;
-//            else if(cubePosition==3)
-//                angleTurn-=12;=
-            for (int i = 0; i < 2; i++)
-                for (int j = 0; j < 2; j++)
-                    telemetry.addData("motor:" + i + "" + j + ": ", robot.driveTrain[i][j].getMode().toString());
-            telemetry.update();
 
-            sleep(3000);
             driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5,0.3);
-            sleep(2500);
+            sleep(1000);
             tsSampling.initVuforiaWebCam(false);
             targetNav.startTracking();
             sleep(1000);

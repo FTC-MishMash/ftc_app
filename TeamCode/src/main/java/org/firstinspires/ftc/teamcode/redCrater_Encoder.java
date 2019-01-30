@@ -63,7 +63,7 @@ public class redCrater_Encoder extends AutoMode {
             driveUtils.driveByEncoderRoverRuckus(-80, -80, -0.4, false);//to depot
             Marker(0.5);  //marker
             driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5, false);//to crater
-            Parking(230,0.4,0,0.4);
+            Parking(230,-3300,0.2,0,0);
             //TODO: to change linear target encoder!!
 //            driveByColor(0,robot.colorRightFront,robot.imu,robot.hsvValuesRightFront,AngleToDepot,0.35);
 //            }
