@@ -29,7 +29,7 @@ public class DriveRoverRuckus extends OpMode {
 
     public void init() {
 
-//
+
         telemetry.addData("Status", "Initialized");
 
         robot = new Robot(hardwareMap);
