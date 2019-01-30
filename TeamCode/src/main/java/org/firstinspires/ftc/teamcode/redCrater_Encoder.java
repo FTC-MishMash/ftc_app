@@ -55,18 +55,14 @@ public class redCrater_Encoder extends AutoMode {
             sleep(2500);
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingBackward, robot.driveEncoderSamplingBackward, -0.36, false);
             telemetry.addLine("finished driving out of cube");
-            driveUtils.driveByEncoderRoverRuckus(25, 25, 0.36, false);
+
 
             telemetry.update();
-            sleep(2000);
+            sleep(500);
 
-            driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
-            sleep(1500);
 
-//            if(cubePosition==2)
-//            angleTurn+=12;
-//            else if(cubePosition==3)
-//                angleTurn-=12;
+
+
             driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5);
             sleep(2500);
 
@@ -74,8 +70,8 @@ public class redCrater_Encoder extends AutoMode {
             //driveUtils.back_up_driveByImage(0.45, robot.AngleToDepot, -(30 + cubePosition * 15));
             driveUtils.back_up_driveByImage(0.45, robot.AngleToDepot, 95);
             //driveUtils.driveByEncoderRoverRuckus(-80, -80, -0.4, false);//to depot
-            driveUtils.driveByEncoderRoverRuckus(-110, -110, -0.5, false);//to depot
-            //Marker(0.5);  //marker
+            driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, -0.5, false);//to depot
+            Marker(0.5);  //marker
            // driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5, false);//to crater
             driveUtils.driveByEncoderRoverRuckus(180, 180, 0.5, false);//to crater
 

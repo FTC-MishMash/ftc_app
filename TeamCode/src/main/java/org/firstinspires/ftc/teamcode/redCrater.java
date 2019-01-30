@@ -76,10 +76,6 @@ public class redCrater extends AutoMode {
                 tfod.shutdown();
             }
             vuforia.close();
-            telemetry.addLine("finished following");
-            telemetry.update();
-            sleep(200);
-            driveUtils.driveByEncoderRoverRuckus(28, 28, 0.4, false);
             telemetry.addLine("finished driving into cube");
             telemetry.update();
             sleep(500);
