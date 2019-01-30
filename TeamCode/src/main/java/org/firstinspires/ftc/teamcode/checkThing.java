@@ -10,6 +10,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
+import static java.lang.Thread.sleep;
+
 
 @TeleOp(name = "check thing", group = "Iterative Opmode")
 //@Disabled
@@ -19,9 +21,9 @@ public class checkThing extends OpMode {
 
     DriveUtilities driveUtils;
     Robot robot;
-    int angle= 0;
+    int angle = 0;
     int targetEncoder = 0;
-    double power= 0;
+    double power = 0;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -37,7 +39,6 @@ public class checkThing extends OpMode {
         robot = new Robot(hardwareMap);
 
     }
-
 
 
     /*
@@ -60,12 +61,34 @@ public class checkThing extends OpMode {
 
     @Override
     public void loop() {
-        if (gamepad1.)
-      if (gamepad1.x){
-          driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5,0.3);
-      } else if (gamepad1.y){
-          driveUtils.driveByEncoderRoverRuckus(targetEncoder,targetEncoder,power,false);
-      }
+        if (gamepad1.dpad_up) {
+            angle += 5;
+            Sleep(700);
+        } else if (gamepad1.dpad_down) {
+            angle -= 5;
+            Sleep(700);
+        } else if (gamepad1.dpad_right) {
+            targetEncoder += 5;
+            Sleep(700);
+        } else if (gamepad1.dpad_left) {
+            angle -= 5;
+            Sleep(700);
+        } else if (gamepad1.right_bumper) {
+            power += 0.05;
+            Sleep(700);
+        } else if (gamepad1.left_bumper) {
+            power -= 0.05;
+            Sleep(700);
+        }
+        if (gamepad1.x) {
+            driveUtils.TurnWithEncoder(angle, power, 0.3);
+        } else if (gamepad1.y) {
+            driveUtils.driveByEncoderRoverRuckus(targetEncoder, targetEncoder, power, false);
+        }
+        telemetry.addData("angle",angle);
+        telemetry.addData("power",power);
+        telemetry.addData("target encoder",targetEncoder);
+        telemetry.update();
     }
 
 
@@ -81,5 +104,12 @@ public class checkThing extends OpMode {
         robot.driveTrain[1][0].setPower(0);
     }
 
+    void Sleep(int time) {
+        try {
+            sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
