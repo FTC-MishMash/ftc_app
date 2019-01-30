@@ -33,7 +33,7 @@ public class redCrater extends AutoMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
             telemetry.update();
         }
-        robot.hanging.setPosition(robot.hangingLockPosition);
+//        robot.hanging.setPosition(robot.hangingLockPosition);
         telemetry.addLine("wait for start");
         telemetry.update();
         waitForStart();

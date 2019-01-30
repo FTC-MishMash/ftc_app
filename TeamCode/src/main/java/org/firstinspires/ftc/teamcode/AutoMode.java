@@ -185,9 +185,9 @@ public class AutoMode extends LinearOpMode {
     public void LandInAuto(double servoOPENPosition) {
 
 
-//        robot.linear.setTargetPosition(0);
-//        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        robot.linear.setPower(0.7);
+        robot.linear.setTargetPosition(-120);
+        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.linear.setPower(0.7);
 //        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //        robot.shaft[0].setPower(1);
