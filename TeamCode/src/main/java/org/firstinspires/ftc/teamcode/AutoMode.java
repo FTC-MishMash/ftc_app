@@ -96,7 +96,7 @@ public class AutoMode extends LinearOpMode {
     ImageTargets targetNav;
     DriveUtilities driveUtils;
     TensorflowUtils tsSampling;
-    public double angleTurn = 240;
+
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
