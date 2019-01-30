@@ -37,8 +37,8 @@ public class redCrater extends AutoMode {
         telemetry.addLine("wait for start");
         telemetry.update();
         waitForStart();
-        LandInAuto(robot.hangingOpenPosition);
-        shaftGoDown(0.4, -250);
+        LandInAuto(robot.hangingLockPosition);
+        shaftGoDown(0.5, -200);
 
 
         if (opModeIsActive()) {
