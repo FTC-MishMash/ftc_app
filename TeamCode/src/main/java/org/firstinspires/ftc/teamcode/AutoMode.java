@@ -202,8 +202,11 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 50);
-        robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 50);
+        robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() );
+        robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() );
+        robot.shaft[0].setPower(1);
+        robot.shaft[1].setPower(1);
+        sleep(200);
         robot.shaft[0].setPower(-1);
         robot.shaft[1].setPower(-1);
         while (opModeIsActive() && getAngularOriention().thirdAngle <= 0) {
@@ -224,7 +227,7 @@ public class AutoMode extends LinearOpMode {
 
             telemetry.update();
         }
-        robot.hanging.setPosition(servoOPENPosition);
+        robot.hanging.setPosition(robot.hangingOpenPosition);
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
         //TODO: add this
@@ -294,6 +297,8 @@ public class AutoMode extends LinearOpMode {
 
         sleep(300);
         setMotorPower(new double[][]{{0, 0}, {0, 0}});
+
+
 
         robot.shaft[0].setTargetPosition(shaftDownPosition);
         robot.shaft[1].setTargetPosition(shaftDownPosition);
