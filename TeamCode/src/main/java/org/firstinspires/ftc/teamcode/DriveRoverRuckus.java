@@ -153,11 +153,11 @@ public class DriveRoverRuckus extends OpMode {
         }
         if (gamepad2.left_trigger >0) {
 
-            robot.hanging.setPosition(robot.hangingLockPosition);
+            robot.hanging.setPosition(robot.hangingOpenPosition);
 
 
         } else if (gamepad2.left_bumper){
-            robot.hanging.setPosition(robot.hangingOpenPosition);
+            robot.hanging.setPosition(robot.hangingLockPosition);
 
         }if (gamepad2.y) {
             DcMotor.RunMode currMode = robot.shaft[0].getMode();
