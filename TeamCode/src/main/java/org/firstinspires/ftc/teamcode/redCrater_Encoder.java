@@ -30,7 +30,7 @@ public class redCrater_Encoder extends AutoMode {
 //            shaftGoDown(0.4,-250);
 
             int cubePosition = 0;
-            cubePosition = tsSampling.searchCube(0.33, 335, 23);
+            cubePosition = tsSampling.searchCube(0.33, robot.SamplingAngleRight, robot.SamplingAngleLeft);
 
             telemetry.addData("Gold mineral position: ", cubePosition);
             telemetry.update();
@@ -39,7 +39,7 @@ public class redCrater_Encoder extends AutoMode {
             telemetry.addLine("finished go to cube");
             telemetry.update();
             sleep(1500);
-            driveUtils.driveByEncoderRoverRuckus(40, 40, 0.36, false);
+            driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingForward, robot.driveEncoderSamplingForward, 0.36, false);
             if (cubePosition!=1)
             {
                 driveUtils.driveByEncoderRoverRuckus(30, 30, 0.36, false);
@@ -67,7 +67,7 @@ public class redCrater_Encoder extends AutoMode {
 //            angleTurn+=12;
 //            else if(cubePosition==3)
 //                angleTurn-=12;
-            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5,0.5);
+            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5);
             sleep(2500);
 
 

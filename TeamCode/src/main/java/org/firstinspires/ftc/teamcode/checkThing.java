@@ -57,7 +57,7 @@ public class checkThing extends AutoMode {
                 sleep(700);
             }
             if (gamepad1.x) {
-                driveUtils.TurnWithEncoder(angle, power, 0.5);
+                driveUtils.TurnWithEncoder(angle, power);
             } else if (gamepad1.y) {
                 driveUtils.driveByEncoderRoverRuckus(targetEncoder, targetEncoder, power, false);
             }

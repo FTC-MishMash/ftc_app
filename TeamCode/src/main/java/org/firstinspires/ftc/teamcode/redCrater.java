@@ -36,7 +36,7 @@ public class redCrater extends AutoMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
             telemetry.update();
         }
-        robot.hanging.setPosition(0.5);
+        robot.hanging.setPosition(robot.hangingLockPosition);
         telemetry.addLine("wait for start");
         telemetry.update();
         //servoLock(0.2);
@@ -54,15 +54,24 @@ public class redCrater extends AutoMode {
 //            driveUtils.TurnWithEncoder(0, 0.6);
 //            sleep(1000);
             int cubePosition = 0;
-            cubePosition = tsSampling.searchCube(0.33, 335, 23);
+            cubePosition = tsSampling.searchCube(0.33, robot.SamplingAngleRight, robot.SamplingAngleLeft);
 
             telemetry.addData("Gold mineral position: ", cubePosition);
             telemetry.update();
             if (tfod != null)
                 tfod.activate();
             sleep(800);
-            tsSampling.followCubeRecognision(0.18);//start power
-
+            driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingForward, robot.driveEncoderSamplingForward , 0.4, false);
+            if (cubePosition!=1)
+            {
+                driveUtils.driveByEncoderRoverRuckus(30, 30, 0.36, false);
+                driveUtils.driveByEncoderRoverRuckus(-30, -30, -0.36, false);
+            }
+            else
+            {
+                driveUtils.driveByEncoderRoverRuckus(10, 10, 0.36, false);
+                driveUtils.driveByEncoderRoverRuckus(-10, -10, -0.36, false);
+            }
             if (tfod != null) {
                 tfod.shutdown();
             }
@@ -70,11 +79,11 @@ public class redCrater extends AutoMode {
             telemetry.addLine("finished following");
             telemetry.update();
             sleep(200);
-            driveUtils.driveByEncoderRoverRuckus(35, 35, 0.4, false);
+            driveUtils.driveByEncoderRoverRuckus(28, 28, 0.4, false);
             telemetry.addLine("finished driving into cube");
             telemetry.update();
             sleep(500);
-            driveUtils.driveByEncoderRoverRuckus(-35, -35, -0.4, false);
+            driveUtils.driveByEncoderRoverRuckus(-36, -36, -0.4, false);
             telemetry.addLine("finished driving out of cube");
             telemetry.update();
             sleep(500);
@@ -83,33 +92,27 @@ public class redCrater extends AutoMode {
 
 
 
-            driveUtils.scaledTurn(robot.angleTurnToImage, 0.5);
-            sleep(1000);
+            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5);
+            sleep(500);
             tsSampling.initVuforiaWebCam(false);
             targetNav.startTracking();
-            sleep(1000);
+            sleep(500);
 
             float[] pos = targetNav.getPositions();
             telemetry.addData("pos null: ", pos == null);
             telemetry.update();
-            sleep(2000);
+            sleep(500);
             if (pos == null) {
 
                 telemetry.addData("start searching wait for click", cubePosition);
                 telemetry.update();
-                sleep(1200);
+                sleep(500);
                 targetNav.searchImage(cubePosition, -0.20);
             }
 
 
             sleep(1000);
             targetNav.driveToImage(-0.25);
-//            }
-//            sleep(1000);
-            //       driveUtils.driveByEncoderRoverRuckus(60, 60, 0.5,false);
-            //marker
-            //go to crater
-            //open shaft
 
         }
     }

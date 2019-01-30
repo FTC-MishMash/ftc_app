@@ -33,7 +33,13 @@ public class Robot {
     public double redColorLeftSensor = 65;
     public double hangingOpenPosition = 0.7;
     public double hangingLockPosition = 0.2;
-    public double angleTurnToImage = 110;
+    public double angleTurnToImage = 263;
+    public int SamplingAngleRight = 328;
+
+    public int driveEncoderSamplingForward = 40;
+    public int driveEncoderSamplingPositio = 40;
+    public int driveEncoderSamplingBackward = -36;
+    public int SamplingAngleLeft = 26;
     int AngleToDepot = 135;
     public Robot(HardwareMap hardwareMap) {
 
