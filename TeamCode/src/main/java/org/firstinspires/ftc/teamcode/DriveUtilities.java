@@ -208,9 +208,9 @@ public class DriveUtilities {
                 leftToTurn = deltaAngle - Math.abs(angle0 - currentAngle);
 
                 if (leftToTurn < 20) {
-                    power = 20/60;
-                } else if (leftToTurn<60)
-                    power = leftToTurn/60 ;
+                    power = 20/50;
+                } else if (leftToTurn<50)
+                    power = leftToTurn/50 ;
                 else power =1;
                 telemetry.addData("angle case 1:", currentAngle);
                 telemetry.update();
@@ -227,9 +227,9 @@ public class DriveUtilities {
                 leftToTurn = deltaAngle - Math.abs(angle0 - currentAngle);
 
                 if (leftToTurn < 20) {
-                    power = 20/60;
-                } else if (leftToTurn<60)
-                    power = leftToTurn/60 ;
+                    power = 20/50;
+                } else if (leftToTurn<50)
+                    power = leftToTurn/50 ;
                 else power =1;
                 telemetry.addData("angle case 1:", currentAngle);
                 telemetry.update();
@@ -247,9 +247,9 @@ public class DriveUtilities {
                 leftToTurn = deltaAngle - Math.abs(angle0 - currentAngle);
 
                 if (leftToTurn < 20) {
-                    power = 20/60;
-                } else if (leftToTurn<60)
-                    power = leftToTurn/60 ;
+                    power = 20/50;
+                } else if (leftToTurn<50)
+                    power = leftToTurn/50 ;
                 else power =1;
                 telemetry.addData("angle case 1:", currentAngle);
                 telemetry.update();
