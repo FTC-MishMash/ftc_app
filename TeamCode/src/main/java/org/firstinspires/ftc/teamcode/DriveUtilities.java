@@ -207,8 +207,8 @@ public class DriveUtilities {
                 telemetry.update();
                 leftToTurn = deltaAngle - Math.abs(angle0 - currentAngle);
 
-                if (leftToTurn < 20) {
-                    power = 20/50;
+                if (leftToTurn < 25) {
+                    power = 25/50;
                 } else if (leftToTurn<50)
                     power = leftToTurn/50 ;
                 else power =1;
@@ -226,8 +226,8 @@ public class DriveUtilities {
                 currentAngle = normalizedAngle(getAngularOriention(robot.imu).firstAngle);
                 leftToTurn = deltaAngle - Math.abs(angle0 - currentAngle);
 
-                if (leftToTurn < 20) {
-                    power = 20/50;
+                if (leftToTurn < 25) {
+                    power = 25/50;
                 } else if (leftToTurn<50)
                     power = leftToTurn/50 ;
                 else power =1;
@@ -246,8 +246,8 @@ public class DriveUtilities {
 
                 leftToTurn = deltaAngle - Math.abs(angle0 - currentAngle);
 
-                if (leftToTurn < 20) {
-                    power = 20/50;
+                if (leftToTurn < 25) {
+                    power = 25/50;
                 } else if (leftToTurn<50)
                     power = leftToTurn/50 ;
                 else power =1;
@@ -262,7 +262,7 @@ public class DriveUtilities {
                 telemetry.update();
             }
 
-
+encoderPower=0.5;
         setMotorPower(driveMotors, new double[][]{{0, 0}, {0, 0}});
         for (int i = 0; i < 2; i++)
             for (int j = 0; j < 2; j++)
