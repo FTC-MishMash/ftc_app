@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @Autonomous
-//@Disabled
+@Disabled
 public class LandInAuto extends LinearOpMode {
     Robot robot;
 

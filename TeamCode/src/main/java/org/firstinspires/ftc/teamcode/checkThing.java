@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -15,7 +16,7 @@ import static java.lang.Thread.sleep;
 
 
 @TeleOp(name = "check thing", group = "Iterative Opmode")
-//@Disabled
+@Disabled
 public class checkThing extends AutoMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
