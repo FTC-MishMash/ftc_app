@@ -23,13 +23,10 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 @Autonomous(name = "Red cretar")
 public class redCrater extends AutoMode {
 
-//    autoMode auto;
-//test2
     @Override
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
-//        auto = new autoMode();
-        // robot = new Robot(hardwareMap);
+
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             tsSampling.initTfod();
         } else {
@@ -39,10 +36,9 @@ public class redCrater extends AutoMode {
         robot.hanging.setPosition(robot.hangingLockPosition);
         telemetry.addLine("wait for start");
         telemetry.update();
-        //servoLock(0.2);
         waitForStart();
-//          LandInAuto(0);
-
+        LandInAuto(robot.hangingOpenPosition);
+        shaftGoDown(0.4, -250);
 
 
         if (opModeIsActive()) {
@@ -61,14 +57,11 @@ public class redCrater extends AutoMode {
             if (tfod != null)
                 tfod.activate();
             sleep(800);
-            driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingForward, robot.driveEncoderSamplingForward , 0.4, false);
-            if (cubePosition!=1)
-            {
+            driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingForward, robot.driveEncoderSamplingForward, 0.4, false);
+            if (cubePosition != 1) {
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionSide, robot.driveEncoderSamplingPositionSide, 0.36, false);
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionSideBackward, robot.driveEncoderSamplingPositionSideBackward, -0.36, false);
-            }
-            else
-            {
+            } else {
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddle, robot.driveEncoderSamplingPositionMiddle, 0.36, false);
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddleBackward, robot.driveEncoderSamplingPositionMiddleBackward, -0.36, false);
             }
@@ -79,13 +72,12 @@ public class redCrater extends AutoMode {
             telemetry.addLine("finished driving into cube");
             telemetry.update();
             sleep(500);
-            driveUtils.driveByEncoderRoverRuckus(-36, -36, -0.4, false);
+            driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingBackward, robot.driveEncoderSamplingBackward, -0.4, false);
             telemetry.addLine("finished driving out of cube");
             telemetry.update();
             sleep(500);
 
             //  driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
-
 
 
             driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5);
@@ -107,9 +99,13 @@ public class redCrater extends AutoMode {
             }
 
 
-            sleep(1000);
+            sleep(300);
             targetNav.driveToImage(-0.25);
-
+            sleep(200);
+            driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, -0.5, false);//to depot
+            Marker(0.5);  //marker
+            // driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5, false);//to crater
+            driveUtils.driveByEncoderRoverRuckus(robot.distToCrater, robot.distToCrater, 0.5, false);//to crater
         }
     }
 }

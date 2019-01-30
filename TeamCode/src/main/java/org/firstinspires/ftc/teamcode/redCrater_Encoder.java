@@ -26,8 +26,8 @@ public class redCrater_Encoder extends AutoMode {
         if (opModeIsActive()) {
             runTime.reset();
             runTime.startTime();
-//            LandInAuto(robot.hangingOpenPosition);
-//            shaftGoDown(0.4,-250);
+            LandInAuto(robot.hangingOpenPosition);
+            shaftGoDown(0.4,-250);
 
             int cubePosition = 0;
             cubePosition = tsSampling.searchCube(0.33, robot.SamplingAngleRight, robot.SamplingAngleLeft);
@@ -73,7 +73,7 @@ public class redCrater_Encoder extends AutoMode {
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, -0.5, false);//to depot
             Marker(0.5);  //marker
            // driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5, false);//to crater
-            driveUtils.driveByEncoderRoverRuckus(180, 180, 0.5, false);//to crater
+            driveUtils.driveByEncoderRoverRuckus(robot.distToCrater, robot.distToCrater, 0.5, false);//to crater
 
            // Parking(230,-3300,0.2,0,0);
             //TODO: to change linear target encoder!!

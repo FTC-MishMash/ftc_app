@@ -183,8 +183,7 @@ public class AutoMode extends LinearOpMode {
     }
 
     public void LandInAuto(double servoOPENPosition) {
-        telemetry.addData("pitch", getAngularOriention().thirdAngle);
-        telemetry.update();
+
 
 //        robot.linear.setTargetPosition(0);
 //        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
