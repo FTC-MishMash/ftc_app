@@ -257,7 +257,7 @@ public class ImageTargets {
             telemetry.update();
             currOpmode.sleep(1000);
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
-            while (currOpmode.opModeIsActive() && positions[0] <= 61) {
+            while (currOpmode.opModeIsActive() && positions[0] <= 60) {
                 positions = getPositions();
                 telemetry.addData("x:", positions[0]);
                 telemetry.update();

@@ -182,8 +182,13 @@ public class AutoMode extends LinearOpMode {
         return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
 
-    public void LandInAuto(double servoOPENPosition,double shaftPower) {
-
+    public void LandInAuto(double servoOPENPosition, double shaftPower) {
+        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition());
+        robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition());
+        robot.shaft[0].setPower(1);
+        robot.shaft[1].setPower(1);
 
         robot.linear.setTargetPosition(-125);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -191,8 +196,6 @@ public class AutoMode extends LinearOpMode {
         robot.hanging.setPosition(robot.hangingLockPosition);
 //        robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //        robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.shaft[0].setPower(1);
-        robot.shaft[1].setPower(1);
 
         telemetry.addData("pitch", getAngularOriention().thirdAngle);
         telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
@@ -217,7 +220,7 @@ public class AutoMode extends LinearOpMode {
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            sleep(150);
+            sleep(30);
             robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 10);
             robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 10);
             robot.shaft[0].setPower(-shaftPower);
@@ -290,9 +293,6 @@ public class AutoMode extends LinearOpMode {
 //        robot.shaft[1].setPower(0);
 
 
-
-
-
     }
 
 
@@ -301,7 +301,6 @@ public class AutoMode extends LinearOpMode {
 
         sleep(300);
         setMotorPower(new double[][]{{0, 0}, {0, 0}});
-
 
 
         robot.shaft[0].setTargetPosition(shaftDownPosition);
@@ -324,8 +323,9 @@ public class AutoMode extends LinearOpMode {
             telemetry.addData("shaft go down", robot.shaft[0].isBusy());
             telemetry.update();
         }
-
-
+robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+robot.linear.setTargetPosition(0);
+robot.linear.setPower(0.4);
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
 
