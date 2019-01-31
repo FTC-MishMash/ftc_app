@@ -182,7 +182,7 @@ public class AutoMode extends LinearOpMode {
         return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
 
-    public void LandInAuto(double servoOPENPosition) {
+    public void LandInAuto(double servoOPENPosition,double shaftPower) {
 
 
         robot.linear.setTargetPosition(-125);
@@ -200,24 +200,28 @@ public class AutoMode extends LinearOpMode {
         telemetry.update();
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() );
-        robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() );
-        robot.shaft[0].setPower(1);
-        robot.shaft[1].setPower(1);
-        sleep(200);
-        robot.shaft[0].setPower(-1);
-        robot.shaft[1].setPower(-1);
+//        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() );
+//        robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() );
+//        robot.shaft[0].setPower(1);
+//        robot.shaft[1].setPower(1);
+//        sleep(200);
+//        robot.shaft[0].setPower(-1);
+//        robot.shaft[1].setPower(-1);
         while (opModeIsActive() && getAngularOriention().thirdAngle <= 0) {
             robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 300);
             robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 300);
+            robot.shaft[0].setPower(shaftPower);
+            robot.shaft[1].setPower(shaftPower);
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             sleep(150);
             robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 10);
             robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 10);
-            robot.shaft[0].setPower(1);
-            robot.shaft[1].setPower(1);
+            robot.shaft[0].setPower(-shaftPower);
+            robot.shaft[1].setPower(-shaftPower);
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -316,7 +320,7 @@ public class AutoMode extends LinearOpMode {
         while (opModeIsActive() &&
                 robot.shaft[0].isBusy() &&
                 robot.shaft[1].isBusy() &&
-                getRuntime() - t0 < 1) {
+                getRuntime() - t0 < 1.5) {
             telemetry.addData("shaft go down", robot.shaft[0].isBusy());
             telemetry.update();
         }
