@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
 @Autonomous(name = "VuforiaCheck")
-@Disabled
+//@Disabled
 public class VuforiaCheck extends AutoMode {
 
     @Override

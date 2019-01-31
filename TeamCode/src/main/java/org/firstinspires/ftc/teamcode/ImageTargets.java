@@ -266,16 +266,16 @@ public class ImageTargets {
             telemetry.addLine("got to x=65");
             telemetry.update();
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
-            currOpmode.sleep(1000);
+            currOpmode.sleep(500);
             double heading = 0;
             if (positions != null) ;
             {
                 heading = positions[5];
                 telemetry.addData("got to heading: ", heading);
                 telemetry.update();
-                currOpmode.sleep(3000);
+                currOpmode.sleep(1000);
             }
-            driveUtilities.diffTurn(340 + heading, 0.15);
+            driveUtilities.diffTurn(320 + heading, 0.15);
         }
     }
 }
