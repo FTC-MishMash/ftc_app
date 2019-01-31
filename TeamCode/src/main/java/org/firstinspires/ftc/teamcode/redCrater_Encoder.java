@@ -20,7 +20,7 @@ public class redCrater_Encoder extends AutoMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
             telemetry.update();
         }
-        robot.hanging.setPosition(robot.hangingLockPosition);
+//        robot.hanging.setPosition(robot.hangingLockPosition);
         waitForStart();
 
         if (opModeIsActive()) {
@@ -71,7 +71,7 @@ public class redCrater_Encoder extends AutoMode {
             driveUtils.back_up_driveByImage(0.45, robot.AngleToDepot, 95);
             //driveUtils.driveByEncoderRoverRuckus(-80, -80, -0.4, false);//to depot
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, -robot.powerEncoder, false);//to depot
-            Marker(0.5);  //marker
+            Marker(0.5,robot.shaftTargetPositionMarker);  //marker
            // driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5, false);//to crater
             driveUtils.driveByEncoderRoverRuckus(robot.distToCrater, robot.distToCrater, robot.powerEncoder, false);//to crater
 

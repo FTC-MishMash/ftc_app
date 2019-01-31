@@ -103,7 +103,7 @@ public class redCrater extends AutoMode {
             targetNav.driveToImage(-0.4);
 //            sleep(500);
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, -robot.powerEncoder, false);//to depot
-            Marker(0.5);  //marker
+            Marker(0.5,robot.shaftTargetPositionMarker);  //marker
             // driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5, false);//to crater
             driveUtils.driveByEncoderRoverRuckus(robot.distToCrater, robot.distToCrater, robot.powerEncoder, false);//to crater
         }

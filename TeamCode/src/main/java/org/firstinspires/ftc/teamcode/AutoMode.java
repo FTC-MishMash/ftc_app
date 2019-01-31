@@ -213,14 +213,14 @@ public class AutoMode extends LinearOpMode {
 //        robot.shaft[0].setPower(-1);
 //        robot.shaft[1].setPower(-1);
         while (opModeIsActive() && getAngularOriention().thirdAngle <= 0) {
-            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 300);
-            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 300);
+            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 250);
+            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 250);
             robot.shaft[0].setPower(shaftPower);
             robot.shaft[1].setPower(shaftPower);
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            sleep(75);
+            sleep(60);
             robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 10);
             robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 10);
             robot.shaft[0].setPower(-shaftPower);
@@ -836,14 +836,14 @@ robot.linear.setPower(0.4);
 //
 //    }
 
-    public void Marker(double powerShaft) {
+    public void Marker(double powerShaft, int shaftTargetPositionMarker) {
 //        driveByColor(color, sensorcColor, imu, hsvValue, heading, power);
 //        driveByEncoderRoverRuckus(75, 75, 0.5);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //open shaft
-        robot.shaft[0].setTargetPosition(175);
-        robot.shaft[1].setTargetPosition(175);
+        robot.shaft[0].setTargetPosition(shaftTargetPositionMarker);
+        robot.shaft[1].setTargetPosition(shaftTargetPositionMarker);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[0].setPower(powerShaft);

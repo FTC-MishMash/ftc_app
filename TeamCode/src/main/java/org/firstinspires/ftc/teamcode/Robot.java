@@ -22,6 +22,7 @@ public class Robot {
     public Servo hanging;
     public ColorSensor colorRightFront;
     public ColorSensor colorLeftFront;
+    public int shaftTargetPositionMarker = -2800;
     float hsvValuesLeftFront[] = {0F, 0F, 0F};
     float hsvValuesRightFront[] = {0F, 0F, 0F};
     public final float valuesLeftFront[] = hsvValuesRightFront;
@@ -36,8 +37,8 @@ public class Robot {
     public double angleTurnToImage = 261;
     public int SamplingAngleRight = 328;
 
-    public int driveEncoderSamplingForward = 40;
-    public int driveEncoderSamplingPositionSide = 40;
+    public int driveEncoderSamplingForward = 35;
+    public int driveEncoderSamplingPositionSide = 30;
     public int driveEncoderSamplingPositionMiddle = 10;
     public int driveEncoderSamplingPositionSideBackward = -29;
     public int driveEncoderSamplingPositionMiddleBackward = -26;
