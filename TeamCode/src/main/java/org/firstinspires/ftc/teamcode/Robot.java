@@ -46,7 +46,7 @@ public class Robot {
     public int SamplingAngleLeft = 26;
     public int distToDepot = -110;
     public int distToCrater = 160;
-    public double powerEncoder = 0.5;
+    public double powerEncoder = 0.4;
     int AngleToDepot = 135;
 
     public Robot(HardwareMap hardwareMap) {

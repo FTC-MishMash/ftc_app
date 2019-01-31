@@ -75,13 +75,13 @@ public class redCrater extends AutoMode {
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingBackward, robot.driveEncoderSamplingBackward, -robot.powerEncoder, false);
             telemetry.addLine("finished driving out of cube");
             telemetry.update();
-//            sleep(500);
+            sleep(200);
 //
             //  driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
 
 
-            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.4);
-//            sleep(500);
+            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5);
+            sleep(100);
             tsSampling.initVuforiaWebCam(false);
             targetNav.startTracking();
 //            sleep(500);

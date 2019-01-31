@@ -59,7 +59,7 @@ public class TensorflowUtils {
 
         VuforiaLocalizer.Parameters parameters;
         int cameraId = currOpMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
-          parameters = new VuforiaLocalizer.Parameters(cameraId);
+          parameters = new VuforiaLocalizer.Parameters();
 
 //        if (count > 1)
 //            parameters = new VuforiaLocalizer.Parameters(cameraId);

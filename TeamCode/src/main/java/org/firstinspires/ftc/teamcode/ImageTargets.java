@@ -255,8 +255,8 @@ public class ImageTargets {
         if (positions != null) {
             telemetry.addLine("On DriveToImage()");
             telemetry.update();
-            currOpmode.sleep(1000);
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
+            currOpmode.sleep(150);
             double time=currOpmode.getRuntime();
             while (currOpmode.opModeIsActive() && positions[0] <= 60&&currOpmode.getRuntime()-time>6) {
                 positions = getPositions();
@@ -274,7 +274,7 @@ public class ImageTargets {
                 heading = positions[5];
                 telemetry.addData("got to heading: ", heading);
                 telemetry.update();
-                currOpmode.sleep(1000);
+                currOpmode.sleep(500);
             }
             driveUtilities.diffTurn(20 + heading, 0.15);
         }
