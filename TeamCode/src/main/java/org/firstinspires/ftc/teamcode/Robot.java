@@ -37,16 +37,16 @@ public class Robot {
     public double angleTurnToImage = 261;
     public int SamplingAngleRight = 328;
 
-    public int driveEncoderSamplingForward = 35;
+    public int driveEncoderSamplingForward = 30;
     public int driveEncoderSamplingPositionSide = 30;
     public int driveEncoderSamplingPositionMiddle = 10;
     public int driveEncoderSamplingPositionSideBackward = -29;
-    public int driveEncoderSamplingPositionMiddleBackward = -26;
+    public int driveEncoderSamplingPositionMiddleBackward = -20;
     public int driveEncoderSamplingBackward = -20;
     public int SamplingAngleLeft = 26;
     public int distToDepot = -110;
     public int distToCrater = 160;
-    public double powerEncoder = 0.6;
+    public double powerEncoder = 0.5;
     int AngleToDepot = 135;
 
     public Robot(HardwareMap hardwareMap) {

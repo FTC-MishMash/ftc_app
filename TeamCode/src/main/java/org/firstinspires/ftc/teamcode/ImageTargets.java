@@ -178,9 +178,9 @@ public class ImageTargets {
                 telemetry.addLine("case1");
                 telemetry.update();
                 currOpmode.sleep(1000);
-                driveUtilities.driveByEncoderRoverRuckus(-70, -60, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(-70, -70, power, true);
                 if (getPositions() == null)
-                    driveUtilities.driveByEncoderRoverRuckus(-50, -70, power, true);
+                    driveUtilities.driveByEncoderRoverRuckus(-50, -50, power, true);
 
                 break;
             }
@@ -188,9 +188,9 @@ public class ImageTargets {
                 telemetry.addLine("case2");
                 telemetry.update();
                 currOpmode.sleep(1000);
-                driveUtilities.driveByEncoderRoverRuckus(-50, -35, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(-50, -50, power, true);
                 if (getPositions() == null)
-                    driveUtilities.driveByEncoderRoverRuckus(-35, -50, power, true);
+                    driveUtilities.driveByEncoderRoverRuckus(-35, -35, power, true);
 
                 break;
             }
@@ -198,9 +198,9 @@ public class ImageTargets {
                 telemetry.addLine("case3");
                 telemetry.update();
                 currOpmode.sleep(1000);
-                driveUtilities.driveByEncoderRoverRuckus(-30, -12, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(-30, -30, power, true);
                 if (getPositions() == null)
-                    driveUtilities.driveByEncoderRoverRuckus(-12, -30, power, true);
+                    driveUtilities.driveByEncoderRoverRuckus(-12, -12, power, true);
             }
         }
 //
@@ -257,7 +257,8 @@ public class ImageTargets {
             telemetry.update();
             currOpmode.sleep(1000);
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
-            while (currOpmode.opModeIsActive() && positions[0] <= 60) {
+            double time=currOpmode.getRuntime();
+            while (currOpmode.opModeIsActive() && positions[0] <= 60&&currOpmode.getRuntime()-time>6) {
                 positions = getPositions();
                 telemetry.addData("x:", positions[0]);
                 telemetry.update();
@@ -266,7 +267,7 @@ public class ImageTargets {
             telemetry.addLine("got to x=65");
             telemetry.update();
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
-            currOpmode.sleep(500);
+            currOpmode.sleep(100);
             double heading = 0;
             if (positions != null) ;
             {

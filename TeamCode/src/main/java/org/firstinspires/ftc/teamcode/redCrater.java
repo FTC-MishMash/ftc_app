@@ -80,7 +80,7 @@ public class redCrater extends AutoMode {
             //  driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
 
 
-            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5);
+            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.4);
 //            sleep(500);
             tsSampling.initVuforiaWebCam(false);
             targetNav.startTracking();
@@ -95,12 +95,12 @@ public class redCrater extends AutoMode {
                 telemetry.addData("start searching wait for click", cubePosition);
                 telemetry.update();
 //                sleep(500);
-                targetNav.searchImage(cubePosition, -0.25);
+                targetNav.searchImage(cubePosition, -0.20);
             }
 
 
 //            sleep(600);
-            targetNav.driveToImage(-0.4);
+            targetNav.driveToImage(-0.3);
 //            sleep(500);
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, -robot.powerEncoder, false);//to depot
             Marker(0.5,robot.shaftTargetPositionMarker);  //marker
