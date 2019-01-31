@@ -203,6 +203,7 @@ public class AutoMode extends LinearOpMode {
         telemetry.update();
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        sleep(150);
 //        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //        robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() );
