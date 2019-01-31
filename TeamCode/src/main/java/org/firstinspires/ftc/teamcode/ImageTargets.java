@@ -275,7 +275,7 @@ public class ImageTargets {
                 telemetry.update();
                 currOpmode.sleep(1000);
             }
-            driveUtilities.diffTurn(320 + heading, 0.15);
+            driveUtilities.diffTurn(364 + heading, 0.15);
         }
     }
 }
