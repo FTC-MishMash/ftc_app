@@ -182,8 +182,13 @@ public class AutoMode extends LinearOpMode {
         return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
 
-    public void LandInAuto(double servoOPENPosition) {
-
+    public void LandInAuto(double servoOPENPosition, double shaftPower) {
+        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition());
+        robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition());
+        robot.shaft[0].setPower(1);
+        robot.shaft[1].setPower(1);
 
         robot.linear.setTargetPosition(-125);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -191,8 +196,6 @@ public class AutoMode extends LinearOpMode {
         robot.hanging.setPosition(robot.hangingLockPosition);
 //        robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //        robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.shaft[0].setPower(1);
-        robot.shaft[1].setPower(1);
 
         telemetry.addData("pitch", getAngularOriention().thirdAngle);
         telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
@@ -200,21 +203,29 @@ public class AutoMode extends LinearOpMode {
         telemetry.update();
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 50);
-        robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 50);
-        robot.shaft[0].setPower(-1);
-        robot.shaft[1].setPower(-1);
+//        sleep(150);
+//        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() );
+//        robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() );
+//        robot.shaft[0].setPower(1);
+//        robot.shaft[1].setPower(1);
+//        sleep(200);
+//        robot.shaft[0].setPower(-1);
+//        robot.shaft[1].setPower(-1);
         while (opModeIsActive() && getAngularOriention().thirdAngle <= 0) {
-            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 300);
-            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 300);
+            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 250);
+            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 250);
+            robot.shaft[0].setPower(shaftPower);
+            robot.shaft[1].setPower(shaftPower);
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            sleep(150);
+            sleep(60);
             robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 10);
             robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 10);
-            robot.shaft[0].setPower(1);
-            robot.shaft[1].setPower(1);
+            robot.shaft[0].setPower(-shaftPower);
+            robot.shaft[1].setPower(-shaftPower);
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -224,7 +235,7 @@ public class AutoMode extends LinearOpMode {
 
             telemetry.update();
         }
-        robot.hanging.setPosition(servoOPENPosition);
+        robot.hanging.setPosition(robot.hangingOpenPosition);
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
         //TODO: add this
@@ -283,9 +294,6 @@ public class AutoMode extends LinearOpMode {
 //        robot.shaft[1].setPower(0);
 
 
-
-
-
     }
 
 
@@ -294,6 +302,7 @@ public class AutoMode extends LinearOpMode {
 
         sleep(300);
         setMotorPower(new double[][]{{0, 0}, {0, 0}});
+
 
         robot.shaft[0].setTargetPosition(shaftDownPosition);
         robot.shaft[1].setTargetPosition(shaftDownPosition);
@@ -311,12 +320,13 @@ public class AutoMode extends LinearOpMode {
         while (opModeIsActive() &&
                 robot.shaft[0].isBusy() &&
                 robot.shaft[1].isBusy() &&
-                getRuntime() - t0 < 1) {
+                getRuntime() - t0 < 1.5) {
             telemetry.addData("shaft go down", robot.shaft[0].isBusy());
             telemetry.update();
         }
-
-
+        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.linear.setTargetPosition(0);
+        robot.linear.setPower(0.4);
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
 
@@ -761,7 +771,7 @@ public class AutoMode extends LinearOpMode {
 
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters();
         // tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
 
@@ -827,13 +837,14 @@ public class AutoMode extends LinearOpMode {
 //
 //    }
 
-    public void Marker(double powerShaft) {
+    public void Marker(double powerShaft, int shaftTargetPositionMarker) {
 //        driveByColor(color, sensorcColor, imu, hsvValue, heading, power);
 //        driveByEncoderRoverRuckus(75, 75, 0.5);
-
+        robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //open shaft
-        robot.shaft[0].setTargetPosition(175);
-        robot.shaft[1].setTargetPosition(175);
+        robot.shaft[0].setTargetPosition(shaftTargetPositionMarker);
+        robot.shaft[1].setTargetPosition(shaftTargetPositionMarker);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[0].setPower(powerShaft);
@@ -844,6 +855,9 @@ public class AutoMode extends LinearOpMode {
             telemetry.addData("shaft move  ", robot.shaft[0].isBusy());
             telemetry.update();
         }
+        robot.inTake.setPower(1);
+        sleep(800);
+        robot.inTake.setPower(0);
         //marker
         robot.shaft[0].setTargetPosition(0);
         robot.shaft[1].setTargetPosition(0);
@@ -861,25 +875,32 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
+        robot.linear.setTargetPosition(0);
+        robot.linear.setPower(0.4);
+    robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    public void Parking(int targetPositionEncoder, int targetShaftParkingPositionEncoder, double shaftPower, int linearTargetEncoder, double linearPower) {
+    public void Parking( int targetShaftParkingPositionEncoder, double shaftPower, int linearTargetEncoder, double linearPower) {
+        robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        driveUtils.driveByEncoderRoverRuckus(160, 160, 0.5, false);
-        robot.shaft[0].setTargetPosition(targetPositionEncoder);//250
-        robot.shaft[1].setTargetPosition(targetPositionEncoder);
+//        driveUtils.driveByEncoderRoverRuckus(160, 160, 0.5, false);
+        robot.shaft[0].setTargetPosition(targetShaftParkingPositionEncoder);//250
+        robot.shaft[1].setTargetPosition(targetShaftParkingPositionEncoder);
 
-        robot.shaft[0].setTargetPosition(750);
-        robot.shaft[1].setTargetPosition(750);
-        robot.shaft[0].setPower(0.6);
-        robot.shaft[1].setPower(0.6);
-        while (robot.shaft[0].isBusy() && robot.shaft[1].isBusy()) ;
-        robot.linear.setTargetPosition(-750);
-        while (robot.linear.isBusy()) ;
-
+//        robot.shaft[0].setTargetPosition(750);
+//        robot.shaft[1].setTargetPosition(750);
+        robot.shaft[0].setPower(shaftPower);
+        robot.shaft[1].setPower(shaftPower);
+        while (opModeIsActive() && robot.shaft[0].isBusy() && robot.shaft[1].isBusy()) ;
+        robot.linear.setTargetPosition(linearTargetEncoder);
+        robot.linear.setPower(0.7);
+        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while (opModeIsActive() && robot.linear.isBusy()) ;
+        robot.shaft[0].setPower(0);
+        robot.shaft[1].setPower(0);
 //        robot.shaft[0].setTargetPosition(targetShaftParkingPositionEncoder);//250
 //        robot.shaft[1].setTargetPosition(targetShaftParkingPositionEncoder);
 //        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);

@@ -16,7 +16,7 @@ import static java.lang.Thread.sleep;
 
 
 @TeleOp(name = "check thing", group = "Iterative Opmode")
-@Disabled
+//@Disabled
 public class checkThing extends AutoMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -61,6 +61,37 @@ public class checkThing extends AutoMode {
                 driveUtils.TurnWithEncoder(angle, power);
             } else if (gamepad1.y) {
                 driveUtils.driveByEncoderRoverRuckus(targetEncoder, targetEncoder, power, false);
+            }
+            if (gamepad1.right_trigger > 0) {
+
+                driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, -robot.powerEncoder, false);//to depot
+                Marker(0.5, robot.shaftTargetPositionMarker);  //marker
+                // driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5, false);//to crater
+                driveUtils.driveByEncoderRoverRuckus(robot.distToCrater, robot.distToCrater, robot.powerEncoder, false);//to crater
+
+            } else if (gamepad1.left_trigger > 0) {
+                int cubePosition = 1;
+                targetNav.startTracking();
+//            sleep(500);
+
+                float[] pos = targetNav.getPositions();
+                telemetry.addData("pos null: ", pos == null);
+                telemetry.update();
+//            sleep(500);
+                if (pos == null) {
+
+                    telemetry.addData("start searching wait for click", cubePosition);
+                    telemetry.update();
+//                sleep(500);
+                    targetNav.searchImage(cubePosition, -0.20);
+                } else if (gamepad1.b) {
+                    driveUtils.back_up_driveByImage(0.45, robot.AngleToDepot, 95);
+                }
+
+
+//            sleep(600);
+                targetNav.driveToImage(-0.3);
+//
             }
             telemetry.addData("angle", angle);
             telemetry.addData("power", power);

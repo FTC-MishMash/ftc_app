@@ -18,10 +18,11 @@ public class Robot {
     public DcMotor[] shaft = new DcMotor[2];
     public DcMotor linear;
     public DcMotor inTake;
-//    public Servo linearLock;
+    //    public Servo linearLock;
     public Servo hanging;
     public ColorSensor colorRightFront;
     public ColorSensor colorLeftFront;
+    public int shaftTargetPositionMarker = -300;
     float hsvValuesLeftFront[] = {0F, 0F, 0F};
     float hsvValuesRightFront[] = {0F, 0F, 0F};
     public final float valuesLeftFront[] = hsvValuesRightFront;
@@ -33,19 +34,23 @@ public class Robot {
     public double redColorLeftSensor = 65;
     public double hangingOpenPosition = 0.2;
     public double hangingLockPosition = 0.7;
-    public double angleTurnToImage = 263;
-    public int SamplingAngleRight = 328;
+    public double angleTurnToImage = 261;
+    public double newAngleTurnToImage = 70;
+    public int SamplingAngleRight = 340;
 
     public int driveEncoderSamplingForward = 40;
-    public int driveEncoderSamplingPositionSide = 40;
+    public int driveEncoderSamplingPositionSide = 30;
     public int driveEncoderSamplingPositionMiddle = 10;
     public int driveEncoderSamplingPositionSideBackward = -30;
-    public int driveEncoderSamplingPositionMiddleBackward = -30;
-    public int driveEncoderSamplingBackward = -36;
-    public int SamplingAngleLeft = 26;
-    public  int distToDepot=-110;
-    public  int distToCrater=180;
+    public int driveEncoderSamplingPositionMiddleBackward = -10;
+    public int driveEncoderSamplingBackward = 0;
+    public int SamplingAngleLeft = 20;
+    public int distToDepot = 90;
+    public int distToCrater = 200;
+    public double powerEncoder = 0.7;
     int AngleToDepot = 135;
+    int newAngleToDepot = 115;
+
     public Robot(HardwareMap hardwareMap) {
 
         inTake = hardwareMap.get(DcMotor.class, "inTake");

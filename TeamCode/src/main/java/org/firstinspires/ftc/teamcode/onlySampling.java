@@ -12,9 +12,10 @@ public class onlySampling extends AutoMode {
     @Override
     public void runOpMode() throws InterruptedException {
 //        auto = new autoMode();
-        robot = new Robot(hardwareMap);
-
-        initVuforiaWebCam(hardwareMap);
+        super.runOpMode();
+//        robot = new Robot(hardwareMap);
+//
+//        initVuforiaWebCam(hardwareMap);
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod(hardwareMap);
@@ -25,7 +26,8 @@ public class onlySampling extends AutoMode {
 
 //        motorLock();
         waitForStart();
-//        LandInAuto();
+        LandInAuto(robot.hangingLockPosition,0.5);
+        shaftGoDown(0.5, 2700);
 
 
         if (opModeIsActive()) {
@@ -33,19 +35,25 @@ public class onlySampling extends AutoMode {
             runTime.startTime();
 
             int cubePosition = 0;
-            cubePosition = searchCube(0.35, 332, 20, robot.driveTrain, robot.imu);
+            cubePosition = tsSampling.searchCube(0.33, robot.SamplingAngleRight, robot.SamplingAngleLeft);
 
-            sleep(1000);
-            followCubeRecognision(0.15);//start power
-
+            telemetry.addData("Gold mineral position: ", cubePosition);
+            telemetry.update();
+            if (tfod != null)
+                tfod.activate();
+//            sleep(800);
+            driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingForward, robot.driveEncoderSamplingForward, robot.powerEncoder, false);
+            if (cubePosition != 1) {
+                driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionSide, robot.driveEncoderSamplingPositionSide, robot.powerEncoder, false);
+            } else {
+                driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddle, robot.driveEncoderSamplingPositionMiddle, robot.powerEncoder, false);
+            }
             if (tfod != null) {
                 tfod.shutdown();
             }
 
-            driveUtils.driveByEncoderRoverRuckus(20, 20, 0.5,false);
-            sleep(1000);
-            ScaledTurn(0, robot.driveTrain, robot.imu, 0.35);
-            driveUtils.driveByEncoderRoverRuckus(50, 50, 0.35,false);
+
+            Parking(1000,0.5,-750,0.5);
 //            driveByEncoderRoverRuckus(-20, -20, 0.5);
 //            setMotorPower(new double[][]{{-0.4, -0.4}, {-0.4, -0.4}});
 //            sleep(500);
