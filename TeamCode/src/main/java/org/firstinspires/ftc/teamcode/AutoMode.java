@@ -855,6 +855,9 @@ public class AutoMode extends LinearOpMode {
             telemetry.addData("shaft move  ", robot.shaft[0].isBusy());
             telemetry.update();
         }
+        robot.inTake.setPower(1);
+        sleep(800);
+        robot.inTake.setPower(0);
         //marker
         robot.shaft[0].setTargetPosition(0);
         robot.shaft[1].setTargetPosition(0);
@@ -872,6 +875,9 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
+        robot.linear.setTargetPosition(0);
+        robot.linear.setPower(0.4);
+    robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void Parking( int targetShaftParkingPositionEncoder, double shaftPower, int linearTargetEncoder, double linearPower) {

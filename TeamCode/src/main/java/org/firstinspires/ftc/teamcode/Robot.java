@@ -22,7 +22,7 @@ public class Robot {
     public Servo hanging;
     public ColorSensor colorRightFront;
     public ColorSensor colorLeftFront;
-    public int shaftTargetPositionMarker = -2800;
+    public int shaftTargetPositionMarker = -300;
     float hsvValuesLeftFront[] = {0F, 0F, 0F};
     float hsvValuesRightFront[] = {0F, 0F, 0F};
     public final float valuesLeftFront[] = hsvValuesRightFront;
@@ -35,19 +35,21 @@ public class Robot {
     public double hangingOpenPosition = 0.2;
     public double hangingLockPosition = 0.7;
     public double angleTurnToImage = 261;
-    public int SamplingAngleRight = 328;
+    public double newAngleTurnToImage = 70;
+    public int SamplingAngleRight = 340;
 
-    public int driveEncoderSamplingForward = 30;
+    public int driveEncoderSamplingForward = 40;
     public int driveEncoderSamplingPositionSide = 30;
     public int driveEncoderSamplingPositionMiddle = 10;
-    public int driveEncoderSamplingPositionSideBackward = -29;
-    public int driveEncoderSamplingPositionMiddleBackward = -20;
-    public int driveEncoderSamplingBackward = -20;
-    public int SamplingAngleLeft = 26;
-    public int distToDepot = -110;
-    public int distToCrater = 160;
-    public double powerEncoder = 0.4;
+    public int driveEncoderSamplingPositionSideBackward = -30;
+    public int driveEncoderSamplingPositionMiddleBackward = -10;
+    public int driveEncoderSamplingBackward = 0;
+    public int SamplingAngleLeft = 20;
+    public int distToDepot = 90;
+    public int distToCrater = 200;
+    public double powerEncoder = 0.7;
     int AngleToDepot = 135;
+    int newAngleToDepot = 115;
 
     public Robot(HardwareMap hardwareMap) {
 

@@ -30,7 +30,7 @@ public class redCrater_Encoder extends AutoMode {
             shaftGoDown(0.4,-250);
 
             int cubePosition = 0;
-            cubePosition = tsSampling.searchCube(robot.powerEncoder, robot.SamplingAngleRight, robot.SamplingAngleLeft);
+            cubePosition = tsSampling.searchCube(0.35, robot.SamplingAngleRight, robot.SamplingAngleLeft);
 
             telemetry.addData("Gold mineral position: ", cubePosition);
             telemetry.update();
@@ -63,19 +63,21 @@ public class redCrater_Encoder extends AutoMode {
 
 
 
-            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5);
+            driveUtils.TurnWithEncoder(robot.newAngleTurnToImage, 0.5);
 //            sleep(2500);
 
 
             //driveUtils.back_up_driveByImage(0.45, robot.AngleToDepot, -(30 + cubePosition * 15));
-            driveUtils.back_up_driveByImage(0.45, robot.AngleToDepot, 95);
+            driveUtils.back_up_driveByImage(0.45, robot.newAngleToDepot, 95);
             //driveUtils.driveByEncoderRoverRuckus(-80, -80, -0.4, false);//to depot
-            driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, -robot.powerEncoder, false);//to depot
+            driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, robot.powerEncoder, false);//to depot
             Marker(0.5,robot.shaftTargetPositionMarker);  //marker
            // driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5, false);//to crater
-            driveUtils.driveByEncoderRoverRuckus(robot.distToCrater, robot.distToCrater, robot.powerEncoder, false);//to crater
-
-           // Parking(230,-3300,0.2,0,0);
+            driveUtils.driveByEncoderRoverRuckus(-robot.distToCrater/2, -robot.distToCrater/2, -robot.powerEncoder, false);//to crater
+            driveUtils.TurnWithEncoder(45, 0.5);
+            driveUtils.TurnWithEncoder(-45, 0.5);
+            driveUtils.driveByEncoderRoverRuckus(robot.distToCrater/2, robot.distToCrater/2, robot.powerEncoder, false);//to crater
+            Parking(230,-3300,-700,0.3);
             //TODO: to change linear target encoder!!
 //            driveByColor(0,robot.colorRightFront,robot.imu,robot.hsvValuesRightFront,AngleToDepot,0.35);
 //            }

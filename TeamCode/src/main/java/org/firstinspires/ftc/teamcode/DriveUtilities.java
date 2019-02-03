@@ -258,7 +258,7 @@ public class DriveUtilities {
     }
 
     public void back_up_driveByImage(double power, int turnAngle, int driveDist) {
-        driveByEncoderRoverRuckus(driveDist, driveDist, power, false);
+        driveByEncoderRoverRuckus(driveDist, driveDist, 0.7, false);
         TurnWithEncoder(turnAngle, power);
     }
 

@@ -104,7 +104,7 @@ public class DriveRoverRuckus extends OpMode {
 //
 //        }
 
-        robot.linear.setPower(gamepad2.left_stick_y);
+        robot.linear.setPower((gamepad2.left_stick_y));
 
 //        else if (gamepad2.right_stick_y < 0) {//hand - linear
 //            linear = true;
