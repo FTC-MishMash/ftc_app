@@ -66,6 +66,7 @@ public class AutoMode extends LinearOpMode {
     static final int PitchtargetAngleMax = 5;
     public VuforiaLocalizerEx vuforia;
 
+
     /**
      * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
@@ -177,9 +178,51 @@ public class AutoMode extends LinearOpMode {
         ScaledTurn(0, motor, imu, power);
         return cubePosition;
     }
+    public boolean magneticLinear(){
+        if (!robot.magnetLinearLock.getState() || !robot.magnetLinearOpen.getState()){
+            return true;
+        }
+        else {
+            return false;
+        }
 
+
+    }
+
+    public boolean magneticShafts() {
+        if (!robot.magnetShaftLock.getState() || !robot.magnetLinearOpen.getState()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
     public Orientation getAngularOriention() {
         return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+    }
+    public void encoderCheck(){
+
+        telemetry.addData( "left front motor CM",robot.driveTrain[0][0].getCurrentPosition()*27/600);
+        telemetry.addData( "left back motor CM",robot.driveTrain[1][0].getCurrentPosition()*27/600);
+
+        telemetry.addData( "right fornt motor CM",robot.driveTrain[0][1].getCurrentPosition()*27/600);
+        telemetry.addData( "right back motor CM",robot.driveTrain[1][1].getCurrentPosition() *27/600);
+
+
+        telemetry.addData( "left front motor encoder",robot.driveTrain[0][0].getCurrentPosition());
+        telemetry.addData( "left back motor encoder",robot.driveTrain[1][0].getCurrentPosition());
+
+        telemetry.addData( "right fornt motor encoder",robot.driveTrain[0][1].getCurrentPosition());
+        telemetry.addData( "right back motor encoder",robot.driveTrain[1][1].getCurrentPosition());
+        telemetry.addData("shaft right CM", robot.shaft[0].getCurrentPosition()*27/600);
+        telemetry.addData("shaft left CM", robot.shaft[1].getCurrentPosition()*27/600);
+
+        telemetry.addData("shaft right encoder", robot.shaft[0].getCurrentPosition());
+        telemetry.addData("shaft left encoder", robot.shaft[1].getCurrentPosition());
+        telemetry.addData("linear CM", robot.linear.getCurrentPosition()*27/600);
+        telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
+        telemetry.update();
+
     }
 
     public void LandInAuto(double servoOPENPosition, double shaftPower) {
@@ -490,13 +533,14 @@ public class AutoMode extends LinearOpMode {
                         if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
 
                             telemetry.addData("Gold Mineral Position", "Left");
-                            cubePlace = 2;//Left
+
+                            return (2);//Left
                         } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                             telemetry.addData("Gold Mineral Position", "Right");
-                            cubePlace = 1;//Right
+                            return (1);//Right
                         } else {
                             telemetry.addData("Gold Mineral Position", "Center");
-                            cubePlace = 3;//center
+                            return (3);//Center
                         }
                     }
                 } else if (updatedRecognitions.size() == 2) {
@@ -515,16 +559,20 @@ public class AutoMode extends LinearOpMode {
                         if (goldMineralX < silverMineral1X) {
                             telemetry.addData("Gold Mineral Position", "Left");
                             telemetry.addLine("in camera");
-                            cubePlace = 5;//LEFT in camera
+
+                            return (5);//LEFT in camera
+
                         } else if (goldMineralX > silverMineral1X) {
                             telemetry.addData("Gold Mineral Position", "Right");
                             telemetry.addLine("in camera");
-                            cubePlace = 4;//RIGHT in camera
+                            return (4);///RIGHT in camera
                         }
 
                     } else {
                         telemetry.addData("Gold Mineral Position", "NOT HERE");
                         cubePlace = 0;//NOT in the camera/ only see 2 BALLS
+                        return (0);
+
                     }
                 }
             }
@@ -890,8 +938,8 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[0].setTargetPosition(targetShaftParkingPositionEncoder);//250
         robot.shaft[1].setTargetPosition(targetShaftParkingPositionEncoder);
 
-//        robot.shaft[0].setTargetPosition(750);
-//        robot.shaft[1].setTargetPosition(750);
+//        robot.shaft[0].setTargetPosition(-750);
+//        robot.shaft[1].setTargetPosition(-750);
         robot.shaft[0].setPower(shaftPower);
         robot.shaft[1].setPower(shaftPower);
         while (opModeIsActive() && robot.shaft[0].isBusy() && robot.shaft[1].isBusy()) ;
