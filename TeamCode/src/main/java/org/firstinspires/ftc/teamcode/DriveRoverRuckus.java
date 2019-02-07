@@ -89,6 +89,16 @@ public class DriveRoverRuckus extends OpMode {
             shaftEncoder = -300;
 
         }
+        if (!robot.magnetLinearLock.getState() ||!robot.magnetLinearOpen.getState() && gamepad2.left_stick_y == 0){
+           robot.linear.setPower(0);
+
+        }
+
+        if (!robot.magnetShaftLock.getState() ||!robot.magnetShaftOpen.getState() && gamepad2.right_stick_y == 0){
+            robot.shaft[0].setPower(0);
+            robot.shaft[1].setPower(0);
+        }
+
 //        if (gamepad2.left_stick_y > 0) {//hand - linear
 //
 ////            linear = true;

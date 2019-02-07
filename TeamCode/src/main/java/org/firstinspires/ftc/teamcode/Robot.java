@@ -5,6 +5,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -22,6 +23,10 @@ public class Robot {
     public Servo hanging;
     public ColorSensor colorRightFront;
     public ColorSensor colorLeftFront;
+    public DigitalChannel magnetLinearLock;
+    public DigitalChannel magnetLinearOpen;
+    public DigitalChannel magnetShaftLock;
+    public DigitalChannel magnetShaftOpen;
     public int shaftTargetPositionMarker = -300;
     float hsvValuesLeftFront[] = {0F, 0F, 0F};
     float hsvValuesRightFront[] = {0F, 0F, 0F};
@@ -61,6 +66,12 @@ public class Robot {
         linear = hardwareMap.get(DcMotor.class, "linearLeft");
         shaft[0] = hardwareMap.get(DcMotor.class, "shaftRight");
         shaft[1] = hardwareMap.get(DcMotor.class, "shaftLeft");
+
+        magnetLinearOpen = hardwareMap.get(DigitalChannel.class, "magnetLinearOpen");
+        magnetLinearLock = hardwareMap.get(DigitalChannel.class, "magnetLinearLock");
+
+        magnetShaftOpen = hardwareMap.get(DigitalChannel.class, "magnetShaftOpen");
+        magnetShaftLock = hardwareMap.get(DigitalChannel.class, "magnetShaftLock");
 
         colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
         colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");

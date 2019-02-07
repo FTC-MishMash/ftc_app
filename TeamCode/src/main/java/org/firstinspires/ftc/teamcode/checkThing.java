@@ -23,13 +23,15 @@ public class checkThing extends AutoMode {
     int angle = 0;
     int targetEncoder = 0;
     double power = 0;
+    AutoMode auto;
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
 
     @Override
+
     public void runOpMode() throws InterruptedException {
-//
         telemetry.addData("Status", "Initialized");
         //super.runOpMode();
         super.runOpMode();
@@ -37,6 +39,25 @@ public class checkThing extends AutoMode {
 
         waitForStart();
         while (opModeIsActive()) {
+            telemetry.addData( "left front motor CM",robot.driveTrain[0][0].getCurrentPosition()*27/600);
+            telemetry.addData( "left back motor CM",robot.driveTrain[1][0].getCurrentPosition()*27/600);
+            telemetry.addData( "right fornt motor CM",robot.driveTrain[0][1].getCurrentPosition()*27/600);
+            telemetry.addData( "right back motor CM",robot.driveTrain[1][1].getCurrentPosition()*27/600);
+
+
+            telemetry.addData( "left front motor encoder",robot.driveTrain[0][0].getCurrentPosition());
+            telemetry.addData( "left back motor encoder",robot.driveTrain[1][0].getCurrentPosition());
+            telemetry.addData( "right fornt motor encoder",robot.driveTrain[0][1].getCurrentPosition());
+            telemetry.addData( "right back motor encoder",robot.driveTrain[1][1].getCurrentPosition());
+
+
+            telemetry.addData("shaft right CM", robot.shaft[0].getCurrentPosition()*27/600);
+            telemetry.addData("shaft left CM", robot.shaft[1].getCurrentPosition()*27/600);
+            telemetry.addData("shaft right encoder", robot.shaft[0].getCurrentPosition());
+            telemetry.addData("shaft left encoder", robot.shaft[1].getCurrentPosition());
+            telemetry.addData("linear CM", robot.linear.getCurrentPosition()*27/600);
+            telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
+            telemetry.update();
 
             if (gamepad1.dpad_up) {
                 angle += 5;
@@ -92,12 +113,9 @@ public class checkThing extends AutoMode {
 //            sleep(600);
                 targetNav.driveToImage(-0.3);
 //
-            }
-            telemetry.addData("angle", angle);
-            telemetry.addData("power", power);
-            telemetry.addData("target encoder", targetEncoder);
-            telemetry.update();
-        }
 
+            }
+
+        }
     }
 }
