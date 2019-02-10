@@ -69,6 +69,7 @@ public class DriveUtilities {
             setMotorPower(motors, new double[][]{{-power, power}, {-power, power}});
         if (directTurn)
             while (currOpmode.opModeIsActive() && Math.abs(angle0 - currentAngle) < deltaAngle) {  //motors running
+             power-=0.001;
                 currentAngle = normalizedAngle(getAngularOriention(imu).firstAngle);
                 telemetry.addData("angle case 3:", currentAngle);
                 telemetry.update();
@@ -164,6 +165,7 @@ public class DriveUtilities {
         robot.driveTrain[1][1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
+
 
     public void TurnWithEncoder(double goalAngle, double power) {
         DcMotor[][] driveMotors = robot.driveTrain;
