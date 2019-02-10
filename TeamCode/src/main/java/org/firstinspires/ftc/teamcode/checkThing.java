@@ -33,38 +33,42 @@ public class checkThing extends AutoMode {
 
     public void runOpMode() throws InterruptedException {
         telemetry.addData("Status", "Initialized");
-        //super.runOpMode();
-        super.runOpMode();
+        robot = new Robot(hardwareMap);
+        targetNav = new ImageTargets(this);
+        driveUtils = new DriveUtilities(this);
+        tsSampling = new TensorflowUtils(this);
 
 
         waitForStart();
         while (opModeIsActive()) {
-            telemetry.addData( "left front motor CM",robot.driveTrain[0][0].getCurrentPosition()*27/600);
-            telemetry.addData( "left back motor CM",robot.driveTrain[1][0].getCurrentPosition()*27/600);
-            telemetry.addData( "right fornt motor CM",robot.driveTrain[0][1].getCurrentPosition()*27/600);
-            telemetry.addData( "right back motor CM",robot.driveTrain[1][1].getCurrentPosition()*27/600);
+            telemetry.addData("left front motor CM", robot.driveTrain[0][0].getCurrentPosition() * 27 / 600);
+            telemetry.addData("left back motor CM", robot.driveTrain[1][0].getCurrentPosition() * 27 / 600);
+            telemetry.addData("right fornt motor CM", robot.driveTrain[0][1].getCurrentPosition() * 27 / 600);
+            telemetry.addData("right back motor CM", robot.driveTrain[1][1].getCurrentPosition() * 27 / 600);
 
 
-            telemetry.addData( "left front motor encoder",robot.driveTrain[0][0].getCurrentPosition());
-            telemetry.addData( "left back motor encoder",robot.driveTrain[1][0].getCurrentPosition());
-            telemetry.addData( "right fornt motor encoder",robot.driveTrain[0][1].getCurrentPosition());
-            telemetry.addData( "right back motor encoder",robot.driveTrain[1][1].getCurrentPosition());
-
-
-            telemetry.addData("shaft right CM", robot.shaft[0].getCurrentPosition()*27/600);
-            telemetry.addData("shaft left CM", robot.shaft[1].getCurrentPosition()*27/600);
-            telemetry.addData("shaft right encoder", robot.shaft[0].getCurrentPosition());
-            telemetry.addData("shaft left encoder", robot.shaft[1].getCurrentPosition());
-            telemetry.addData("linear CM", robot.linear.getCurrentPosition()*27/600);
-            telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
+            telemetry.addData("left front motor encoder", robot.driveTrain[0][0].getCurrentPosition());
+            telemetry.addData("left back motor encoder", robot.driveTrain[1][0].getCurrentPosition());
+            telemetry.addData("right fornt motor encoder", robot.driveTrain[0][1].getCurrentPosition());
+            telemetry.addData("right back motor encoder", robot.driveTrain[1][1].getCurrentPosition());
+            telemetry.addData("angle: ", angle);
+            telemetry.addData("power: ", power);
+            telemetry.addData("imu angle", DriveUtilities.normalizedAngle(DriveUtilities.getAngularOriention(robot.imu).firstAngle));
+////
+//            telemetry.addData("shaft right CM", robot.shaft[0].getCurrentPosition()*27/600);
+//            telemetry.addData("shaft left CM", robot.shaft[1].getCurrentPosition()*27/600);
+//            telemetry.addData("shaft right encoder", robot.shaft[0].getCurrentPosition());
+//            telemetry.addData("shaft left encoder", robot.shaft[1].getCurrentPosition());
+//            telemetry.addData("linear CM", robot.linear.getCurrentPosition()*27/600);
+//            telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
             telemetry.update();
 
             if (gamepad1.dpad_up) {
                 angle += 5;
-                sleep(700);
+                sleep(200);
             } else if (gamepad1.dpad_down) {
                 angle -= 5;
-                sleep(700);
+                sleep(200);
             } else if (gamepad1.dpad_right) {
                 targetEncoder += 5;
                 sleep(700);
@@ -80,7 +84,11 @@ public class checkThing extends AutoMode {
             }
             if (gamepad1.x) {
                 driveUtils.TurnWithEncoder(angle, power);
-            } else if (gamepad1.y) {
+
+            }
+           else if (gamepad1.right_stick_button)
+                driveUtils.scaledTurn(angle, power);
+            else if (gamepad1.y) {
                 driveUtils.driveByEncoderRoverRuckus(targetEncoder, targetEncoder, power, false);
             }
             if (gamepad1.right_trigger > 0) {

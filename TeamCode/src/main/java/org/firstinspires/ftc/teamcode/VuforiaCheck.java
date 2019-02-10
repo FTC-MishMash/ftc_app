@@ -7,6 +7,7 @@ import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
@@ -42,10 +43,11 @@ public class VuforiaCheck extends AutoMode {
         double angle = 280;
         while (opModeIsActive()) {
 //            telemetry.addData("pos",targetNav.getPositions());
-//            telemetry.addData("left: ", distLeft);
+            telemetry.addData("left: ", distLeft);
 //            telemetry.addData("right: ", distRight);
 //            telemetry.addData("pow: ", power);
 //            telemetry.addData("motor: ", motor);
+            telemetry.addData("range", robot.rangeSensor.getDistance(DistanceUnit.CM));
             telemetry.addData("angle:   ", angle);
             telemetry.addData("imu", DriveUtilities.normalizedAngle(getAngularOriention().firstAngle));
             float[] pos = targetNav.getPositions();
@@ -56,54 +58,55 @@ public class VuforiaCheck extends AutoMode {
 
             }
 //            telemetry.addData("ANGLE: ",angle);
-                telemetry.update();
-                if (gamepad1.left_stick_button) {
-                    driveUtils.TurnWithEncoder(angle, power);
-                }
-                if (gamepad1.right_stick_button) {
-                    driveUtils.scaledTurn(angle, power);
-                }
-                if (gamepad1.dpad_up) {
+            telemetry.update();
+            if (gamepad1.left_stick_button) {
+                driveUtils.TurnWithEncoder(angle, power);
+            }
+            if (gamepad1.right_stick_button) {
+                driveUtils.scaledTurn(angle, power);
+            }
+            if (gamepad1.dpad_up) {
 
-                    distLeft += 1;
-                    distRight += 1;
-                    sleep(40);
-                    angle += 5;
-                }
-                if (gamepad1.left_bumper) {
-                    motor++;
-                    sleep(70);
-                }
-                if (gamepad1.right_bumper) {
-                    motor--;
-                    sleep(70);
-                }
-                if (gamepad1.dpad_down) {
-                    distLeft -= 1;
-                    distRight -= 1;
-                    sleep(40);
-                    angle -= 5;
-                }
-                if (gamepad1.dpad_right) {
-                    distRight -= 1;
-                    sleep(40);
-                }
-                if (gamepad1.b) {
-                    distRight += 1;
-                    sleep(40);
-                }
-                if (gamepad1.x) {
-                    distLeft += 1;
-                    sleep(40);
-                }
-                if (gamepad1.y)
-                    power *= -1;
-                if (gamepad1.dpad_left) {
-                    distLeft -= 1;
-                    sleep(40);
-                }
-                if (gamepad1.a)
-                    driveUtils.driveByEncoderRoverRuckus(distRight, distLeft, power, false);
+                distLeft += 1;
+                distRight += 1;
+                sleep(40);
+                angle += 5;
+            }
+            if (gamepad1.left_bumper) {
+                motor++;
+                sleep(70);
+            }
+            if (gamepad1.right_bumper) {
+                motor--;
+                sleep(70);
+            }
+            if (gamepad1.dpad_down) {
+                distLeft -= 1;
+                distRight -= 1;
+                sleep(40);
+                angle -= 5;
+            }
+            if (gamepad1.dpad_right) {
+                distRight -= 1;
+                sleep(40);
+            }
+            if (gamepad1.b) {
+                distRight += 1;
+                sleep(40);
+            }
+            if (gamepad1.x) {
+                distLeft += 1;
+                sleep(40);
+            }
+            if (gamepad1.y)
+                power *= -1;
+            if (gamepad1.dpad_left) {
+                distLeft -= 1;
+                sleep(40);
+            }
+            if (gamepad1.a)
+                driveUtils.DriveByDistance(distLeft,power,0);
+            //    driveUtils.driveByEncoderRoverRuckus(distRight, distLeft, power, false);
 //            if(gamepad1.left_bumper)
 //                          targetNav.searchImage(2, -0.23);
 
@@ -124,8 +127,8 @@ public class VuforiaCheck extends AutoMode {
 //            }
 //            telemetry.update();
 
-            }
         }
     }
+}
 
 
