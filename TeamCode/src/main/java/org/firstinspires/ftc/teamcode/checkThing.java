@@ -55,12 +55,12 @@ public class checkThing extends AutoMode {
             telemetry.addData("power: ", power);
             telemetry.addData("imu angle", DriveUtilities.normalizedAngle(DriveUtilities.getAngularOriention(robot.imu).firstAngle));
 ////
-//            telemetry.addData("shaft right CM", robot.shaft[0].getCurrentPosition()*27/600);
-//            telemetry.addData("shaft left CM", robot.shaft[1].getCurrentPosition()*27/600);
-//            telemetry.addData("shaft right encoder", robot.shaft[0].getCurrentPosition());
-//            telemetry.addData("shaft left encoder", robot.shaft[1].getCurrentPosition());
-//            telemetry.addData("linear CM", robot.linear.getCurrentPosition()*27/600);
-//            telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
+            telemetry.addData("shaft right CM", robot.shaft[0].getCurrentPosition()*27/600);
+            telemetry.addData("shaft left CM", robot.shaft[1].getCurrentPosition()*27/600);
+            telemetry.addData("shaft right encoder", robot.shaft[0].getCurrentPosition());
+            telemetry.addData("shaft left encoder", robot.shaft[1].getCurrentPosition());
+            telemetry.addData("linear CM", robot.linear.getCurrentPosition()*27/600);
+            telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
             telemetry.update();
 
             if (gamepad1.dpad_up) {

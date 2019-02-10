@@ -167,7 +167,7 @@ public class AutoMode extends LinearOpMode {
             telemetry.addLine("have cube?   ");
             telemetry.update();
 
-            if (RecognitionList != null)//TODO: להבין למה לא הלך שמאלה למרות שהייתה קוביה בימין
+            if (RecognitionList != null)
                 for (Recognition recognition : RecognitionList) {
                     if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                         cubePosition = 3;//RIGHT

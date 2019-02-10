@@ -69,7 +69,7 @@ public class DriveUtilities {
             setMotorPower(motors, new double[][]{{-power, power}, {-power, power}});
         if (directTurn)
             while (currOpmode.opModeIsActive() && Math.abs(angle0 - currentAngle) < deltaAngle) {  //motors running
-             power-=0.001;
+                power -= 0.001;
                 currentAngle = normalizedAngle(getAngularOriention(imu).firstAngle);
                 telemetry.addData("angle case 3:", currentAngle);
                 telemetry.update();
@@ -77,6 +77,7 @@ public class DriveUtilities {
         else if (goalAngle > 180 && currentAngle < 180)
             while (currOpmode.opModeIsActive() &&
                     (currentAngle <= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle > 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
+                power -= 0.001;
                 currentAngle = normalizedAngle(getAngularOriention(imu).firstAngle);
                 telemetry.addData("angle case 1:", currentAngle);
                 telemetry.update();
@@ -84,12 +85,14 @@ public class DriveUtilities {
 
         else if (goalAngle < 180 && currentAngle > 180)
             while (currOpmode.opModeIsActive() && (currentAngle >= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle < 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
+                power -= 0.001;
                 currentAngle = normalizedAngle(getAngularOriention(imu).firstAngle);
                 telemetry.addData("angle case 2:", currentAngle);
                 telemetry.update();
             }
-
-
+        telemetry.addData("angle completed: ", normalizedAngle(getAngularOriention(imu).firstAngle));
+        telemetry.update();
+        currOpmode.sleep(4500);
         setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
     }
 
@@ -245,7 +248,6 @@ public class DriveUtilities {
                 driveMotors[i][j].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         setMotorPower(driveMotors, new double[][]{{0, 0}, {0, 0}});
     }
-
 
 
     public static double normalizedAngle(double angle) {
