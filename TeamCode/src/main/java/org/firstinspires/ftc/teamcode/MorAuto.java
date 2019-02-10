@@ -5,11 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 @Autonomous(name = "AutoWithoutLanding")
 public class MorAuto extends AutoMode {
+
     @Override
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
-//        auto = new autoMode();
-        // robot = new Robot(hardwareMap);
+
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             tsSampling.initTfod();
         } else {
@@ -17,45 +17,48 @@ public class MorAuto extends AutoMode {
             telemetry.update();
         }
 //        robot.hanging.setPosition(robot.hangingLockPosition);
+        telemetry.addLine("wait for start");
+        telemetry.update();
         waitForStart();
+
 
         if (opModeIsActive()) {
             runTime.reset();
             runTime.startTime();
-
+//        getOffTheClimb
+//            driveUtils.TurnWithEncoder(50, 0.6);
+//            sleep(1500);
+//            driveUtils.TurnWithEncoder(0, 0.6);
+//            sleep(1000);
             int cubePosition = 0;
-            cubePosition = tsSampling.searchCube(0.35, robot.SamplingAngleRight, robot.SamplingAngleLeft);
+            cubePosition = tsSampling.searchCube(0.33, robot.SamplingAngleRight, robot.SamplingAngleLeft);
 
             telemetry.addData("Gold mineral position: ", cubePosition);
             telemetry.update();
-            // driveUtils.driveByEncoderRoverRuckus(20, 40, 0.35, false);
-
-            telemetry.addLine("finished go to cube");
-            telemetry.update();
-//            sleep(1500);
+            if (tfod != null)
+                tfod.activate();
+//            sleep(800);
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingForward, robot.driveEncoderSamplingForward, robot.powerEncoder, false);
-            if (cubePosition!=1)
-            {
+            if (cubePosition != 1) {
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionSide, robot.driveEncoderSamplingPositionSide, robot.powerEncoder, false);
-                driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionSideBackward,robot.driveEncoderSamplingPositionSideBackward, -robot.powerEncoder, false);
-            }
-            else
-            {
+                driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionSideBackward, robot.driveEncoderSamplingPositionSideBackward, -robot.powerEncoder, false);
+            } else {
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddle, robot.driveEncoderSamplingPositionMiddle, robot.powerEncoder, false);
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddleBackward, robot.driveEncoderSamplingPositionMiddleBackward, -robot.powerEncoder, false);
             }
+            if (tfod != null) {
+                tfod.shutdown();
+            }
+            vuforia.close();
             telemetry.addLine("finished driving into cube");
             telemetry.update();
-//            sleep(2500);
-            vuforia.close();
+//            sleep(500);
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingBackward, robot.driveEncoderSamplingBackward, -robot.powerEncoder, false);
             telemetry.addLine("finished driving out of cube");
-
-
             telemetry.update();
-//            sleep(500);
-
-
+            sleep(200);
+//
+            //  driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
 
 
             driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5);
@@ -83,7 +86,6 @@ public class MorAuto extends AutoMode {
             Marker(0.5,robot.shaftTargetPositionMarker);  //marker
             // driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5, false);//to crater
             driveUtils.driveByEncoderRoverRuckus(robot.distToCrater, robot.distToCrater, -robot.powerEncoder, false);//to crater
-
         }
     }
 }
