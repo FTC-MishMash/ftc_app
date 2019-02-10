@@ -104,8 +104,8 @@ public class VuforiaCheck extends AutoMode {
                 distLeft -= 1;
                 sleep(40);
             }
-            if (gamepad1.a)
-                driveUtils.DriveByDistance(distLeft,power,0);
+         //   if (gamepad1.a)
+               // driveUtils.DriveByDistance(distLeft,power,0);
             //    driveUtils.driveByEncoderRoverRuckus(distRight, distLeft, power, false);
 //            if(gamepad1.left_bumper)
 //                          targetNav.searchImage(2, -0.23);

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -33,6 +34,7 @@ public class Robot {
     public final float valuesLeftFront[] = hsvValuesRightFront;
     public final float valuesRightFront[] = hsvValuesLeftFront;
     BNO055IMU imu;
+    public Rev2mDistanceSensor rangeSensor;
     public double blueColorRightSensor = 100;
     public double redColorRightSensor = 42;
     public double blueColorLeftSensor = 135;
@@ -75,7 +77,7 @@ public class Robot {
 
         colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
         colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
-
+        rangeSensor = hardwareMap.get(Rev2mDistanceSensor.class, "range");
         driveTrain[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
         driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
         driveTrain[0][1] = hardwareMap.get(DcMotor.class, "rightFront");
