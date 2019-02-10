@@ -47,6 +47,7 @@ public class MorAuto extends AutoMode {
             telemetry.addLine("finished driving into cube");
             telemetry.update();
 //            sleep(2500);
+            vuforia.close();
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingBackward, robot.driveEncoderSamplingBackward, -robot.powerEncoder, false);
             telemetry.addLine("finished driving out of cube");
 
@@ -57,29 +58,31 @@ public class MorAuto extends AutoMode {
 
 
 
-            driveUtils.TurnWithEncoder(robot.newAngleTurnToImage, 0.5);
-//            sleep(2500);
+            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5);
+            sleep(100);
+            tsSampling.initVuforiaWebCam(false);
+            targetNav.startTracking();
+//            sleep(500);
 
+            float[] pos = targetNav.getPositions();
+            telemetry.addData("pos null: ", pos == null);
+            telemetry.update();
+//            sleep(500);
+            if (pos == null) {
 
-            //driveUtils.back_up_driveByImage(0.45, robot.AngleToDepot, -(30 + cubePosition * 15));
-            driveUtils.back_up_driveByImage(0.45, robot.newAngleToDepot, 95);
-            //driveUtils.driveByEncoderRoverRuckus(-80, -80, -0.4, false);//to depot
+                telemetry.addData("start searching wait for click", cubePosition);
+                telemetry.update();
+//                sleep(500);
+                targetNav.searchImage(cubePosition, -0.20);
+            }
+
+//            sleep(600);
+            targetNav.driveToImage(-0.3);
+//            sleep(500);
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, robot.powerEncoder, false);//to depot
             Marker(0.5,robot.shaftTargetPositionMarker);  //marker
             // driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5, false);//to crater
-            driveUtils.driveByEncoderRoverRuckus(-robot.distToCrater/2, -robot.distToCrater/2, -robot.powerEncoder, false);//to crater
-            driveUtils.TurnWithEncoder(45, 0.5);
-            driveUtils.TurnWithEncoder(-45, 0.5);
-            driveUtils.driveByEncoderRoverRuckus(robot.distToCrater/2, robot.distToCrater/2, robot.powerEncoder, false);//to crater
-            Parking(230,-3300,-700,0.3);
-            //TODO: to change linear target encoder!!
-//            driveByColor(0,robot.colorRightFront,robot.imu,robot.hsvValuesRightFront,AngleToDepot,0.35);
-//            }
-//            sleep(1000);
-            //       driveUtils.driveByEncoderRoverRuckus(60, 60, 0.5,false);
-
-            //go to crater
-            //open shaft
+            driveUtils.driveByEncoderRoverRuckus(robot.distToCrater, robot.distToCrater, -robot.powerEncoder, false);//to crater
 
         }
     }

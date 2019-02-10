@@ -949,7 +949,7 @@ public class AutoMode extends LinearOpMode {
         }
         robot.linear.setTargetPosition(0);
         robot.linear.setPower(0.4);
-    robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         if (!magneticLinear()){
             robot.linear.setPower(0);
         }
