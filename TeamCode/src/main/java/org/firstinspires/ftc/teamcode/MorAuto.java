@@ -19,7 +19,6 @@ public class MorAuto extends AutoMode {
 //        robot.hanging.setPosition(robot.hangingLockPosition);
         telemetry.addLine("wait for start");
         telemetry.update();
-        waitForStart();
 
 
         if (opModeIsActive()) {
@@ -27,6 +26,7 @@ public class MorAuto extends AutoMode {
             runTime.startTime();
 //        getOffTheClimb
 //            driveUtils.TurnWithEncoder(50, 0.6);
+            waitForStart();
 //            sleep(1500);
 //            driveUtils.TurnWithEncoder(0, 0.6);
 //            sleep(1000);
