@@ -46,7 +46,7 @@ public class TensorflowUtils {
 
         int tfodMonitorViewId = currOpMode.hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters();
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
         currOpMode.tfod=tfod;
@@ -59,7 +59,7 @@ public class TensorflowUtils {
 
         VuforiaLocalizer.Parameters parameters;
         int cameraId = currOpMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
-          parameters = new VuforiaLocalizer.Parameters();
+          parameters = new VuforiaLocalizer.Parameters(cameraId);
 
 //        if (count > 1)
 //            parameters = new VuforiaLocalizer.Parameters(cameraId);
@@ -158,10 +158,10 @@ public class TensorflowUtils {
             telemetry.addData("tfod is NULL  ", tfod);
             telemetry.update();
             cubePosition = -1;
-            return cubePosition;
-        } else if (tfod != null) {
-            tfod.activate();
-        }
+            return cubePosition;}
+//        } else if (tfod != null) {
+//            tfod.activate();
+//        }
 
         double runTime0 = currOpMode.getRuntime();
         while (currOpMode.opModeIsActive() && currOpMode.getRuntime() - runTime0 < 3) {

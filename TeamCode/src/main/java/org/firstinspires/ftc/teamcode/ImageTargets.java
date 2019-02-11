@@ -143,7 +143,7 @@ public class ImageTargets {
              * the last time that call was made, or if the trackable is not currently visible.
              * getRobotLocation() will return null if the trackable is not currently visible.
              */
-            telemetry.addData(trackable.getName(), ((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() ? "Visible" : "Not Visible");    //
+       //     telemetry.addData(trackable.getName(), ((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() ? "Visible" : "Not Visible");    //
 
             OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
             if (robotLocationTransform != null) {
@@ -255,10 +255,20 @@ public class ImageTargets {
         if (positions != null) {
             telemetry.addLine("On DriveToImage()");
             telemetry.update();
-            setMotorPower(motors, new double[][]{{power, power}, {power, power}});
             currOpmode.sleep(150);
-            double time=currOpmode.getRuntime();
-            while (currOpmode.opModeIsActive() && positions[0] <= 60&&currOpmode.getRuntime()-time>6) {
+            double time = currOpmode.getRuntime();
+            telemetry.addLine("test image positions");
+            telemetry.update();
+//            while (!currOpmode.gamepad1.a) {
+//                positions = getPositions();
+//                telemetry.addData("x", positions[0]);
+//                telemetry.addData("y", positions[1]);
+//                telemetry.addData("z", positions[2]);
+//                telemetry.update();
+//            }
+            setMotorPower(motors, new double[][]{{power, power}, {power, power}});
+
+            while (currOpmode.opModeIsActive() && positions[0] <= 61) {
                 positions = getPositions();
                 telemetry.addData("x:", positions[0]);
                 telemetry.update();
@@ -269,6 +279,7 @@ public class ImageTargets {
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
             currOpmode.sleep(100);
             double heading = 0;
+            positions=getPositions();
             if (positions != null) ;
             {
                 heading = positions[5];
@@ -276,7 +287,14 @@ public class ImageTargets {
                 telemetry.update();
                 currOpmode.sleep(500);
             }
-            driveUtilities.diffTurn(20 + heading, 0.15);
+//            while (!currOpmode.gamepad1.a) {
+//                positions = getPositions();
+//                telemetry.addData("currIMU: ",DriveUtilities.normalizedAngle(DriveUtilities.getAngularOriention(robot.imu).firstAngle));
+//                telemetry.addData("heading: ", positions[5]);
+//                telemetry.update();
+//            }
+         //   driveUtilities.TurnWithEncoder(310,0.4);
+            driveUtilities.diffTurn(99 + heading, 0.4);
         }
     }
 }

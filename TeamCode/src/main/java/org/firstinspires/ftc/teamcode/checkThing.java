@@ -87,7 +87,7 @@ public class checkThing extends AutoMode {
 
             }
            else if (gamepad1.right_stick_button)
-                driveUtils.scaledTurn(angle, power);
+                driveUtils.diffTurn(angle, power);
             else if (gamepad1.y) {
                 driveUtils.driveByEncoderRoverRuckus(targetEncoder, targetEncoder, power, false);
             }

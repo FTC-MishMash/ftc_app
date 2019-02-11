@@ -63,7 +63,7 @@ public class redCrater_Encoder extends AutoMode {
 
 
 
-            driveUtils.TurnWithEncoder(robot.newAngleTurnToImage, 0.5);
+            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5);
 //            sleep(2500);
 
 
