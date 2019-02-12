@@ -46,7 +46,7 @@ public class TensorflowUtils {
 
         int tfodMonitorViewId = currOpMode.hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters();
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
         currOpMode.tfod=tfod;

@@ -14,6 +14,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
+import java.util.Timer;
+
 /**
  * This class is used for performing all driving functions.
  */
@@ -204,6 +206,52 @@ public class DriveUtilities {
 
     }
 
+    public void Turn(double goalAngle, double power) {
+        DcMotor[][] driveMotors = robot.driveTrain;
+        power = 1;//TODO: Remove
+
+        double currentAngle = getAngularOriention(robot.imu).firstAngle;
+        double lastTime = currOpmode.getRuntime();
+        double diffAngle = normalizedAngle(goalAngle - currentAngle);
+        if (diffAngle > 180)
+            diffAngle -= 360;
+        double lastDiffAngle = diffAngle;
+        final double direction = Math.signum(diffAngle);
+        telemetry.clear();
+        while (currOpmode.opModeIsActive() && Math.abs(diffAngle) > 0.1 /*&& direction == Math.signum(diffAngle)*/)
+        {
+            currentAngle = normalizedAngle(getAngularOriention(robot.imu).firstAngle);
+            double currentTime = currOpmode.getRuntime();
+            diffAngle = normalizedAngle(goalAngle - currentAngle);
+            if (diffAngle > 180)
+                diffAngle -= 360;
+
+            double diffAngleAbs = Math.abs(diffAngle);
+
+            double currentAngleSpeed = Math.abs(diffAngle - lastDiffAngle) / (currentTime - lastTime);
+
+//            double speedSuggested = 0.0000003 * diffAngleAbs * diffAngleAbs * diffAngleAbs +
+//                    0.00004 * diffAngleAbs * diffAngleAbs + 0.000001 * diffAngleAbs;
+//            double speedSuggested = 0.00000012 * diffAngleAbs * diffAngleAbs * diffAngleAbs +
+//                0.00004 * diffAngleAbs * diffAngleAbs + 0.0002 * diffAngleAbs;
+            double speedSuggested = 0.0000003 * diffAngleAbs * diffAngleAbs * diffAngleAbs +
+                0.00005 * diffAngleAbs * diffAngleAbs + 0.0006 * diffAngleAbs;
+            double speed = Math.signum(diffAngle) * Math.min(Math.max(0.19, speedSuggested), power);
+            setMotorPower(robot.driveTrain, new double[][]{{speed, -speed}, {speed, -speed}});
+
+//            telemetry.addData("goal angle:", goalAngle);
+//            telemetry.addData("current angle:", currentAngle);
+//            telemetry.addData("diffAngle angle:", diffAngle);
+//            telemetry.addData("speed:", speed);
+//            telemetry.update();
+
+            lastTime = currentTime;
+            lastDiffAngle = diffAngle;
+        }
+
+        setMotorPower(driveMotors, new double[][]{{0, 0}, {0, 0}});
+
+    }
 
     public void TurnWithEncoder(double goalAngle, double power) {
         DcMotor[][] driveMotors = robot.driveTrain;
@@ -248,6 +296,11 @@ public class DriveUtilities {
 //                    power*=decMotors;
 //                    decMotors*=decMotors;
 //                }
+
+                //double diff = Math.abs(angle0 - currentAngle);
+
+                //double speed = Math.min(0.05 * diff, power);
+                //setMotorPower(robot.driveTrain, new double[][]{{speed, -speed}, {speed, -speed}});
                 telemetry.addData("angle case 3:", currentAngle);
                 telemetry.update();
             }
@@ -261,6 +314,8 @@ public class DriveUtilities {
 //                    power*=decMotors;
 //                    decMotors*=decMotors;
 //                }
+
+
                 telemetry.addData("angle case 1:", currentAngle);
                 telemetry.update();
             }

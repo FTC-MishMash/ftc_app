@@ -518,9 +518,9 @@ public class AutoMode extends LinearOpMode {
 
         int cubePlace = -1;// 0 = NOT HERE, 1 = RIGHT (in camera), 2 = LEFT (in camera)
 
-        if (tfod != null) {
-            tfod.activate();
-        }
+//        if (tfod != null) {
+////            tfod.activate();
+////        }
         if (tfod != null) {
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
@@ -550,13 +550,13 @@ public class AutoMode extends LinearOpMode {
 
                             telemetry.addData("Gold Mineral Position", "Left");
 
-                            return (2);//Left
+                            return 3;//Left
                         } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                             telemetry.addData("Gold Mineral Position", "Right");
-                            return (1);//Right
+                            return 2;//Right
                         } else {
                             telemetry.addData("Gold Mineral Position", "Center");
-                            return (3);//Center
+                            return 1;//Center
                         }
                     }
                 } else if (updatedRecognitions.size() == 2) {
@@ -576,12 +576,12 @@ public class AutoMode extends LinearOpMode {
                             telemetry.addData("Gold Mineral Position", "Left");
                             telemetry.addLine("in camera");
 
-                            return (5);//LEFT in camera
+                            return 4;//LEFT in camera
 
                         } else if (goldMineralX > silverMineral1X) {
                             telemetry.addData("Gold Mineral Position", "Right");
                             telemetry.addLine("in camera");
-                            return (4);///RIGHT in camera
+                            return 5;///RIGHT in camera
                         }
 
                     } else {

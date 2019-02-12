@@ -22,17 +22,21 @@ public class VuforiaCheck extends AutoMode {
         driveUtils = new DriveUtilities(this);
         tsSampling = new TensorflowUtils(this);
 
-        tsSampling.initVuforiaWebCam(false);
-        targetNav.startTracking();
+        tsSampling.initVuforiaWebCam(true);
+       // targetNav.startTracking();
 //        tsSampling.initVuforiaWebCam(true);
 //
-//        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-//            tsSampling.initTfod();
-//        } else {
-//            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-//            telemetry.update();
-//        }
-//        tfod.activate();
+        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+            tsSampling.initTfod();
+        } else {
+            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+            telemetry.update();
+        }
+        tfod.activate();
+        while (!isStarted()) {
+            telemetry.addData("cube Pos:", getCube());
+            telemetry.update();
+        }
 //        //motorLock();
         waitForStart();
         //LandInAuto();
@@ -62,9 +66,7 @@ public class VuforiaCheck extends AutoMode {
             if (gamepad1.left_stick_button) {
                 driveUtils.TurnWithEncoder(angle, power);
             }
-            if (gamepad1.right_stick_button) {
-                driveUtils.scaledTurn(angle, power);
-            }
+
             if (gamepad1.dpad_up) {
 
                 distLeft += 1;
@@ -104,8 +106,8 @@ public class VuforiaCheck extends AutoMode {
                 distLeft -= 1;
                 sleep(40);
             }
-         //   if (gamepad1.a)
-               // driveUtils.DriveByDistance(distLeft,power,0);
+            //   if (gamepad1.a)
+            // driveUtils.DriveByDistance(distLeft,power,0);
             //    driveUtils.driveByEncoderRoverRuckus(distRight, distLeft, power, false);
 //            if(gamepad1.left_bumper)
 //                          targetNav.searchImage(2, -0.23);
