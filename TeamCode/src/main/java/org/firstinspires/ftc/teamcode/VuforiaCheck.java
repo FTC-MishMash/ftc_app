@@ -33,8 +33,12 @@ public class VuforiaCheck extends AutoMode {
             telemetry.update();
         }
         tfod.activate();
+        int posCube=-1;
+        telemetry.addData("cube Pos:", posCube);
         while (!isStarted()) {
-            telemetry.addData("cube Pos:", getCube());
+                posCube=getCube();
+                if(posCube!=-1)
+            telemetry.addData("cube Pos:", posCube);
             telemetry.update();
         }
 //        //motorLock();

@@ -46,10 +46,11 @@ public class TensorflowUtils {
 
         int tfodMonitorViewId = currOpMode.hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters();
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
-        currOpMode.tfod=tfod;
+        tfodParameters.minimumConfidence=0.25;
+        currOpMode.tfod = tfod;
     }
 
     public void initVuforiaWebCam(boolean webcam) {
@@ -59,7 +60,7 @@ public class TensorflowUtils {
 
         VuforiaLocalizer.Parameters parameters;
         int cameraId = currOpMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
-          parameters = new VuforiaLocalizer.Parameters(cameraId);
+        parameters = new VuforiaLocalizer.Parameters(/*cameraId*/);
 
 //        if (count > 1)
 //            parameters = new VuforiaLocalizer.Parameters(cameraId);
@@ -69,13 +70,14 @@ public class TensorflowUtils {
 //        }        //  Instantiate the Vuforia engine
         //vuforia = (VuforiaLocalizer) ClassFactory.getInstance().createVuforia(parameters);
         if (webcam) {
-            parameters.cameraName = currOpMode.hardwareMap.get(WebcamName.class, "Webcam 1");
-
+            WebcamName webcamName = currOpMode.hardwareMap.get(WebcamName.class, "Webcam 1");
+            if (webcamName.isAttached())
+                parameters.cameraName = webcamName;
         }
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         vuforia = new VuforiaLocalizerEx(parameters);
         currOpMode.vuforia = this.vuforia;
-        currOpMode.targetNav.vuforia=this.vuforia;
+        currOpMode.targetNav.vuforia = this.vuforia;
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
 
@@ -158,7 +160,8 @@ public class TensorflowUtils {
             telemetry.addData("tfod is NULL  ", tfod);
             telemetry.update();
             cubePosition = -1;
-            return cubePosition;}
+            return cubePosition;
+        }
 //        } else if (tfod != null) {
 //            tfod.activate();
 //        }

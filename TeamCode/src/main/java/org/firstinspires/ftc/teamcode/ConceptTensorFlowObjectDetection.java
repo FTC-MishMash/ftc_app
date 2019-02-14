@@ -38,6 +38,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -115,7 +116,7 @@ public  class ConceptTensorFlowObjectDetection extends LinearOpMode {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
+                    if (updatedRecognitions != null&&updatedRecognitions.size()>0) {
                       telemetry.addData("# Object Detected", updatedRecognitions.size());
                       if (updatedRecognitions.size() == 3) {
                         int goldMineralX = -1;
@@ -129,6 +130,7 @@ public  class ConceptTensorFlowObjectDetection extends LinearOpMode {
                           } else {
                             silverMineral2X = (int) recognition.getLeft();
                           }
+
                         }
                         if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                           if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
@@ -140,6 +142,14 @@ public  class ConceptTensorFlowObjectDetection extends LinearOpMode {
                           }
                         }
                       }
+                        telemetry.addData("left: ",updatedRecognitions.get(0).getLeft());
+                        telemetry.addData("right: ",updatedRecognitions.get(0).getRight());
+                        telemetry.addData("top: ",updatedRecognitions.get(0).getTop());
+                        telemetry.addData("bottom: ",updatedRecognitions.get(0).getBottom());
+                        telemetry.addData("angle: ",updatedRecognitions.get(0).estimateAngleToObject(AngleUnit.DEGREES));
+                        telemetry.addData("confidence: ",updatedRecognitions.get(0).getConfidence());
+                        telemetry.addData("width: ",updatedRecognitions.get(0).getWidth());
+                        telemetry.addData("height: ",updatedRecognitions.get(0).getHeight());
                       telemetry.update();
                     }
                 }
@@ -158,7 +168,8 @@ public  class ConceptTensorFlowObjectDetection extends LinearOpMode {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          */
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        int cameraId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraId);
         parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1" +
                 "");
 
@@ -177,8 +188,10 @@ public  class ConceptTensorFlowObjectDetection extends LinearOpMode {
     private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
             "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters();
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+        tfodParameters.minimumConfidence=0.25;
+
     }
 }

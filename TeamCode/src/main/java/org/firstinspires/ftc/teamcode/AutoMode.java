@@ -522,7 +522,7 @@ public class AutoMode extends LinearOpMode {
 ////            tfod.activate();
 ////        }
         if (tfod != null) {
-            // getUpdatedRecognitions() will return null if no new information is available since
+           // getUpdatedRecognitions() wll return null if no new information is available since
             // the last time that call was made.
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
@@ -537,7 +537,7 @@ public class AutoMode extends LinearOpMode {
                     int silverMineral1X = -1;
                     int silverMineral2X = -1;
                     for (Recognition recognition : updatedRecognitions) {
-                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)&&recognition.getTop()<270&&recognition.getConfidence()>=0.78) {
                             goldMineralX = (int) recognition.getLeft();
                         } else if (silverMineral1X == -1) {
                             silverMineral1X = (int) recognition.getLeft();
@@ -546,12 +546,12 @@ public class AutoMode extends LinearOpMode {
                         }
                     }
                     if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {//TODO: add cube place
-                        if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                        if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
 
                             telemetry.addData("Gold Mineral Position", "Left");
 
                             return 3;//Left
-                        } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                        } else if (goldMineralX < silverMineral1X && goldMineralX< silverMineral2X) {
                             telemetry.addData("Gold Mineral Position", "Right");
                             return 2;//Right
                         } else {
@@ -563,7 +563,7 @@ public class AutoMode extends LinearOpMode {
                     int goldMineralX = -1;
                     int silverMineral1X = -1;
                     for (Recognition recognition : updatedRecognitions) {
-                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)&&recognition.getTop()<270&&recognition.getConfidence()>=0.78 ){
                             goldMineralX = (int) recognition.getLeft();
                         } else //if (silverMineral1X == -1) {
                             silverMineral1X = (int) recognition.getLeft();
@@ -572,13 +572,13 @@ public class AutoMode extends LinearOpMode {
 
 
                     if (goldMineralX != -1 && silverMineral1X != -1) {
-                        if (goldMineralX < silverMineral1X) {
+                        if (goldMineralX > silverMineral1X) {
                             telemetry.addData("Gold Mineral Position", "Left");
                             telemetry.addLine("in camera");
 
                             return 4;//LEFT in camera
 
-                        } else if (goldMineralX > silverMineral1X) {
+                        } else if (goldMineralX < silverMineral1X) {
                             telemetry.addData("Gold Mineral Position", "Right");
                             telemetry.addLine("in camera");
                             return 5;///RIGHT in camera
@@ -597,7 +597,7 @@ public class AutoMode extends LinearOpMode {
         }
 
 
-        return (cubePlace);
+        return cubePlace;
     }
 
 
