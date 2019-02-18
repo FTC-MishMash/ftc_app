@@ -68,10 +68,10 @@ public class ImageTargets {
 
     public ImageTargets(AutoMode currOpmode) {
         this.currOpmode = currOpmode;
-        this.robot = currOpmode.robot;
+        //this.robot = currOpmode.robot;
         this.vuforia = currOpmode.vuforia;
         this.telemetry = currOpmode.telemetry;
-        this.motors = robot.driveTrain;
+        //this.motors = robot.driveTrain;
     }
 
     public void startTracking() {

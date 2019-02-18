@@ -17,9 +17,9 @@ public class VuforiaCheck extends AutoMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(hardwareMap);
-        targetNav = new ImageTargets(this);
-        driveUtils = new DriveUtilities(this);
+     //   robot = new Robot(hardwareMap);
+    targetNav = new ImageTargets(this);
+      //  driveUtils = new DriveUtilities(this);
         tsSampling = new TensorflowUtils(this);
 
         tsSampling.initVuforiaWebCam(true);
@@ -34,12 +34,9 @@ public class VuforiaCheck extends AutoMode {
         }
         tfod.activate();
         int posCube=-1;
-        telemetry.addData("cube Pos:", posCube);
         while (!isStarted()) {
-                posCube=getCube();
-                if(posCube!=-1)
-            telemetry.addData("cube Pos:", posCube);
-            telemetry.update();
+             telemetry.addData( "pos: ",tsSampling.goldPosition());
+             telemetry.update();
         }
 //        //motorLock();
         waitForStart();

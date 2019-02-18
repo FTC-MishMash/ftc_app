@@ -13,6 +13,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class TensorflowUtils {
@@ -28,6 +31,13 @@ public class TensorflowUtils {
     Telemetry telemetry;
     DriveUtilities driveUtilities;
 
+    static enum GOLD_MINERAL_POSITION {
+        LEFT,
+        CENTER,
+        RIGHT,
+        NONE;
+    }
+
     /**
      * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
@@ -35,14 +45,55 @@ public class TensorflowUtils {
 
     public TFObjectDetector tfod;
 
+    public Recognition[] getSampling(List<Recognition> updateRecognitions) {
+        Recognition[] twoSmallestMinerals = new Recognition[2];
+        Recognition temp;
+        if (updateRecognitions != null && updateRecognitions.size() >= 2) {
+            twoSmallestMinerals[0] = updateRecognitions.get(0);
+            twoSmallestMinerals[1] = updateRecognitions.get(1);
+            for (Recognition recognition : updateRecognitions) {
+                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL) || recognition.getLabel().equals(LABEL_SILVER_MINERAL)) {
+                    if (recognition.getTop() < twoSmallestMinerals[0].getTop()) {
+                        temp = twoSmallestMinerals[0];
+                        twoSmallestMinerals[0] = recognition;
+                        twoSmallestMinerals[1] = temp;
+                    } else if (recognition.getTop() < twoSmallestMinerals[1].getTop())
+                        twoSmallestMinerals[1] = recognition;
+                }
+            }
+        }
 
+        return twoSmallestMinerals;
+    }
 
+    public GOLD_MINERAL_POSITION goldPosition() {
+        GOLD_MINERAL_POSITION cubePosition = GOLD_MINERAL_POSITION.NONE;
+
+        if (tfod != null) {
+            List<Recognition> updatetedRecognitions = tfod.getUpdatedRecognitions();
+            Recognition[] samplingMinerals = getSampling(updatetedRecognitions);
+            Recognition temp;
+            if (samplingMinerals[0] != null && samplingMinerals[1] != null) {
+                if (samplingMinerals[0].getLeft() > samplingMinerals[1].getLeft()) {
+                    temp = samplingMinerals[0];
+                    samplingMinerals[0] = samplingMinerals[1];
+                    samplingMinerals[1] = temp;
+                }
+                if (samplingMinerals[0].equals(LABEL_GOLD_MINERAL))
+                    cubePosition = GOLD_MINERAL_POSITION.CENTER;
+                else if (samplingMinerals[1].equals(LABEL_GOLD_MINERAL))
+                    cubePosition = GOLD_MINERAL_POSITION.RIGHT;
+
+            }
+        }
+        return cubePosition;
+    }
 
     public TensorflowUtils(AutoMode currOpMode) {
         this.currOpMode = currOpMode;
         this.vuforia = currOpMode.vuforia;
         this.tfod = currOpMode.tfod;
-        this.robot = currOpMode.robot;
+        // this.robot = currOpMode.robot;
         this.telemetry = currOpMode.telemetry;
         this.driveUtilities = currOpMode.driveUtils;
     }
@@ -52,9 +103,9 @@ public class TensorflowUtils {
         int tfodMonitorViewId = currOpMode.hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
         tfodParameters.minimumConfidence = 0.35;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
         currOpMode.tfod = tfod;
     }
 
