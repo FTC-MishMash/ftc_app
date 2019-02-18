@@ -537,7 +537,7 @@ public class AutoMode extends LinearOpMode {
                     int silverMineral1X = -1;
                     int silverMineral2X = -1;
                     for (Recognition recognition : updatedRecognitions) {
-                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)&&recognition.getTop()<270&&recognition.getConfidence()>=0.78) {
+                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)&&recognition.getTop()<225&&recognition.getConfidence()>=0.8) {
                             goldMineralX = (int) recognition.getLeft();
                         } else if (silverMineral1X == -1) {
                             silverMineral1X = (int) recognition.getLeft();
