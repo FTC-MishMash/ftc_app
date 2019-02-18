@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.sun.tools.javac.code.Attribute;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -97,7 +98,6 @@ public class AutoMode extends LinearOpMode {
     ImageTargets targetNav;
     DriveUtilities driveUtils;
     TensorflowUtils tsSampling;
-
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -512,32 +512,28 @@ public class AutoMode extends LinearOpMode {
         targetsRoverRuckus.activate();
     }
 
+
     public int getCube() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first..
 
         int cubePlace = -1;// 0 = NOT HERE, 1 = RIGHT (in camera), 2 = LEFT (in camera)
 
-//        if (tfod != null) {
-////            tfod.activate();
-////        }
+
         if (tfod != null) {
-           // getUpdatedRecognitions() wll return null if no new information is available since
+            // getUpdatedRecognitions() wll return null if no new information is available since
             // the last time that call was made.
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
                 telemetry.addData("# Object Detected", updatedRecognitions.size());
 
 
-//            if (updatedRecognitions.size() == 1 && updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL)) {
-//
-//            }
                 if (updatedRecognitions.size() == 3) {
                     int goldMineralX = -1;
                     int silverMineral1X = -1;
                     int silverMineral2X = -1;
                     for (Recognition recognition : updatedRecognitions) {
-                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)&&recognition.getTop()<225&&recognition.getConfidence()>=0.8) {
+                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)&&recognition.getTop()<270&&recognition.getConfidence()>=0.78) {
                             goldMineralX = (int) recognition.getLeft();
                         } else if (silverMineral1X == -1) {
                             silverMineral1X = (int) recognition.getLeft();
