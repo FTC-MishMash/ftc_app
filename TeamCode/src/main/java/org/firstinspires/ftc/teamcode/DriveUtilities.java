@@ -253,112 +253,7 @@ public class DriveUtilities {
 
     }
 
-    public void TurnWithEncoder(double goalAngle, double power) {
-        DcMotor[][] driveMotors = robot.driveTrain;
-        boolean sideOfTurn = true;
-        double deltaAngle = 0;
-        int motorsCurrentEncoder[][] = new int[2][2];
-        boolean directTurn = true;
-        double currentAngle = normalizedAngle(getAngularOriention(robot.imu).firstAngle);
-        double angle0 = currentAngle;
-        if (currentAngle < goalAngle) {
-            if (goalAngle - currentAngle <= 360 - (goalAngle - currentAngle)) {
-                sideOfTurn = false;
-                deltaAngle = goalAngle - currentAngle;
-            } else {
-                sideOfTurn = true;
-                deltaAngle = 360 - (goalAngle - currentAngle);
-                directTurn = false;
-            }
 
-
-        } else {
-            if (currentAngle - goalAngle <= 360 - (currentAngle - goalAngle)) {
-                sideOfTurn = true;
-                deltaAngle = currentAngle - goalAngle;
-            } else {
-                sideOfTurn = false;
-                deltaAngle = 360 - (currentAngle - goalAngle);
-                directTurn = false;
-            }
-        }
-        if (sideOfTurn)
-            power *= -1;
-        double decAngle=0.55;
-        double decMotors=0.8;
-        setMotorPower(robot.driveTrain, new double[][]{{power, -power}, {power, -power}});
-        if (directTurn)
-            while (currOpmode.opModeIsActive() && Math.abs(angle0 - currentAngle) < deltaAngle) {  //motors running
-                currentAngle = normalizedAngle(getAngularOriention(robot.imu).firstAngle);
-//                if(Math.abs(angle0 - currentAngle) <= deltaAngle*decAngle)
-//                {
-//                    decAngle+=0.08;
-//                    power*=decMotors;
-//                    decMotors*=decMotors;
-//                }
-
-                //double diff = Math.abs(angle0 - currentAngle);
-
-                //double speed = Math.min(0.05 * diff, power);
-                //setMotorPower(robot.driveTrain, new double[][]{{speed, -speed}, {speed, -speed}});
-                telemetry.addData("angle case 3:", currentAngle);
-                telemetry.update();
-            }
-        else if (goalAngle > 180 && currentAngle < 180)
-            while (currOpmode.opModeIsActive() &&
-                    (currentAngle <= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle > 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
-                currentAngle = normalizedAngle(getAngularOriention(robot.imu).firstAngle);
-//                if(Math.max(Math.abs(angle0 - currentAngle),360 - Math.abs((angle0 - currentAngle)))< deltaAngle*decAngle)
-//                {
-//                    decAngle+=0.08;
-//                    power*=decMotors;
-//                    decMotors*=decMotors;
-//                }
-
-
-                telemetry.addData("angle case 1:", currentAngle);
-                telemetry.update();
-            }
-
-        else if (goalAngle < 180 && currentAngle > 180)
-            while (currOpmode.opModeIsActive() && (currentAngle >= 180 && Math.abs(angle0 - currentAngle) < deltaAngle) || (currentAngle < 180 && 360 - Math.abs((angle0 - currentAngle)) < deltaAngle)) {//motors running
-                currentAngle = normalizedAngle(getAngularOriention(robot.imu).firstAngle);
-//                if(Math.max(Math.abs(angle0 - currentAngle),360 - Math.abs((angle0 - currentAngle)))< deltaAngle*decAngle)
-//                {
-//                    decAngle+=0.08;
-//                    power*=decMotors;
-//                    decMotors*=decMotors;
-//                }
-                telemetry.addData("angle case 2:", currentAngle);
-                telemetry.update();
-            }
-        setMotorPower(driveMotors, new double[][]{{0, 0}, {0, 0}});
-        telemetry.addData("Start encoders:", normalizedAngle(getAngularOriention(imu).firstAngle));
-        telemetry.update();
-        currOpmode.sleep(4000);
-//        for (int i = 0; i < 2; i++)
-//            for (int j = 0; j < 2; j++)
-//                motorsCurrentEncoder[i][j] = driveMotors[i][j].getCurrentPosition();
-//        for (int i = 0; i < 2; i++)
-//            for (int j = 0; j < 2; j++) {
-//                driveMotors[i][j].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//                driveMotors[i][j].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                driveMotors[i][j].setTargetPosition(motorsCurrentEncoder[i][j]);
-//                setMotorPower(driveMotors, new double[][]{{power, power}, {power, power}});
-//            }
-//        while (currOpmode.opModeIsActive() &&
-//                driveMotors[0][0].isBusy()
-//                && driveMotors[1][0].isBusy()
-//                && driveMotors[0][1].isBusy()
-//                && driveMotors[1][1].isBusy()) {
-//            telemetry.addData("Encoder busy:", currentAngle);
-//            telemetry.update();
-//        }
-//        for (int i = 0; i < 2; i++)
-//            for (int j = 0; j < 2; j++)
-//                driveMotors[i][j].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        setMotorPower(driveMotors, new double[][]{{0, 0}, {0, 0}});
-    }
 
 
     public static double normalizedAngle(double angle) {
@@ -374,14 +269,14 @@ public class DriveUtilities {
 
     public void back_up_driveByImage(double power, int turnAngle, int driveDist) {
         driveByEncoderRoverRuckus(driveDist, driveDist, 0.7, false);
-        TurnWithEncoder(turnAngle, power);
+        Turn(turnAngle, power);
     }
 
     public void diffTurn(double diffAngle, double power) {
         double currAngle = robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
                 AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         double goalAngle = normalizedAngle(diffAngle + currAngle);
-        TurnWithEncoder(goalAngle, power);
+        Turn(goalAngle, power);
 
     }
 
@@ -393,8 +288,8 @@ public class DriveUtilities {
         double pidErr[] = {0, 0}; //PID reset
 
         boolean range0 = true; //in case the ranaesensor is detacahed range0 is false
-        Rev2mDistanceSensor rangeSensor = robot.rangeSensor;
-        for (int ii = 0; ii < correct + 1; ii++) {
+        Rev2mDistanceSensor rangeSensor = null;
+        int ii=2; //shut error
             if (ii > 0)
                 power *= 0.75;
             if (distance > rangeSensor.getDistance(DistanceUnit.CM)) {// Further then tareget distance
@@ -420,10 +315,10 @@ public class DriveUtilities {
 
             }
         }
-        setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});  //stop drivetrain motors
-        if (rangeSensor.getDistance(DistanceUnit.CM) == 0) { //In case the range sensor is detached.
-            range0 = false;
+//        setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});  //stop drivetrain motors
+//        if (rangeSensor.getDistance(DistanceUnit.CM) == 0) { //In case the range sensor is detached.
+//            range0 = false;
 
         }
-    }
-}
+
+

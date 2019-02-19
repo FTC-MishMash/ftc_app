@@ -169,12 +169,12 @@ public class ImageTargets {
         return null;
     }
 
-    public void searchImage(int cubePos, double power) {
+    public void searchImage(TensorflowUtils.GOLD_MINERAL_POSITION cubePos, double power) {
         this.driveUtilities = currOpmode.driveUtils;
         telemetry.addData("on search", currOpmode.targetNav == null);
         telemetry.update();
         switch (cubePos) {
-            case 2: {
+            case RIGHT: {
                 telemetry.addLine("case1");
                 telemetry.update();
                 currOpmode.sleep(1000);
@@ -184,7 +184,7 @@ public class ImageTargets {
 
                 break;
             }
-            case 1: {
+            case CENTER: {
                 telemetry.addLine("case2");
                 telemetry.update();
                 currOpmode.sleep(1000);
@@ -194,7 +194,7 @@ public class ImageTargets {
 
                 break;
             }
-            case 3: {
+            case LEFT: {
                 telemetry.addLine("case3");
                 telemetry.update();
                 currOpmode.sleep(1000);

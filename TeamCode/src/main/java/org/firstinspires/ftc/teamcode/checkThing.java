@@ -54,8 +54,11 @@ public class checkThing extends AutoMode {
 //            telemetry.addData("right back motor encoder", robot.driveTrain[1][1].getCurrentPosition());
             telemetry.addData("angle: ", angle);
             telemetry.addData("power: ", power);
-            telemetry.addData("y: ", getPositions()[1]);
-            telemetry.addData("z: ", getPositions()[2]);
+            float[] pos = targetNav.getPositions();
+            if (pos != null) {
+                telemetry.addData("y: ", pos[1]);
+                telemetry.addData("z: ", pos[2]);
+            }
 
 //            telemetry.addData("imu angle", DriveUtilities.normalizedAngle(DriveUtilities.getAngularOriention(robot.imu).firstAngle));
 //////
@@ -89,8 +92,7 @@ public class checkThing extends AutoMode {
             if (gamepad1.x) {
                 driveUtils.Turn(angle, power);
 
-            }
-           else if (gamepad1.right_stick_button)
+            } else if (gamepad1.right_stick_button)
                 driveUtils.diffTurn(angle, power);
             else if (gamepad1.y) {
                 driveUtils.driveByEncoderRoverRuckus(targetEncoder, targetEncoder, power, false);
@@ -107,23 +109,23 @@ public class checkThing extends AutoMode {
                 targetNav.startTracking();
 //            sleep(500);
 
-                float[] pos = targetNav.getPositions();
-                telemetry.addData("pos null: ", pos == null);
-                telemetry.update();
-//            sleep(500);
-                if (pos == null) {
-
-                    telemetry.addData("start searching wait for click", cubePosition);
-                    telemetry.update();
-//                sleep(500);
-                    targetNav.searchImage(cubePosition, -0.20);
-                } else if (gamepad1.b) {
-                    driveUtils.back_up_driveByImage(0.45, robot.AngleToDepot, 95);
-                }
-
-
-//            sleep(600);
-                targetNav.driveToImage(-0.3);
+//                float[] pos = targetNav.getPositions();
+//                telemetry.addData("pos null: ", pos == null);
+//                telemetry.update();
+////            sleep(500);
+//                if (pos == null) {
+//
+//                    telemetry.addData("start searching wait for click", cubePosition);
+//                    telemetry.update();
+////                sleep(500);
+//                    //           targetNav.searchImage(cubePosition, -0.20);
+//                } else if (gamepad1.b) {
+//                    driveUtils.back_up_driveByImage(0.45, robot.AngleToDepot, 95);
+//                }
+//
+//
+////            sleep(600);
+//                targetNav.driveToImage(-0.3);
 //
 
             }

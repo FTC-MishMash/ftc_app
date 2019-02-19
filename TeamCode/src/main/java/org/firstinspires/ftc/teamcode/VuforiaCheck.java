@@ -12,7 +12,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
 @Autonomous(name = "VuforiaCheck")
-@Disabled public class VuforiaCheck extends AutoMode {
+//@Disabled
+public class VuforiaCheck extends AutoMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -34,8 +35,10 @@ import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
         tfod.activate();
         int posCube=-1;
         while (!isStarted()) {
-             telemetry.addData( "pos: ",tsSampling.goldPosition());
-             telemetry.update();
+            TensorflowUtils.GOLD_MINERAL_POSITION goldPos=tsSampling.goldPosition();
+            if(goldPos!=TensorflowUtils.GOLD_MINERAL_POSITION.NONE){
+             telemetry.addData( "pos: ",goldPos);
+             telemetry.update();}
         }
 //        //motorLock();
         waitForStart();
@@ -51,7 +54,6 @@ import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 //            telemetry.addData("right: ", distRight);
 //            telemetry.addData("pow: ", power);
 //            telemetry.addData("motor: ", motor);
-            telemetry.addData("range", robot.rangeSensor.getDistance(DistanceUnit.CM));
             telemetry.addData("angle:   ", angle);
             telemetry.addData("imu", DriveUtilities.normalizedAngle(getAngularOriention().firstAngle));
             float[] pos = targetNav.getPositions();
@@ -64,7 +66,7 @@ import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 //            telemetry.addData("ANGLE: ",angle);
             telemetry.update();
             if (gamepad1.left_stick_button) {
-                driveUtils.TurnWithEncoder(angle, power);
+                driveUtils.Turn(angle, power);
             }
 
             if (gamepad1.dpad_up) {

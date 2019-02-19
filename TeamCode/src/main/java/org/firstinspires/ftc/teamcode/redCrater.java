@@ -33,7 +33,7 @@ public class redCrater extends AutoMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
             telemetry.update();
         }
-//        robot.hanging.setPosition(robot.hangingLockPosition);
+        //TODO: add the cube searching
         telemetry.addLine("wait for start");
         telemetry.update();
         waitForStart();
@@ -76,11 +76,9 @@ public class redCrater extends AutoMode {
             telemetry.addLine("finished driving out of cube");
             telemetry.update();
             sleep(200);
-//
-            //  driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
 
 
-            driveUtils.TurnWithEncoder(robot.angleTurnToImage, 0.5);
+            driveUtils.Turn(robot.angleTurnToImage, 0.5);
             sleep(100);
             tsSampling.initVuforiaWebCam(false);
             targetNav.startTracking();
@@ -95,7 +93,7 @@ public class redCrater extends AutoMode {
                 telemetry.addData("start searching wait for click", cubePosition);
                 telemetry.update();
 //                sleep(500);
-                targetNav.searchImage(cubePosition, -0.20);
+              //  targetNav.searchImage(cubePosition, -0.20);
             }
 
 //            sleep(600);

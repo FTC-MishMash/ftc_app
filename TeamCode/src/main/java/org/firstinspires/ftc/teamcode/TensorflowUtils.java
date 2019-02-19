@@ -31,7 +31,7 @@ public class TensorflowUtils {
     Telemetry telemetry;
     DriveUtilities driveUtilities;
 
-    static enum GOLD_MINERAL_POSITION {
+    public static enum GOLD_MINERAL_POSITION {
         LEFT,
         CENTER,
         RIGHT,
@@ -52,12 +52,12 @@ public class TensorflowUtils {
             twoSmallestMinerals[0] = updateRecognitions.get(0);
             twoSmallestMinerals[1] = updateRecognitions.get(1);
             for (Recognition recognition : updateRecognitions) {
-                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL) || recognition.getLabel().equals(LABEL_SILVER_MINERAL)) {
-                    if (recognition.getTop() < twoSmallestMinerals[0].getTop()) {
+                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL) || recognition.getConfidence() > 0.7) {
+                    if (recognition.getTop() > twoSmallestMinerals[0].getTop()) {
                         temp = twoSmallestMinerals[0];
                         twoSmallestMinerals[0] = recognition;
                         twoSmallestMinerals[1] = temp;
-                    } else if (recognition.getTop() < twoSmallestMinerals[1].getTop())
+                    } else if (recognition.getTop() > twoSmallestMinerals[1].getTop())
                         twoSmallestMinerals[1] = recognition;
                 }
             }
@@ -79,10 +79,12 @@ public class TensorflowUtils {
                     samplingMinerals[0] = samplingMinerals[1];
                     samplingMinerals[1] = temp;
                 }
-                if (samplingMinerals[0].equals(LABEL_GOLD_MINERAL))
+                if (samplingMinerals[0].getLabel().equals(LABEL_GOLD_MINERAL))
                     cubePosition = GOLD_MINERAL_POSITION.CENTER;
-                else if (samplingMinerals[1].equals(LABEL_GOLD_MINERAL))
+                else if (samplingMinerals[1].getLabel().equals(LABEL_GOLD_MINERAL))
                     cubePosition = GOLD_MINERAL_POSITION.RIGHT;
+                else
+                    cubePosition = GOLD_MINERAL_POSITION.LEFT;
 
             }
         }
@@ -103,7 +105,7 @@ public class TensorflowUtils {
         int tfodMonitorViewId = currOpMode.hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minimumConfidence = 0.35;
+        tfodParameters.minimumConfidence = 0.12;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
         currOpMode.tfod = tfod;
@@ -116,7 +118,7 @@ public class TensorflowUtils {
 
         VuforiaLocalizer.Parameters parameters;
         int cameraId = currOpMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
-        parameters = new VuforiaLocalizer.Parameters(/*cameraId*/);
+        parameters = new VuforiaLocalizer.Parameters(cameraId);
 
 //        if (count > 1)
 //            parameters = new VuforiaLocalizer.Parameters(cameraId);
@@ -210,6 +212,17 @@ public class TensorflowUtils {
         robot.driveTrain[0][0].setPower(0);//LEFT Front
     }
 
+    public void rotateToCube(double power, int turnAngleRight, int turnAngleLeft, GOLD_MINERAL_POSITION goldMineralPosition) {
+
+
+        double runTime0 = currOpMode.getRuntime();
+        if (goldMineralPosition == GOLD_MINERAL_POSITION.LEFT)
+            driveUtilities.Turn(turnAngleLeft, power);
+        else if (goldMineralPosition == GOLD_MINERAL_POSITION.RIGHT)
+            driveUtilities.Turn(turnAngleRight, power);
+
+    }
+
     public int searchCube(double power, int turnAngleRight, int turnAngleLeft) {
         int cubePosition = 0;
         if (tfod == null) {
@@ -237,7 +250,7 @@ public class TensorflowUtils {
                 }
         }
         //only if dont have cube in middle
-        driveUtilities.TurnWithEncoder(turnAngleRight, power);
+        driveUtilities.Turn(turnAngleRight, power);
         runTime0 = currOpMode.getRuntime();
         while (currOpMode.opModeIsActive() && currOpMode.getRuntime() - runTime0 < 2) {
             java.util.List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
@@ -255,7 +268,7 @@ public class TensorflowUtils {
 
         // cubePosition != 1 && cubePosition != 2
         cubePosition = 3;//LEFT
-        driveUtilities.TurnWithEncoder(turnAngleLeft, power);//encoder=0.3
+        driveUtilities.Turn(turnAngleLeft, power);//encoder=0.3
         runTime0 = currOpMode.getRuntime();
         while (currOpMode.opModeIsActive() && currOpMode.getRuntime() - runTime0 < 2) {
             List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
@@ -270,7 +283,7 @@ public class TensorflowUtils {
                     }
                 }
         }
-        driveUtilities.TurnWithEncoder(0, power);
+        driveUtilities.Turn(0, power);
         return cubePosition;
     }
 

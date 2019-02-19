@@ -230,7 +230,6 @@ public class AutoMode extends LinearOpMode {
         if (!magneticLinear()){
             robot.linear.setPower(0);
         }
-        robot.hanging.setPosition(robot.hangingLockPosition);
 
 //        robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //        robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -282,7 +281,6 @@ public class AutoMode extends LinearOpMode {
 
             telemetry.update();
         }
-        robot.hanging.setPosition(robot.hangingOpenPosition);
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
         //TODO: add this

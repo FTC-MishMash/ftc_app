@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 
-@Autonomous(name = "Red cretar - ENCODERTESTING")
+@Autonomous(name = "cretar - ENCODER TESTING")
 public class redCrater_EncoderTEST extends AutoMode {
 
 //    autoMode auto;
@@ -20,7 +20,6 @@ public class redCrater_EncoderTEST extends AutoMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
             telemetry.update();
         }
-//        robot.hanging.setPosition(robot.hangingLockPosition);
         waitForStart();
 
         if (opModeIsActive()) {
@@ -63,7 +62,7 @@ public class redCrater_EncoderTEST extends AutoMode {
 
 
 
-            driveUtils.TurnWithEncoder(robot.newAngleTurnToImage, 0.5);
+            driveUtils.Turn(robot.newAngleTurnToImage, 0.5);
 //            sleep(2500);
 
 
@@ -74,10 +73,10 @@ public class redCrater_EncoderTEST extends AutoMode {
             Marker(0.5,robot.shaftTargetPositionMarker);  //marker
             // driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5, false);//to crater
             driveUtils.driveByEncoderRoverRuckus(-robot.distToCrater/2, -robot.distToCrater/2, -robot.powerEncoder, false);//to crater
-            driveUtils.TurnWithEncoder(10, 0.5);
-            driveUtils.TurnWithEncoder(330, 0.5);
+            driveUtils.Turn(10, 0.5);
+            driveUtils.Turn(330, 0.5);
             driveUtils.driveByEncoderRoverRuckus(robot.distToCrater/2, robot.distToCrater/2, robot.powerEncoder, false);//to crater
-            Parking(-600,0.5,-900,0.3);
+            Parking(robot.shaftEncoderPositionPARKING,0.5,robot.linearOpenPosition,0.3);
             //TODO: to change linear target encoder!!
 //            driveByColor(0,robot.colorRightFront,robot.imu,robot.hsvValuesRightFront,AngleToDepot,0.35);
 //            }

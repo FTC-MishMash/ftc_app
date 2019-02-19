@@ -21,8 +21,7 @@ public class Robot {
     public DcMotor[] shaft = new DcMotor[2];
     public DcMotor linear;
     public DcMotor inTake;
-    //    public Servo linearLock;
-    public Servo hanging;
+
     public ColorSensor colorRightFront;
     public ColorSensor colorLeftFront;
     public DigitalChannel magnetLinearLock;
@@ -35,7 +34,7 @@ public class Robot {
     public final float valuesLeftFront[] = hsvValuesRightFront;
     public final float valuesRightFront[] = hsvValuesLeftFront;
     BNO055IMU imu;
-    public Rev2mDistanceSensor rangeSensor;
+//    public Rev2mDistanceSensor rangeSensor;
     public double blueColorRightSensor = 100;
     public double redColorRightSensor = 42;
     public double blueColorLeftSensor = 135;
@@ -55,6 +54,8 @@ public class Robot {
     public int distToDepot = -120;
     public int distToCrater = 200;
     public double powerEncoder = 0.7;
+    public int linearOpenPosition = -900;
+    public int shaftEncoderPositionPARKING = -600;
     int AngleToDepot = 135;
     int newAngleToDepot = 115;
 
@@ -62,8 +63,6 @@ public class Robot {
 
         inTake = hardwareMap.get(DcMotor.class, "inTake");
 
-        hanging = hardwareMap.get(Servo.class, "hanging");
-//        linearLock = hardwareMap.get(Servo.class, "LinearServoLock");
 
         linear = hardwareMap.get(DcMotor.class, "linearLeft");
         shaft[0] = hardwareMap.get(DcMotor.class, "shaftRight");
@@ -75,9 +74,9 @@ public class Robot {
         magnetShaftOpen = hardwareMap.get(DigitalChannel.class, "magnetShaftOpen");
         magnetShaftLock = hardwareMap.get(DigitalChannel.class, "magnetShaftLock");
 
-        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
-        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
-        rangeSensor = hardwareMap.get(Rev2mDistanceSensor.class, "range");
+//        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
+//        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
+//        rangeSensor = hardwareMap.get(Rev2mDistanceSensor.class, "range");
         driveTrain[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
         driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
         driveTrain[0][1] = hardwareMap.get(DcMotor.class, "rightFront");
