@@ -139,78 +139,7 @@ public class TensorflowUtils {
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
 
-    public void followCubeRecognision(double power) {
-        double runTime = 0;
-        telemetry.addLine("follow cube 1:");
-        telemetry.update();
 
-        double distanceFromRight = 0;
-        double distanceFromLeft = 0;
-        double middleCubeX = 0;
-        double k = 0.0007; //EDEN
-        double[] addToMotors;
-        addToMotors = new double[2];
-
-        boolean breakLoop = false;
-        runTime = currOpMode.getRuntime();
-
-//        RecognitionList.get(indexGold);
-        if (tfod != null)
-            do {
-                List<Recognition> RecognitionList = tfod.getRecognitions();// I delete List<Recognition>
-                Recognition goldReco = null;
-
-                if (RecognitionList != null) {
-                    for (Recognition recognition : RecognitionList) {
-                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                            goldReco = recognition;
-                            runTime = currOpMode.getRuntime();
-                            break;
-                        }
-                    }
-                }
-
-                if (goldReco != null) {
-
-                    middleCubeX = ((goldReco.getLeft() + goldReco.getRight()) / 2);
-                    distanceFromRight = 720 - middleCubeX;
-                    distanceFromLeft = middleCubeX;
-                    telemetry.addLine("follow cube 4:");
-
-                    addToMotors[0] = k * distanceFromRight;  //RIGHT
-                    addToMotors[1] = k * distanceFromLeft; //LEFT
-                    telemetry.addData("distance From Right:", addToMotors[0]);
-                    telemetry.addData("distance From Left:", addToMotors[1]);
-                    telemetry.update();
-
-
-                    robot.driveTrain[0][1].setPower(addToMotors[0] + power);//RIGHT Front
-                    robot.driveTrain[1][1].setPower(addToMotors[0] + power);//Right Back
-                    robot.driveTrain[1][0].setPower(addToMotors[1] + power);//Left Back
-                    robot.driveTrain[0][0].setPower(addToMotors[1] + power);//LEFT Front
-                } else {
-                    telemetry.addLine("gold reco = null");
-                    telemetry.update();
-                    robot.driveTrain[0][1].setPower(0);//RIGHT Front
-                    robot.driveTrain[1][1].setPower(0);//Right Back
-                    robot.driveTrain[1][0].setPower(0);//Left Back
-                    robot.driveTrain[0][0].setPower(0);//LEFT Front
-                    if ((runTime - currOpMode.getRuntime()) < -2) {
-
-                        breakLoop = true;
-                        telemetry.addLine("in 2 seconds dont see the cube");
-                        telemetry.update();
-                    }
-                }
-
-
-            }
-            while (currOpMode.opModeIsActive() && !breakLoop);
-        robot.driveTrain[0][1].setPower(0);//RIGHT Front
-        robot.driveTrain[1][1].setPower(0);//Right Back
-        robot.driveTrain[1][0].setPower(0);//Left Back
-        robot.driveTrain[0][0].setPower(0);//LEFT Front
-    }
 
     public void rotateToCube(double power, int turnAngleRight, int turnAngleLeft, GOLD_MINERAL_POSITION goldMineralPosition) {
 

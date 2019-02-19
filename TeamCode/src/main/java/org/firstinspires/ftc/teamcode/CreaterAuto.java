@@ -28,9 +28,7 @@ public class CreaterAuto extends AutoMode {
 
            // driveUtils.TurnWithEncoder(320, 0.35);//encoder=0.3
               TensorflowUtils.GOLD_MINERAL_POSITION cubePosition;
-//            telemetry.addLine("press a for searchCube()");
-//            telemetry.update();
-//            while (!gamepad1.a);
+
             cubePosition = TensorflowUtils.GOLD_MINERAL_POSITION.CENTER;
 
             telemetry.addData("Gold mineral position: ", cubePosition);
@@ -58,20 +56,15 @@ public class CreaterAuto extends AutoMode {
             telemetry.update();
             sleep(300);
 
-//            telemetry.addLine("press a for driveEncoderSamplingBackward");
-//            telemetry.update();
-//            while (!gamepad1.a);
+
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingBackward, robot.driveEncoderSamplingBackward, -robot.powerEncoder, false);
             telemetry.addLine("finished driving out of cube");
             telemetry.update();
             tsSampling.initVuforiaWebCam(false);
             sleep(200);
-//
+
             //  driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
-//
-//            telemetry.addLine("press a for turning");
-//            telemetry.update();
-//            while (!gamepad1.a);
+
             driveUtils.Turn(robot.angleTurnToImage, 0.5);
             sleep(300);
             targetNav.startTracking();
@@ -86,16 +79,9 @@ public class CreaterAuto extends AutoMode {
                 telemetry.addData("start searching wait for click", cubePosition);
                 telemetry.update();
                sleep(300);
-//                telemetry.addLine("press a for searchImage");
-//                telemetry.update();
-//                while (!gamepad1.a);
                 targetNav.searchImage(cubePosition, -0.20);
             }
 
-//            sleep(600);
-//            telemetry.addLine("press a for driveToImage");
-//            telemetry.update();
-//            while (!gamepad1.a);
             targetNav.driveToImage(-0.35);
             sleep(500);
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, -robot.powerEncoder, false);//to depot
