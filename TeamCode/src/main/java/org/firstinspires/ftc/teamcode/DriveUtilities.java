@@ -218,7 +218,8 @@ public class DriveUtilities {
         double lastDiffAngle = diffAngle;
         final double direction = Math.signum(diffAngle);
         telemetry.clear();
-        while (currOpmode.opModeIsActive() && Math.abs(diffAngle) > 0.1 /*&& direction == Math.signum(diffAngle)*/)
+        int count=0;
+        while (currOpmode.opModeIsActive() && Math.abs(diffAngle) > 0.1&&count<=3 /*&& direction == Math.signum(diffAngle)*/)
         {
             currentAngle = normalizedAngle(getAngularOriention(robot.imu).firstAngle);
             double currentTime = currOpmode.getRuntime();
@@ -234,10 +235,12 @@ public class DriveUtilities {
 //                    0.00004 * diffAngleAbs * diffAngleAbs + 0.000001 * diffAngleAbs;
 //            double speedSuggested = 0.00000012 * diffAngleAbs * diffAngleAbs * diffAngleAbs +
 //                0.00004 * diffAngleAbs * diffAngleAbs + 0.0002 * diffAngleAbs;
-            double speedSuggested = 0.0000003 * diffAngleAbs * diffAngleAbs * diffAngleAbs +
-                0.00005 * diffAngleAbs * diffAngleAbs + 0.0006 * diffAngleAbs;
-            double speed = Math.signum(diffAngle) * Math.min(Math.max(0.19, speedSuggested), power);
+            double minSpeed=0.21;
+            double speedSuggested = 0.0000011 * diffAngleAbs * diffAngleAbs * diffAngleAbs +
+                0.0001178 * diffAngleAbs * diffAngleAbs + 0.0030 * diffAngleAbs;
+            double speed = Math.signum(diffAngle) * Math.min(Math.max(minSpeed, speedSuggested), power);
             setMotorPower(robot.driveTrain, new double[][]{{speed, -speed}, {speed, -speed}});
+
 
 //            telemetry.addData("goal angle:", goalAngle);
 //            telemetry.addData("current angle:", currentAngle);
@@ -247,6 +250,8 @@ public class DriveUtilities {
 
             lastTime = currentTime;
             lastDiffAngle = diffAngle;
+            if(direction != Math.signum(diffAngle))
+                count++;
         }
 
         setMotorPower(driveMotors, new double[][]{{0, 0}, {0, 0}});

@@ -37,7 +37,7 @@ public class checkThing extends AutoMode {
         targetNav = new ImageTargets(this);
         driveUtils = new DriveUtilities(this);
         tsSampling = new TensorflowUtils(this);
-        tsSampling.initVuforiaWebCam(false);
+        tsSampling.initVuforia(false);
         targetNav.startTracking();
         waitForStart();
         while (opModeIsActive()) {
@@ -60,7 +60,7 @@ public class checkThing extends AutoMode {
                 telemetry.addData("z: ", pos[2]);
             }
 
-//            telemetry.addData("imu angle", DriveUtilities.normalizedAngle(DriveUtilities.getAngularOriention(robot.imu).firstAngle));
+            telemetry.addData("imu angle", DriveUtilities.normalizedAngle(DriveUtilities.getAngularOriention(robot.imu).firstAngle));
 //////
 //            telemetry.addData("shaft right CM", robot.shaft[0].getCurrentPosition()*27/600);
 //            telemetry.addData("shaft left CM", robot.shaft[1].getCurrentPosition()*27/600);

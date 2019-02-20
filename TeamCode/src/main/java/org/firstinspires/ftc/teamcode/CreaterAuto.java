@@ -17,7 +17,7 @@ public class CreaterAuto extends AutoMode {
         }
         if (tfod != null)
             tfod.activate();
-
+        robot.hanging.setPosition(robot.hangingLockPosition);
         telemetry.addLine("wait for start");
         telemetry.update();
 
@@ -25,16 +25,15 @@ public class CreaterAuto extends AutoMode {
         if (opModeIsActive()) {
             runTime.reset();
             runTime.startTime();
+            LandInAuto(robot.hangingLockPosition,0.5);
+            shaftGoDown(0.5, robot.shaftDownPosition);
 
-           // driveUtils.TurnWithEncoder(320, 0.35);//encoder=0.3
-              TensorflowUtils.GOLD_MINERAL_POSITION cubePosition;
+              TensorflowUtils.GOLD_MINERAL_POSITION cubePosition= TensorflowUtils.GOLD_MINERAL_POSITION.RIGHT;
 
-            cubePosition = TensorflowUtils.GOLD_MINERAL_POSITION.CENTER;
 
             telemetry.addData("Gold mineral position: ", cubePosition);
             telemetry.update();
 
-            sleep(800);
             tsSampling.rotateToCube(0.5,robot.SamplingAngleRight,robot.SamplingAngleLeft,cubePosition);
             telemetry.addLine("press a for driveEncoderSamplingForward");
             telemetry.update();
@@ -51,19 +50,21 @@ public class CreaterAuto extends AutoMode {
             if (tfod != null) {
                 tfod.shutdown();
             }
-            vuforia.close();
+            if(TensorflowUtils.isWebcamActivate) {
+                vuforia.close();
+                tsSampling.initVuforia(false);
+            }
             telemetry.addLine("finished driving into cube");
             telemetry.update();
-            sleep(300);
+            sleep(200);
 
 
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingBackward, robot.driveEncoderSamplingBackward, -robot.powerEncoder, false);
             telemetry.addLine("finished driving out of cube");
             telemetry.update();
-            tsSampling.initVuforiaWebCam(false);
+
             sleep(200);
 
-            //  driveUtils.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
 
             driveUtils.Turn(robot.angleTurnToImage, 0.5);
             sleep(300);
@@ -73,7 +74,7 @@ public class CreaterAuto extends AutoMode {
             float[] pos = targetNav.getPositions();
             telemetry.addData("pos null: ", pos == null);
             telemetry.update();
-//            sleep(500);
+           sleep(200);
             if (pos == null) {
 
                 telemetry.addData("start searching wait for click", cubePosition);
@@ -82,7 +83,7 @@ public class CreaterAuto extends AutoMode {
                 targetNav.searchImage(cubePosition, -0.20);
             }
 
-            targetNav.driveToImage(-0.35);
+           targetNav.driveToImage(-0.3);
             sleep(500);
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, -robot.powerEncoder, false);//to depot
 //            Marker(0.5,robot.shaftTargetPositionMarker);  //marker

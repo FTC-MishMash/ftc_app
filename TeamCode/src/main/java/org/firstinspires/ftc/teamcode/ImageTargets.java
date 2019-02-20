@@ -68,10 +68,11 @@ public class ImageTargets {
 
     public ImageTargets(AutoMode currOpmode) {
         this.currOpmode = currOpmode;
-        //this.robot = currOpmode.robot;
+        this.robot = currOpmode.robot;
         this.vuforia = currOpmode.vuforia;
         this.telemetry = currOpmode.telemetry;
-        //this.motors = robot.driveTrain;
+        this.motors = robot.driveTrain;
+        this.driveUtilities=currOpmode.driveUtils;
     }
 
     public void startTracking() {
@@ -143,7 +144,7 @@ public class ImageTargets {
              * the last time that call was made, or if the trackable is not currently visible.
              * getRobotLocation() will return null if the trackable is not currently visible.
              */
-       //     telemetry.addData(trackable.getName(), ((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() ? "Visible" : "Not Visible");    //
+            //     telemetry.addData(trackable.getName(), ((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() ? "Visible" : "Not Visible");    //
 
             OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
             if (robotLocationTransform != null) {
@@ -178,9 +179,9 @@ public class ImageTargets {
                 telemetry.addLine("case1");
                 telemetry.update();
                 currOpmode.sleep(1000);
-                driveUtilities.driveByEncoderRoverRuckus(-70, -70, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(-70, -62, power, true);
                 if (getPositions() == null)
-                    driveUtilities.driveByEncoderRoverRuckus(-50, -50, power, true);
+                    driveUtilities.driveByEncoderRoverRuckus(-50, -42, power, true);
 
                 break;
             }
@@ -188,9 +189,9 @@ public class ImageTargets {
                 telemetry.addLine("case2");
                 telemetry.update();
                 currOpmode.sleep(1000);
-                driveUtilities.driveByEncoderRoverRuckus(-50, -50, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(-50, -42, power, true);
                 if (getPositions() == null)
-                    driveUtilities.driveByEncoderRoverRuckus(-35, -35, power, true);
+                    driveUtilities.driveByEncoderRoverRuckus(-35, -30, power, true);
 
                 break;
             }
@@ -198,9 +199,9 @@ public class ImageTargets {
                 telemetry.addLine("case3");
                 telemetry.update();
                 currOpmode.sleep(1000);
-                driveUtilities.driveByEncoderRoverRuckus(-30, -30, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(-30, -22, power, true);
                 if (getPositions() == null)
-                    driveUtilities.driveByEncoderRoverRuckus(-12, -12, power, true);
+                    driveUtilities.driveByEncoderRoverRuckus(-12, -6, power, true);
             }
         }
 //
@@ -251,7 +252,7 @@ public class ImageTargets {
     public void driveToImage(double power) {
         //  Driving.Driving.setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
 
-        float[] positions = getPositions();//למה לקרוא פעמים לאותה הפונקציה?
+        float[] positions = getPositions();
         if (positions != null) {
             telemetry.addLine("On DriveToImage()");
             telemetry.update();
@@ -268,7 +269,7 @@ public class ImageTargets {
 //            }
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
 
-            while (currOpmode.opModeIsActive() && positions[0] <= 61) {
+            while (currOpmode.opModeIsActive() && (positions != null && positions[0] <= 60)) {
                 positions = getPositions();
                 telemetry.addData("x:", positions[0]);
                 telemetry.update();
@@ -279,7 +280,7 @@ public class ImageTargets {
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
             currOpmode.sleep(100);
             double heading = 0;
-            positions=getPositions();
+            positions = getPositions();
             if (positions != null) ;
             {
                 heading = positions[5];
@@ -293,7 +294,7 @@ public class ImageTargets {
 //                telemetry.addData("heading: ", positions[5]);
 //                telemetry.update();
 //            }
-         //   driveUtilities.TurnWithEncoder(310,0.4);
+            //   driveUtilities.TurnWithEncoder(310,0.4);
             driveUtilities.diffTurn(99 + heading, 0.4);
         }
     }

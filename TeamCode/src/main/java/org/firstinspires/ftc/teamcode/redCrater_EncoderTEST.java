@@ -29,7 +29,7 @@ public class redCrater_EncoderTEST extends AutoMode {
             shaftGoDown(0.4,-250);
 
             int cubePosition = 0;
-            cubePosition = tsSampling.searchCube(0.4, robot.SamplingAngleRight, robot.SamplingAngleLeft);
+            //bePosition = tsSampling.searchCube(0.4, robot.SamplingAngleRight, robot.SamplingAngleLeft);
 
             telemetry.addData("Gold mineral position: ", cubePosition);
             telemetry.update();

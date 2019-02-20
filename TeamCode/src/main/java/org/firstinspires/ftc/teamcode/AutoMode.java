@@ -48,21 +48,21 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 @Autonomous(name = "AutoMode")
 //@Disabled
 public class AutoMode extends LinearOpMode {
-    public static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
-    public static final String LABEL_GOLD_MINERAL = "Gold Mineral";
-    public static final String LABEL_SILVER_MINERAL = "Silver Mineral";
-    //    private static final android.graphics.Color Color = ;
-    public Robot robot;
-    public static final String VUFORIA_KEY = " ATgDONj/////AAABmW0G/nQirUMiumnzPc6Pl8oJhBOCC2qoUq0BWhir9YWcBFDlhZUfSwATcQArcyyLxIOV21sHaYJeeQEJZfIJ+4spBn3oJ/DfycsbPaNs87+TRpM46/vbUkj1Ok+NtZ/eqMhmMXjFC8dgdCfbCt0aMxoBNzDw4+v28abG+hjUCjVYf86Jq1m7R942XCjw0yhOZqTXWIp3WAZDXY/PdWGQGY/zWae0l6TAZ6Z27t1xYJdkkpLqEsbKM3ZprvtgIs8AsWS9Tri2892OHq2CnCL+1ZHHXKPdxON3fiC1Gd3oihwPhTUReNw0VAg9yeVsVa1UQg7ea9K6WpmVto0FG+T2/LV8uq/3Mp/NHWiNizw2DM4h";
-
-
     /**
-     * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
-     * localization engine.
+     * A master autonomous class that initializes all of the objects that
+     * in the autonomous program and execute the initialization part before the match start/.
      */
+
+    public Robot robot;   //An instance Robot class which provide access to the robot components.
+
 
     public ElapsedTime runTime = new ElapsedTime();
     final double SCALE_FACTOR = 255;
+
+    /**
+     * These two variables are the range values of the IMU pitch angle to tell
+     * if robot is balanced on the field.
+     */
     static final int PitchtargetAngleMin = -5;
     static final int PitchtargetAngleMax = 5;
     public VuforiaLocalizerEx vuforia;
@@ -72,18 +72,10 @@ public class AutoMode extends LinearOpMode {
      * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
      */
-    public TFObjectDetector tfod;
+    public TFObjectDetector tfod; //
     static final int RolltargetAngleMin = -10;
     static final int RolltargetAngleMax = 10;
 
-    //test1
-    final double minAngleToTarget = 35;
-    static final int XtargetPosition = 63;
-    static final int YtargetPosition = 6;
-    static final int ZtargetPosition = -4;
-
-    static final int HeadingToSampling = 45;
-    static final int HeadingToTarget = 90;
 
     public static final float mmPerInch = 25.4f;
     public static final float mmFTCFieldWidth = (12 * 6) * mmPerInch;       // the width of the FTC field (from the center point to the outer panels)
@@ -110,20 +102,19 @@ public class AutoMode extends LinearOpMode {
         targetNav = new ImageTargets(this);
         driveUtils = new DriveUtilities(this);
         tsSampling = new TensorflowUtils(this);
-        tsSampling.initVuforiaWebCam(true);
+        tsSampling.initVuforia(true);
 
 
     }
 
 
-
-    public boolean magneticLinear(){
-        return  !robot.magnetLinearLock.getState() || !robot.magnetLinearOpen.getState();
+    public boolean magneticLinear() {
+        return !robot.magnetLinearLock.getState() || !robot.magnetLinearOpen.getState();
 
     }
 
     public boolean magneticShafts() {
-        return  !robot.magnetShaftLock.getState() || !robot.magnetShaftOpen.getState() ;
+        return !robot.magnetShaftLock.getState() || !robot.magnetShaftOpen.getState();
     }
 
     public Orientation getAngularOriention() {
@@ -142,7 +133,7 @@ public class AutoMode extends LinearOpMode {
         robot.linear.setTargetPosition(-125);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.linear.setPower(0.7);
-        if (!magneticLinear()){
+        if (!magneticLinear()) {
             robot.linear.setPower(0);
         }
         robot.hanging.setPosition(robot.hangingLockPosition);
@@ -169,11 +160,11 @@ public class AutoMode extends LinearOpMode {
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 250);
-            robot.shaft[1]. setTargetPosition(robot.shaft[1].getCurrentPosition() - 250);
+            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 250);
             robot.shaft[0].setPower(shaftPower);
             robot.shaft[1].setPower(shaftPower);
 
-            if (!magneticShafts()){
+            if (!magneticShafts()) {
                 robot.shaft[0].setPower(0);
                 robot.shaft[1].setPower(0);
             }
@@ -186,7 +177,7 @@ public class AutoMode extends LinearOpMode {
             robot.shaft[0].setPower(-shaftPower);
             robot.shaft[1].setPower(-shaftPower);
 
-            if (!magneticShafts()){
+            if (!magneticShafts()) {
                 robot.shaft[0].setPower(0);
                 robot.shaft[1].setPower(0);
             }
@@ -270,7 +261,7 @@ public class AutoMode extends LinearOpMode {
 
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        if (!magneticShafts()){
+        if (!magneticShafts()) {
             robot.shaft[0].setPower(0);
             robot.shaft[1].setPower(0);
         }
@@ -281,7 +272,7 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[0].setPower(shaftPower);
         robot.shaft[1].setPower(shaftPower);
 
-        if (!magneticShafts()){
+        if (!magneticShafts()) {
             robot.shaft[0].setPower(0);
             robot.shaft[1].setPower(0);
         }
@@ -296,7 +287,7 @@ public class AutoMode extends LinearOpMode {
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.linear.setTargetPosition(0);
         robot.linear.setPower(0.4);
-        if (!magneticLinear()){
+        if (!magneticLinear()) {
             robot.linear.setPower(0);
         }
 
@@ -306,7 +297,6 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
 
 
     public double[] GyroPID(double heading, double lasterror, BNO055IMU imu) {
@@ -358,10 +348,6 @@ public class AutoMode extends LinearOpMode {
     }
 
 
-
-
-
-
     public void Marker(double powerShaft, int shaftTargetPositionMarker) {
 //        driveByColor(color, sensorcColor, imu, hsvValue, heading, power);
 //        driveByEncoderRoverRuckus(75, 75, 0.5);
@@ -374,7 +360,7 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[0].setPower(powerShaft);
         robot.shaft[1].setPower(powerShaft);
-        if (!magneticShafts()){
+        if (!magneticShafts()) {
             robot.shaft[0].setPower(0);
             robot.shaft[1].setPower(0);
         }
@@ -404,19 +390,19 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
-        if (!magneticShafts()){
+        if (!magneticShafts()) {
             robot.shaft[0].setPower(0);
             robot.shaft[1].setPower(0);
         }
         robot.linear.setTargetPosition(0);
         robot.linear.setPower(0.4);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        if (!magneticLinear()){
+        if (!magneticLinear()) {
             robot.linear.setPower(0);
         }
     }
 
-    public void Parking( int targetShaftParkingPositionEncoder, double shaftPower, int linearTargetEncoder, double linearPower) {
+    public void Parking(int targetShaftParkingPositionEncoder, double shaftPower, int linearTargetEncoder, double linearPower) {
         robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -434,13 +420,13 @@ public class AutoMode extends LinearOpMode {
         robot.linear.setTargetPosition(linearTargetEncoder);
         robot.linear.setPower(0.7);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        if (!magneticLinear()){
+        if (!magneticLinear()) {
             robot.linear.setPower(0);
         }
         while (opModeIsActive() && robot.linear.isBusy()) ;
         robot.shaft[0].setPower(0);
         robot.shaft[1].setPower(0);
-        if (!magneticShafts()){
+        if (!magneticShafts()) {
             robot.shaft[0].setPower(0);
             robot.shaft[1].setPower(0);
         }
@@ -462,19 +448,6 @@ public class AutoMode extends LinearOpMode {
 //        }
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

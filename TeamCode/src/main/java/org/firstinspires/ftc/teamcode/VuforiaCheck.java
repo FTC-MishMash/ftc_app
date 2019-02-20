@@ -22,7 +22,7 @@ public class VuforiaCheck extends AutoMode {
       //  driveUtils = new DriveUtilities(this);
         tsSampling = new TensorflowUtils(this);
 
-        tsSampling.initVuforiaWebCam(true);
+        tsSampling.initVuforia(true);
        // targetNav.startTracking();
 //        tsSampling.initVuforiaWebCam(true);
 //

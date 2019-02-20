@@ -50,7 +50,7 @@ public class redCrater extends AutoMode {
 //            driveUtils.TurnWithEncoder(0, 0.6);
 //            sleep(1000);
             int cubePosition = 0;
-            cubePosition = tsSampling.searchCube(0.33, robot.SamplingAngleRight, robot.SamplingAngleLeft);
+         //   cubePosition = tsSampling.searchCube(0.33, robot.SamplingAngleRight, robot.SamplingAngleLeft);
 
             telemetry.addData("Gold mineral position: ", cubePosition);
             telemetry.update();
@@ -80,7 +80,7 @@ public class redCrater extends AutoMode {
 
             driveUtils.Turn(robot.angleTurnToImage, 0.5);
             sleep(100);
-            tsSampling.initVuforiaWebCam(false);
+            tsSampling.initVuforia(false);
             targetNav.startTracking();
 //            sleep(500);
 

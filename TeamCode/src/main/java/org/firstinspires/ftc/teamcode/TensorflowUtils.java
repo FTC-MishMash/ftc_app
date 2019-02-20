@@ -28,6 +28,7 @@ public class TensorflowUtils {
     public static final String LABEL_SILVER_MINERAL = "Silver Mineral";
     //    private static final android.graphics.Color Color = ;
     public static final String VUFORIA_KEY = " ATgDONj/////AAABmW0G/nQirUMiumnzPc6Pl8oJhBOCC2qoUq0BWhir9YWcBFDlhZUfSwATcQArcyyLxIOV21sHaYJeeQEJZfIJ+4spBn3oJ/DfycsbPaNs87+TRpM46/vbUkj1Ok+NtZ/eqMhmMXjFC8dgdCfbCt0aMxoBNzDw4+v28abG+hjUCjVYf86Jq1m7R942XCjw0yhOZqTXWIp3WAZDXY/PdWGQGY/zWae0l6TAZ6Z27t1xYJdkkpLqEsbKM3ZprvtgIs8AsWS9Tri2892OHq2CnCL+1ZHHXKPdxON3fiC1Gd3oihwPhTUReNw0VAg9yeVsVa1UQg7ea9K6WpmVto0FG+T2/LV8uq/3Mp/NHWiNizw2DM4h";
+    public static boolean isWebcamActivate=false;
     Telemetry telemetry;
     DriveUtilities driveUtilities;
 
@@ -95,7 +96,7 @@ public class TensorflowUtils {
         this.currOpMode = currOpMode;
         this.vuforia = currOpMode.vuforia;
         this.tfod = currOpMode.tfod;
-        // this.robot = currOpMode.robot;
+        this.robot = currOpMode.robot;
         this.telemetry = currOpMode.telemetry;
         this.driveUtilities = currOpMode.driveUtils;
     }
@@ -104,14 +105,14 @@ public class TensorflowUtils {
 
         int tfodMonitorViewId = currOpMode.hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters();
         tfodParameters.minimumConfidence = 0.12;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
         currOpMode.tfod = tfod;
     }
 
-    public void initVuforiaWebCam(boolean webcam) {
+    public void initVuforia(boolean webcam) {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          */
@@ -129,8 +130,10 @@ public class TensorflowUtils {
         //vuforia = (VuforiaLocalizer) ClassFactory.getInstance().createVuforia(parameters);
         if (webcam) {
             WebcamName webcamName = currOpMode.hardwareMap.get(WebcamName.class, "Webcam 1");
-            if (webcamName.isAttached())
+            if (webcamName.isAttached()) {
                 parameters.cameraName = webcamName;
+                isWebcamActivate=true;
+            }
         }
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         vuforia = new VuforiaLocalizerEx(parameters);
@@ -152,68 +155,5 @@ public class TensorflowUtils {
 
     }
 
-    public int searchCube(double power, int turnAngleRight, int turnAngleLeft) {
-        int cubePosition = 0;
-        if (tfod == null) {
-            telemetry.addData("tfod is NULL  ", tfod);
-            telemetry.update();
-            cubePosition = -1;
-            return cubePosition;
-        }
-//        } else if (tfod != null) {
-//            tfod.activate();
-//        }
-
-        double runTime0 = currOpMode.getRuntime();
-        while (currOpMode.opModeIsActive() && currOpMode.getRuntime() - runTime0 < 3) {
-            java.util.List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
-            telemetry.addData("have cube?   ", RecognitionList != null);
-            telemetry.update();
-
-            if (RecognitionList != null)
-                for (Recognition recognition : RecognitionList) {
-                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                        cubePosition = 1;//CENTER
-                        return cubePosition;
-                    }
-                }
-        }
-        //only if dont have cube in middle
-        driveUtilities.Turn(turnAngleRight, power);
-        runTime0 = currOpMode.getRuntime();
-        while (currOpMode.opModeIsActive() && currOpMode.getRuntime() - runTime0 < 2) {
-            java.util.List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
-            telemetry.addLine("have cube?   ");
-            telemetry.update();
-
-            if (RecognitionList != null)//TODO: להבין למה לא הלך שמאלה למרות שהייתה קוביה בימין
-                for (Recognition recognition : RecognitionList) {
-                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                        cubePosition = 2;//RIGHT
-                        return cubePosition;
-                    }
-                }
-        }
-
-        // cubePosition != 1 && cubePosition != 2
-        cubePosition = 3;//LEFT
-        driveUtilities.Turn(turnAngleLeft, power);//encoder=0.3
-        runTime0 = currOpMode.getRuntime();
-        while (currOpMode.opModeIsActive() && currOpMode.getRuntime() - runTime0 < 2) {
-            List<Recognition> RecognitionList = tfod.getUpdatedRecognitions();
-            telemetry.addLine("have cube?   ");
-            telemetry.update();
-
-            if (RecognitionList != null)//TODO: להבין למה לא הלך שמאלה למרות שהייתה קוביה בימין
-                for (Recognition recognition : RecognitionList) {
-                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                        cubePosition = 3;//RIGHT
-                        return cubePosition;
-                    }
-                }
-        }
-        driveUtilities.Turn(0, power);
-        return cubePosition;
-    }
 
 }
