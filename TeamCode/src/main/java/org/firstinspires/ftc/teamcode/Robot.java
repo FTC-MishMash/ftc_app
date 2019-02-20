@@ -21,7 +21,7 @@ public class Robot {
     public DcMotor[] shaft = new DcMotor[2];
     public DcMotor linear;
     public DcMotor inTake;
-
+    public Servo hanging;
     public ColorSensor colorRightFront;
     public ColorSensor colorLeftFront;
     public DigitalChannel magnetLinearLock;
@@ -34,7 +34,7 @@ public class Robot {
     public final float valuesLeftFront[] = hsvValuesRightFront;
     public final float valuesRightFront[] = hsvValuesLeftFront;
     BNO055IMU imu;
-//    public Rev2mDistanceSensor rangeSensor;
+    //    public Rev2mDistanceSensor rangeSensor;
     public double blueColorRightSensor = 100;
     public double redColorRightSensor = 42;
     public double blueColorLeftSensor = 135;
@@ -73,7 +73,7 @@ public class Robot {
 
         magnetShaftOpen = hardwareMap.get(DigitalChannel.class, "magnetShaftOpen");
         magnetShaftLock = hardwareMap.get(DigitalChannel.class, "magnetShaftLock");
-
+        hanging = hardwareMap.get(Servo.class, "hanging");
 //        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
 //        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
 //        rangeSensor = hardwareMap.get(Rev2mDistanceSensor.class, "range");

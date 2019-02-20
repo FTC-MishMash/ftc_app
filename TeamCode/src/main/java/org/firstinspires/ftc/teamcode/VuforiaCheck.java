@@ -40,9 +40,8 @@ public class VuforiaCheck extends AutoMode {
              telemetry.addData( "pos: ",goldPos);
              telemetry.update();}
         }
-//        //motorLock();
         waitForStart();
-        //LandInAuto();
+
         double power = 0.45;
         int motor = 0;
         int distLeft = 10;
