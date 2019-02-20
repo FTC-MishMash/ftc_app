@@ -40,8 +40,8 @@ public class Robot {
     public double redColorRightSensor = 42;
     public double blueColorLeftSensor = 135;
     public double redColorLeftSensor = 65;
-    public double hangingOpenPosition = 0.2;
-    public double hangingLockPosition = 0.7;
+    public double hangingOpenPosition = 0.7;
+    public double hangingLockPosition = 0.2;
     public double angleTurnToImage = 263;
     public double newAngleTurnToImage = 70;
     public int SamplingAngleRight = 310;
