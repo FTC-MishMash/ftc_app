@@ -196,7 +196,7 @@ public class DriveRoverRuckus extends OpMode {
 //            robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //            robot.linear.setTargetPosition(linearEncoder);
-//            robot.linear.setPower(0.7);
+//            robot.linear.setPower(0.7);d
 //
 //        }
 
