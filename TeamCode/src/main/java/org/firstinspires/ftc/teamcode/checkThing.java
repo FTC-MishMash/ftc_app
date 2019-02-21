@@ -56,8 +56,12 @@ public class checkThing extends AutoMode {
             telemetry.addData("power: ", power);
             float[] pos = targetNav.getPositions();
             if (pos != null) {
+                telemetry.addData("x: ", pos[0]);
                 telemetry.addData("y: ", pos[1]);
                 telemetry.addData("z: ", pos[2]);
+                telemetry.addData("r: ", pos[3]);
+                telemetry.addData("p: ", pos[4]);
+                telemetry.addData("h: ", pos[5]);
             }
 
             telemetry.addData("imu angle", DriveUtilities.normalizedAngle(DriveUtilities.getAngularOriention(robot.imu).firstAngle));
@@ -90,10 +94,10 @@ public class checkThing extends AutoMode {
                 sleep(700);
             }
             if (gamepad1.x) {
-                driveUtils.Turn(angle, power);
+                driveUtils.Turn(angle);
 
             } else if (gamepad1.right_stick_button)
-                driveUtils.diffTurn(angle, power);
+                driveUtils.diffTurn(angle);
             else if (gamepad1.y) {
                 driveUtils.driveByEncoderRoverRuckus(targetEncoder, targetEncoder, power, false);
             }

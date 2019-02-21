@@ -149,9 +149,9 @@ public class TensorflowUtils {
 
         double runTime0 = currOpMode.getRuntime();
         if (goldMineralPosition == GOLD_MINERAL_POSITION.LEFT)
-            driveUtilities.Turn(turnAngleLeft, power);
+            driveUtilities.Turn(turnAngleLeft);
         else if (goldMineralPosition == GOLD_MINERAL_POSITION.RIGHT)
-            driveUtilities.Turn(turnAngleRight, power);
+            driveUtilities.Turn(turnAngleRight);
 
     }
 

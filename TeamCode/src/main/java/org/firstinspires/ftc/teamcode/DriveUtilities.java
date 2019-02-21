@@ -206,9 +206,9 @@ public class DriveUtilities {
 
     }
 
-    public void Turn(double goalAngle, double power) {
+    public void Turn(double goalAngle) {
         DcMotor[][] driveMotors = robot.driveTrain;
-        power = 1;//TODO: Remove
+        final double maxPower = 1;
 
         double currentAngle = getAngularOriention(robot.imu).firstAngle;
         double lastTime = currOpmode.getRuntime();
@@ -216,10 +216,9 @@ public class DriveUtilities {
         if (diffAngle > 180)
             diffAngle -= 360;
         double lastDiffAngle = diffAngle;
-        final double direction = Math.signum(diffAngle);
+        //final double direction = Math.signum(diffAngle);
         telemetry.clear();
-        int count=0;
-        while (currOpmode.opModeIsActive() && Math.abs(diffAngle) > 0.1&&count<=3 /*&& direction == Math.signum(diffAngle)*/)
+        while (currOpmode.opModeIsActive() && Math.abs(diffAngle) > 0.1 /*&& direction == Math.signum(diffAngle)*/)
         {
             currentAngle = normalizedAngle(getAngularOriention(robot.imu).firstAngle);
             double currentTime = currOpmode.getRuntime();
@@ -235,10 +234,12 @@ public class DriveUtilities {
 //                    0.00004 * diffAngleAbs * diffAngleAbs + 0.000001 * diffAngleAbs;
 //            double speedSuggested = 0.00000012 * diffAngleAbs * diffAngleAbs * diffAngleAbs +
 //                0.00004 * diffAngleAbs * diffAngleAbs + 0.0002 * diffAngleAbs;
-            double minSpeed=0.21;
-            double speedSuggested = 0.0000011 * diffAngleAbs * diffAngleAbs * diffAngleAbs +
-                0.0001178 * diffAngleAbs * diffAngleAbs + 0.0030 * diffAngleAbs;
-            double speed = Math.signum(diffAngle) * Math.min(Math.max(minSpeed, speedSuggested), power);
+//            double speedSuggested = 0.0000007 * diffAngleAbs * diffAngleAbs * diffAngleAbs +
+//                0.0001178 * diffAngleAbs * diffAngleAbs + 0.0030 * diffAngleAbs;
+            double speedSuggested = 0.0000007 * diffAngleAbs * diffAngleAbs * diffAngleAbs +
+                0.0001178 * diffAngleAbs * diffAngleAbs + 0.02 * diffAngleAbs;
+            double minSpeed=0.2;
+            double speed = Math.signum(diffAngle) * Math.min(Math.max(minSpeed, speedSuggested), maxPower);
             setMotorPower(robot.driveTrain, new double[][]{{speed, -speed}, {speed, -speed}});
 
 
@@ -250,8 +251,6 @@ public class DriveUtilities {
 
             lastTime = currentTime;
             lastDiffAngle = diffAngle;
-            if(direction != Math.signum(diffAngle))
-                count++;
         }
 
         setMotorPower(driveMotors, new double[][]{{0, 0}, {0, 0}});
@@ -274,14 +273,14 @@ public class DriveUtilities {
 
     public void back_up_driveByImage(double power, int turnAngle, int driveDist) {
         driveByEncoderRoverRuckus(driveDist, driveDist, 0.7, false);
-        Turn(turnAngle, power);
+        Turn(turnAngle);
     }
 
-    public void diffTurn(double diffAngle, double power) {
+    public void diffTurn(double diffAngle) {
         double currAngle = robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
                 AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         double goalAngle = normalizedAngle(diffAngle + currAngle);
-        Turn(goalAngle, power);
+        Turn(goalAngle);
 
     }
 

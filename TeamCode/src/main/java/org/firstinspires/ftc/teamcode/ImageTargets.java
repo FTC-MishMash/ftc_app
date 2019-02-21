@@ -72,7 +72,7 @@ public class ImageTargets {
         this.vuforia = currOpmode.vuforia;
         this.telemetry = currOpmode.telemetry;
         this.motors = robot.driveTrain;
-        this.driveUtilities=currOpmode.driveUtils;
+        this.driveUtilities = currOpmode.driveUtils;
     }
 
     public void startTracking() {
@@ -295,7 +295,7 @@ public class ImageTargets {
 //                telemetry.update();
 //            }
             //   driveUtilities.TurnWithEncoder(310,0.4);
-            driveUtilities.diffTurn(99 + heading, 0.4);
+            driveUtilities.diffTurn(0 - heading);
         }
     }
 }

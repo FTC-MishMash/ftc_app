@@ -65,7 +65,7 @@ public class VuforiaCheck extends AutoMode {
 //            telemetry.addData("ANGLE: ",angle);
             telemetry.update();
             if (gamepad1.left_stick_button) {
-                driveUtils.Turn(angle, power);
+                driveUtils.Turn(angle);
             }
 
             if (gamepad1.dpad_up) {

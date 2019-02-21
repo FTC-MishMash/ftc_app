@@ -25,19 +25,21 @@ public class CreaterAuto extends AutoMode {
         if (opModeIsActive()) {
             runTime.reset();
             runTime.startTime();
-            LandInAuto(robot.hangingLockPosition,0.5);
-            shaftGoDown(0.5, robot.shaftDownPosition);
+//            LandInAuto(robot.hangingLockPosition,0.5);
+//            shaftGoDown(0.5, robot.shaftDownPosition);
 
               TensorflowUtils.GOLD_MINERAL_POSITION cubePosition= TensorflowUtils.GOLD_MINERAL_POSITION.RIGHT;
 
 
             telemetry.addData("Gold mineral position: ", cubePosition);
             telemetry.update();
+            driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderAfHanging, robot.driveEncoderAfHanging, robot.powerEncoder, false);
 
             tsSampling.rotateToCube(0.5,robot.SamplingAngleRight,robot.SamplingAngleLeft,cubePosition);
             telemetry.addLine("press a for driveEncoderSamplingForward");
             telemetry.update();
 //            while (!gamepad1.a);
+
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingForward, robot.driveEncoderSamplingForward, robot.powerEncoder, false);
             if (cubePosition != TensorflowUtils.GOLD_MINERAL_POSITION.CENTER) {
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionSide, robot.driveEncoderSamplingPositionSide, robot.powerEncoder, false);
@@ -66,7 +68,7 @@ public class CreaterAuto extends AutoMode {
             sleep(200);
 
 
-            driveUtils.Turn(robot.angleTurnToImage, 0.5);
+            driveUtils.Turn(robot.angleTurnToImage);
             sleep(300);
             targetNav.startTracking();
             sleep(500);

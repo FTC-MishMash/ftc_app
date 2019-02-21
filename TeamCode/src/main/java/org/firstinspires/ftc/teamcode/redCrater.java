@@ -78,7 +78,7 @@ public class redCrater extends AutoMode {
             sleep(200);
 
 
-            driveUtils.Turn(robot.angleTurnToImage, 0.5);
+            driveUtils.Turn(robot.angleTurnToImage);
             sleep(100);
             tsSampling.initVuforia(false);
             targetNav.startTracking();

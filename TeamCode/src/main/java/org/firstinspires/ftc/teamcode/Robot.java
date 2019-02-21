@@ -30,6 +30,7 @@ public class Robot {
     public DigitalChannel magnetShaftOpen;
     public int shaftTargetPositionMarker = -300;
     public int shaftDownPosition=2700;
+    public int driveEncoderAfHanging=12;
     float hsvValuesLeftFront[] = {0F, 0F, 0F};
     float hsvValuesRightFront[] = {0F, 0F, 0F};
     public final float valuesLeftFront[] = hsvValuesRightFront;
@@ -44,7 +45,7 @@ public class Robot {
     public double hangingLockPosition = 0.2;
     public double angleTurnToImage = 263;
     public double newAngleTurnToImage = 70;
-    public int SamplingAngleRight = 310;
+    public int SamplingAngleRight = 326;
     public int driveEncoderSamplingForward = 40;
     public int driveEncoderSamplingPositionSide = 30;
     public int driveEncoderSamplingPositionMiddle = 12;
