@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+
 @Autonomous(name = "Creater")
 public class CreaterAuto extends AutoMode {
 
@@ -20,28 +22,34 @@ public class CreaterAuto extends AutoMode {
         robot.hanging.setPosition(robot.hangingLockPosition);
         telemetry.addLine("wait for start");
         telemetry.update();
-while (!isStarted()){
-    goldPos=tsSampling.goldPosition();
-    telemetry.addData( "pos: ",goldPos);
-    telemetry.update();
-}
-if(goldPos==TensorflowUtils.GOLD_MINERAL_POSITION.NONE)
-    goldPos=TensorflowUtils.GOLD_MINERAL_POSITION.LEFT;
+
+        telemetry.addData("pos: ", goldPos);
+        telemetry.update();
+        while (!isStarted()) {
+            TensorflowUtils.GOLD_MINERAL_POSITION result = tsSampling.goldPosition();
+            if (result != TensorflowUtils.GOLD_MINERAL_POSITION.NONE) {
+                goldPos = result;
+                telemetry.addData("pos: ", goldPos);
+                telemetry.update();
+            }
+        }
+        if (goldPos == TensorflowUtils.GOLD_MINERAL_POSITION.NONE)
+            goldPos = TensorflowUtils.GOLD_MINERAL_POSITION.LEFT;
         waitForStart();
         if (opModeIsActive()) {
             runTime.reset();
             runTime.startTime();
-           // LandInAuto(robot.hangingLockPosition,0.5);
+            // LandInAuto(robot.hangingLockPosition,0.5);
             shaftGoDown(0.5, robot.shaftDownPosition);
 
-              TensorflowUtils.GOLD_MINERAL_POSITION cubePosition= TensorflowUtils.GOLD_MINERAL_POSITION.RIGHT;
+            TensorflowUtils.GOLD_MINERAL_POSITION cubePosition = TensorflowUtils.GOLD_MINERAL_POSITION.RIGHT;
 
 
             telemetry.addData("Gold mineral position: ", cubePosition);
             telemetry.update();
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderAfHanging, robot.driveEncoderAfHanging, robot.powerEncoder, false);
 
-            tsSampling.rotateToCube(0.5,robot.SamplingAngleRight,robot.SamplingAngleLeft,cubePosition);
+            tsSampling.rotateToCube(0.5, robot.SamplingAngleRight, robot.SamplingAngleLeft, cubePosition);
             telemetry.addLine("press a for driveEncoderSamplingForward");
             telemetry.update();
 //            while (!gamepad1.a);
@@ -58,7 +66,7 @@ if(goldPos==TensorflowUtils.GOLD_MINERAL_POSITION.NONE)
             if (tfod != null) {
                 tfod.shutdown();
             }
-            if(TensorflowUtils.isWebcamActivate) {
+            if (TensorflowUtils.isWebcamActivate) {
                 vuforia.close();
                 tsSampling.initVuforia(false);
             }
@@ -82,16 +90,16 @@ if(goldPos==TensorflowUtils.GOLD_MINERAL_POSITION.NONE)
             float[] pos = targetNav.getPositions();
             telemetry.addData("pos null: ", pos == null);
             telemetry.update();
-           sleep(200);
+            sleep(200);
             if (pos == null) {
 
                 telemetry.addData("start searching wait for click", cubePosition);
                 telemetry.update();
-               sleep(300);
+                sleep(300);
                 targetNav.searchImage(cubePosition, -0.20);
             }
 
-           targetNav.driveToImage(-0.3);
+            targetNav.driveToImage(-0.3);
             sleep(500);
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, -robot.powerEncoder, false);//to depot
 //            Marker(0.5,robot.shaftTargetPositionMarker);  //marker

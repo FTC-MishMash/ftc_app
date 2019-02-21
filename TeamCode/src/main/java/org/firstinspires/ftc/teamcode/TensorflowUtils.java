@@ -53,7 +53,7 @@ public class TensorflowUtils {
             twoSmallestMinerals[0] = updateRecognitions.get(0);
             twoSmallestMinerals[1] = updateRecognitions.get(1);
             for (Recognition recognition : updateRecognitions) {
-                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL) || recognition.getConfidence() > 0.7) {
+                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL) || recognition.getConfidence() > 0.4) {
                     if (recognition.getTop() < twoSmallestMinerals[0].getTop()) {
                         temp = twoSmallestMinerals[0];
                         twoSmallestMinerals[0] = recognition;
@@ -75,7 +75,7 @@ public class TensorflowUtils {
             Recognition[] samplingMinerals = getSampling(updatetedRecognitions);
             Recognition temp;
             if (samplingMinerals[0] != null && samplingMinerals[1] != null) {
-                if (samplingMinerals[0].getLeft() > samplingMinerals[1].getLeft()) {
+                if (samplingMinerals[0].getLeft() < samplingMinerals[1].getLeft()) {
                     temp = samplingMinerals[0];
                     samplingMinerals[0] = samplingMinerals[1];
                     samplingMinerals[1] = temp;

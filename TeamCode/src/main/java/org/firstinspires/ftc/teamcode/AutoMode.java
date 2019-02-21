@@ -90,7 +90,7 @@ public class AutoMode extends LinearOpMode {
     ImageTargets targetNav;
     DriveUtilities driveUtils;
     TensorflowUtils tsSampling;
-    TensorflowUtils.GOLD_MINERAL_POSITION goldPos;
+    TensorflowUtils.GOLD_MINERAL_POSITION goldPos=TensorflowUtils.GOLD_MINERAL_POSITION.NONE;
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
