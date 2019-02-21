@@ -16,9 +16,8 @@ import static java.lang.Thread.sleep;
 @TeleOp(name = "Drive Rover Ruckus", group = "Iterative Opmode")
 //@Disabled
 public class DriveRoverRuckus extends OpMode {
-    // Declare OpMode members.
+    // Declare OpModem embers.
     private ElapsedTime runtime = new ElapsedTime();
-
 
     Robot robot;
     /*
@@ -67,20 +66,17 @@ public class DriveRoverRuckus extends OpMode {
 
     @Override
     public void loop() {
-        tankDriveTrainSetPower(speed);//מערכת הנעה רובוט
+        tankDriveTrainSetPower(speed);
 
 // SHAFT MANUAL MOVEMENT
         if (gamepad2.right_stick_y != 0) {//hand mode shaft turn ON
             shaft = true;
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            if (gamepad2.b) {
-                robot.shaft[0].setPower(Math.signum(gamepad2.right_stick_y) * (0.5));
-                robot.shaft[1].setPower(Math.signum(gamepad2.right_stick_y) * (0.5));
-            } else {
-                robot.shaft[0].setPower(Math.signum(gamepad2.right_stick_y)*(0.6));
-                robot.shaft[1].setPower(Math.signum(gamepad2.right_stick_y)*(0.6));
-            }
+
+                    robot.shaft[0].setPower((gamepad2.right_stick_y) * (0.5));
+                    robot.shaft[1].setPower((gamepad2.right_stick_y) * (0.5));
+
             shaftEncoder = robot.shaft[1].getCurrentPosition();
         } else
             shaft = false;
@@ -89,12 +85,12 @@ public class DriveRoverRuckus extends OpMode {
             shaftEncoder = -300;
 
         }
-        if (!robot.magnetLinearLock.getState() ||!robot.magnetLinearOpen.getState() && gamepad2.left_stick_y == 0){
-           robot.linear.setPower(0);
+        if (!robot.magnetLinearLock.getState() || !robot.magnetLinearOpen.getState() && gamepad2.left_stick_y == 0) {
+            robot.linear.setPower(0);
 
         }
 
-        if (!robot.magnetShaftLock.getState() ||!robot.magnetShaftOpen.getState() && gamepad2.right_stick_y == 0){
+        if (!robot.magnetShaftLock.getState() || !robot.magnetShaftOpen.getState() && gamepad2.right_stick_y == 0) {
             robot.shaft[0].setPower(0);
             robot.shaft[1].setPower(0);
         }

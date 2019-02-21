@@ -250,10 +250,10 @@ public class AutoMode extends LinearOpMode {
 
 
     public void shaftGoDown(double shaftPower, int shaftDownPosition) {
-        setMotorPower(new double[][]{{0.3, 0.3}, {0.3, 0.3}});
+        DriveUtilities.setMotorPower(robot.driveTrain,new double[][]{{0.3, 0.3}, {0.3, 0.3}});
 
         sleep(300);
-        setMotorPower(new double[][]{{0, 0}, {0, 0}});
+        DriveUtilities.setMotorPower(robot.driveTrain,new double[][]{{0, 0}, {0, 0}});
 
 
         robot.shaft[0].setTargetPosition(shaftDownPosition);
@@ -319,28 +319,12 @@ public class AutoMode extends LinearOpMode {
     }
 
     public boolean straightToField(BNO055IMU imu) {
-        Orientation axis = getAxis(imu);
+        Orientation axis = DriveUtilities.getAngularOriention(imu);
         return axis.secondAngle > RolltargetAngleMin && axis.secondAngle < RolltargetAngleMax && axis.thirdAngle > PitchtargetAngleMin && axis.thirdAngle < PitchtargetAngleMax;
 
     }
 
-    public Orientation getAxis(BNO055IMU imu) {
-        return imu.getAngularOrientation(AxesReference.INTRINSIC,
-                AxesOrder.ZYX, AngleUnit.DEGREES);
-    }
 
-    public void ResetHue(ColorSensor color, float[] hsvArr) { //Reset the sensor color to read bt hue values.
-        Color.RGBToHSV((int) (color.red() * SCALE_FACTOR),
-                (int) (color.green() * SCALE_FACTOR),
-                (int) (color.blue() * SCALE_FACTOR),
-                hsvArr);
-    }
-
-    public void setMotorPower(double[][] power) { //Stores the four drivetrain motors power in array
-        for (int row = 0; opModeIsActive() && row < 2; row++)
-            for (int col = 0; opModeIsActive() && col < 2; col++)
-                robot.driveTrain[row][col].setPower(power[row][col]);
-    }
 
     public void setMotorSHAFTPower(double power) { //Stores the four drivetrain motors power in array
         for (int row = 0; opModeIsActive() && row < 2; row++)
