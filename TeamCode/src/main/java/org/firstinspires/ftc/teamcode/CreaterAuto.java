@@ -20,13 +20,19 @@ public class CreaterAuto extends AutoMode {
         robot.hanging.setPosition(robot.hangingLockPosition);
         telemetry.addLine("wait for start");
         telemetry.update();
-
+while (!isStarted()){
+    goldPos=tsSampling.goldPosition();
+    telemetry.addData( "pos: ",goldPos);
+    telemetry.update();
+}
+if(goldPos==TensorflowUtils.GOLD_MINERAL_POSITION.NONE)
+    goldPos=TensorflowUtils.GOLD_MINERAL_POSITION.LEFT;
         waitForStart();
         if (opModeIsActive()) {
             runTime.reset();
             runTime.startTime();
-//            LandInAuto(robot.hangingLockPosition,0.5);
-//            shaftGoDown(0.5, robot.shaftDownPosition);
+           // LandInAuto(robot.hangingLockPosition,0.5);
+            shaftGoDown(0.5, robot.shaftDownPosition);
 
               TensorflowUtils.GOLD_MINERAL_POSITION cubePosition= TensorflowUtils.GOLD_MINERAL_POSITION.RIGHT;
 

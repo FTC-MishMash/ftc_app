@@ -268,10 +268,10 @@ public class ImageTargets {
 //                telemetry.update();
 //            }
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
-
-            while (currOpmode.opModeIsActive() && (positions != null && positions[0] <= 60)) {
+            double headingTarget=90*Math.signum(positions[1]);
+            while (currOpmode.opModeIsActive() && (positions != null && Math.abs(positions[1]) <= 65)) {
                 positions = getPositions();
-                telemetry.addData("x:", positions[0]);
+                telemetry.addData("x:", positions[1]);
                 telemetry.update();
             }
 
@@ -295,7 +295,7 @@ public class ImageTargets {
 //                telemetry.update();
 //            }
             //   driveUtilities.TurnWithEncoder(310,0.4);
-            driveUtilities.diffTurn(0 - heading);
+            driveUtilities.diffTurn(headingTarget - heading);
         }
     }
 }

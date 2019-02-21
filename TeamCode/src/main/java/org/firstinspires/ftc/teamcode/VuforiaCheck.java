@@ -28,9 +28,6 @@ public class VuforiaCheck extends AutoMode {
 //
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             tsSampling.initTfod();
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-            telemetry.update();
         }
         tfod.activate();
         int posCube=-1;

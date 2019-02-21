@@ -24,9 +24,6 @@ public class Robot {
     public Servo hanging;
     public ColorSensor colorRightFront;
     public ColorSensor colorLeftFront;
-    public DigitalChannel magnetLinearLock;
-    public DigitalChannel magnetLinearOpen;
-    public DigitalChannel magnetShaftLock;
     public DigitalChannel magnetShaftOpen;
     public int shaftTargetPositionMarker = -300;
     public int shaftDownPosition=2700;
@@ -70,11 +67,8 @@ public class Robot {
         shaft[0] = hardwareMap.get(DcMotor.class, "shaftRight");
         shaft[1] = hardwareMap.get(DcMotor.class, "shaftLeft");
 
-        magnetLinearOpen = hardwareMap.get(DigitalChannel.class, "magnetLinearOpen");
-        magnetLinearLock = hardwareMap.get(DigitalChannel.class, "magnetLinearLock");
 
         magnetShaftOpen = hardwareMap.get(DigitalChannel.class, "magnetShaftOpen");
-        magnetShaftLock = hardwareMap.get(DigitalChannel.class, "magnetShaftLock");
         hanging = hardwareMap.get(Servo.class, "hanging");
 //        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
 //        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");

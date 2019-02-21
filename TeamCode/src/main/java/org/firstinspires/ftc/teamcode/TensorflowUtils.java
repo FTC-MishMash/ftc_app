@@ -54,11 +54,11 @@ public class TensorflowUtils {
             twoSmallestMinerals[1] = updateRecognitions.get(1);
             for (Recognition recognition : updateRecognitions) {
                 if (recognition.getLabel().equals(LABEL_GOLD_MINERAL) || recognition.getConfidence() > 0.7) {
-                    if (recognition.getTop() > twoSmallestMinerals[0].getTop()) {
+                    if (recognition.getTop() < twoSmallestMinerals[0].getTop()) {
                         temp = twoSmallestMinerals[0];
                         twoSmallestMinerals[0] = recognition;
                         twoSmallestMinerals[1] = temp;
-                    } else if (recognition.getTop() > twoSmallestMinerals[1].getTop())
+                    } else if (recognition.getTop() < twoSmallestMinerals[1].getTop())
                         twoSmallestMinerals[1] = recognition;
                 }
             }
@@ -105,8 +105,8 @@ public class TensorflowUtils {
 
         int tfodMonitorViewId = currOpMode.hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters();
-        tfodParameters.minimumConfidence = 0.12;
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minimumConfidence = 0.11;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
         currOpMode.tfod = tfod;
@@ -119,7 +119,7 @@ public class TensorflowUtils {
 
         VuforiaLocalizer.Parameters parameters;
         int cameraId = currOpMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", currOpMode.hardwareMap.appContext.getPackageName());
-        parameters = new VuforiaLocalizer.Parameters(cameraId);
+        parameters = new VuforiaLocalizer.Parameters();
 
 //        if (count > 1)
 //            parameters = new VuforiaLocalizer.Parameters(cameraId);
