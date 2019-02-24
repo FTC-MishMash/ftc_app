@@ -39,7 +39,7 @@ public class ImageTargets {
     public TFObjectDetector tfod;
     public ElapsedTime runTime = new ElapsedTime();
     final double SCALE_FACTOR = 255;
-
+    int distImage = 35;
     static final int PitchtargetAngleMin = -5;
     static final int PitchtargetAngleMax = 5;
     static final int RolltargetAngleMin = -10;
@@ -178,30 +178,27 @@ public class ImageTargets {
             case RIGHT: {
                 telemetry.addLine("case1");
                 telemetry.update();
-                currOpmode.sleep(1000);
-                driveUtilities.driveByEncoderRoverRuckus(-70, -62, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(-65, -57, power, true);
                 if (getPositions() == null)
-                    driveUtilities.driveByEncoderRoverRuckus(-50, -42, power, true);
+                    driveUtilities.driveByEncoderRoverRuckus(-58, -38, power, true);
 
                 break;
             }
             case CENTER: {
                 telemetry.addLine("case2");
                 telemetry.update();
-                currOpmode.sleep(1000);
-                driveUtilities.driveByEncoderRoverRuckus(-50, -42, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(-48, -37, power, true);
                 if (getPositions() == null)
-                    driveUtilities.driveByEncoderRoverRuckus(-35, -30, power, true);
+                    driveUtilities.driveByEncoderRoverRuckus(-32, -26, power, true);
 
                 break;
             }
             case LEFT: {
                 telemetry.addLine("case3");
                 telemetry.update();
-                currOpmode.sleep(1000);
-                driveUtilities.driveByEncoderRoverRuckus(-30, -22, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(-25, -19, power, true);
                 if (getPositions() == null)
-                    driveUtilities.driveByEncoderRoverRuckus(-12, -6, power, true);
+                    driveUtilities.driveByEncoderRoverRuckus(-10, -5, power, true);
             }
         }
 //
@@ -268,13 +265,20 @@ public class ImageTargets {
 //                telemetry.update();
 //            }
             setMotorPower(motors, new double[][]{{power, power}, {power, power}});
-            double headingTarget=90*Math.signum(positions[1]);
-            while (currOpmode.opModeIsActive() && (positions != null && Math.abs(positions[1]) <= 65)) {
+            double headingTarget = -90 * Math.signum(positions[1]);
+            float totalPassed = 1;
+            float firstpos = Math.abs(positions[1]);
+            float ypos =53;
+            while (currOpmode.opModeIsActive() && (positions != null && Math.abs(positions[1]) <= ypos)) {
+                totalPassed = (ypos - firstpos) / (ypos - Math.abs(positions[1]));
                 positions = getPositions();
                 telemetry.addData("x:", positions[1]);
                 telemetry.update();
             }
-
+            if (positions == null) {
+                int distToComplete = Math.round(distImage * totalPassed);
+                driveUtilities.driveByEncoderRoverRuckus(-distToComplete, -distToComplete, -robot.powerEncoder, false);
+            }
             telemetry.addLine("got to x=65");
             telemetry.update();
             setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});
@@ -295,7 +299,16 @@ public class ImageTargets {
 //                telemetry.update();
 //            }
             //   driveUtilities.TurnWithEncoder(310,0.4);
-            driveUtilities.diffTurn(headingTarget - heading);
+            try {
+
+                currOpmode.driveUtils.diffTurn(headingTarget - heading);
+            }
+            catch (Exception e){
+                telemetry.addLine("Turn failed");
+                telemetry.update();
+                currOpmode.sleep(2000);
+              //  driveUtilities.Turn(210);
+            }
         }
     }
 }

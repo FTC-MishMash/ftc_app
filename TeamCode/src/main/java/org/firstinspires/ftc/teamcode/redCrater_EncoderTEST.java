@@ -71,11 +71,10 @@ public class redCrater_EncoderTEST extends AutoMode {
             //driveUtils.driveByEncoderRoverRuckus(-80, -80, -0.4, false);//to depot
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, robot.powerEncoder, false);//to depot
             Marker(0.5,robot.shaftTargetPositionMarker);  //marker
-            // driveUtils.driveByEncoderRoverRuckus(90, 90, -0.5, false);//to crater
-            driveUtils.driveByEncoderRoverRuckus(-robot.distToCrater/2, -robot.distToCrater/2, -robot.powerEncoder, false);//to crater
+//            driveUtils.driveByEncoderRoverRuckus(-robot.distToCrater/2, -robot.distToCrater/2, -robot.powerEncoder, false);//to crater
             driveUtils.Turn(10);
             driveUtils.Turn(330);
-            driveUtils.driveByEncoderRoverRuckus(robot.distToCrater/2, robot.distToCrater/2, robot.powerEncoder, false);//to crater
+//            driveUtils.driveByEncoderRoverRuckus(robot.distToCrater/2, robot.distToCrater/2, robot.powerEncoder, false);//to crater
             Parking(robot.shaftEncoderPositionPARKING,0.5,robot.linearOpenPosition,0.3);
             //TODO: to change linear target encoder!!
 //            driveByColor(0,robot.colorRightFront,robot.imu,robot.hsvValuesRightFront,AngleToDepot,0.35);

@@ -84,7 +84,7 @@ public class DriveRoverRuckus extends OpMode {
             shaft = false;
 
         if (gamepad2.x) {
-            shaftEncoder = robot.shaftTargetPositionMarker;
+            shaftEncoder = robot.shaftDownPosition;
             shaftPower = 1;
             robot.hanging.setPosition(robot.hangingLockPosition);
         }
@@ -92,13 +92,13 @@ public class DriveRoverRuckus extends OpMode {
 
         if (gamepad2.left_stick_y > 0) {//hand - linear
 
-//            linear = true;
+            linear = true;
             robot.linear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.linear.setPower(gamepad2.left_stick_y);
 //            linearEncoder = robot.linear.getCurrentPosition();
 
         } else if (gamepad2.left_stick_y < 0) {
-//            linear = true;
+            linear = true;
 
             robot.linear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.linear.setPower(gamepad2.left_stick_y);
@@ -106,6 +106,8 @@ public class DriveRoverRuckus extends OpMode {
 
         } else if (gamepad2.left_stick_y == 0) {//hand mode turn OFF
             linear = false;
+            if (!gamepad2.a&&!gamepad2.b)
+            robot.linear.setPower(0);
 
         }
 //        robot.linear.setPower((gamepad2.left_stick_y));
@@ -157,7 +159,7 @@ public class DriveRoverRuckus extends OpMode {
             robot.hanging.setPosition(robot.hangingLockPosition);
 
         }
-        if (gamepad2.y){//reset encoders
+        if (gamepad2.y) {//reset encoders
             DcMotor.RunMode currMode = robot.shaft[0].getMode();
             robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -181,7 +183,7 @@ public class DriveRoverRuckus extends OpMode {
             robot.shaft[1].setPower(shaftPower);
         }
 
-        if (gamepad2.a || gamepad2.b) {//in progress when AUTO mode turn ON
+        if (!linear && (gamepad2.a || gamepad2.b)) {//in progress when AUTO mode turn ON
 
             robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);

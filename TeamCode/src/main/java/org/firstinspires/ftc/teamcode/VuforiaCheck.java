@@ -3,13 +3,17 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
+
+import java.util.List;
 
 @Autonomous(name = "VuforiaCheck")
 //@Disabled
@@ -17,25 +21,27 @@ public class VuforiaCheck extends AutoMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-     //   robot = new Robot(hardwareMap);
-    targetNav = new ImageTargets(this);
-      //  driveUtils = new DriveUtilities(this);
+           robot = new Robot(hardwareMap);
+        targetNav = new ImageTargets(this);
+         driveUtils = new DriveUtilities(this);
         tsSampling = new TensorflowUtils(this);
 
-        tsSampling.initVuforia(true);
-       // targetNav.startTracking();
+        tsSampling.initVuforia(false);
+        // targetNav.startTracking();
 //        tsSampling.initVuforiaWebCam(true);
 //
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             tsSampling.initTfod();
         }
         tfod.activate();
-        int posCube=-1;
+        int posCube = -1;
         while (!isStarted()) {
-            TensorflowUtils.GOLD_MINERAL_POSITION goldPos=tsSampling.goldPosition();
-            if(goldPos!=TensorflowUtils.GOLD_MINERAL_POSITION.NONE){
-             telemetry.addData( "pos: ",goldPos);
-             telemetry.update();}
+
+            TensorflowUtils.GOLD_MINERAL_POSITION goldPos = tsSampling.goldPosition();
+            if (goldPos != TensorflowUtils.GOLD_MINERAL_POSITION.NONE) {
+                telemetry.addData("pos: ", goldPos);
+                telemetry.update();
+            }
         }
         waitForStart();
 
@@ -49,7 +55,8 @@ public class VuforiaCheck extends AutoMode {
             telemetry.addData("left: ", distLeft);
 //            telemetry.addData("right: ", distRight);
 //            telemetry.addData("pow: ", power);
-//            telemetry.addData("motor: ", motor);
+
+            telemetry.addData("motor pos: ", robot.driveTrain[0][0].getCurrentPosition());
             telemetry.addData("angle:   ", angle);
             telemetry.addData("imu", DriveUtilities.normalizedAngle(getAngularOriention().firstAngle));
             float[] pos = targetNav.getPositions();

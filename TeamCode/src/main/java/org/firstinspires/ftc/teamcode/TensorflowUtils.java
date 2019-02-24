@@ -28,7 +28,7 @@ public class TensorflowUtils {
     public static final String LABEL_SILVER_MINERAL = "Silver Mineral";
     //    private static final android.graphics.Color Color = ;
     public static final String VUFORIA_KEY = " ATgDONj/////AAABmW0G/nQirUMiumnzPc6Pl8oJhBOCC2qoUq0BWhir9YWcBFDlhZUfSwATcQArcyyLxIOV21sHaYJeeQEJZfIJ+4spBn3oJ/DfycsbPaNs87+TRpM46/vbUkj1Ok+NtZ/eqMhmMXjFC8dgdCfbCt0aMxoBNzDw4+v28abG+hjUCjVYf86Jq1m7R942XCjw0yhOZqTXWIp3WAZDXY/PdWGQGY/zWae0l6TAZ6Z27t1xYJdkkpLqEsbKM3ZprvtgIs8AsWS9Tri2892OHq2CnCL+1ZHHXKPdxON3fiC1Gd3oihwPhTUReNw0VAg9yeVsVa1UQg7ea9K6WpmVto0FG+T2/LV8uq/3Mp/NHWiNizw2DM4h";
-    public static boolean isWebcamActivate=false;
+    public static boolean isWebcamActivate = false;
     Telemetry telemetry;
     DriveUtilities driveUtilities;
 
@@ -37,6 +37,11 @@ public class TensorflowUtils {
         CENTER,
         RIGHT,
         NONE;
+    }
+
+    enum MINERAL_HALF {
+        RIGHT_HALF,
+        LEFT_HALF;
     }
 
     /**
@@ -49,23 +54,25 @@ public class TensorflowUtils {
     public Recognition[] getSampling(List<Recognition> updateRecognitions) {
         Recognition[] twoSmallestMinerals = new Recognition[2];
         Recognition temp;
-        if (updateRecognitions != null && updateRecognitions.size() >= 2) {
+        if (updateRecognitions != null && updateRecognitions.size() >= 1) {
             twoSmallestMinerals[0] = updateRecognitions.get(0);
-            twoSmallestMinerals[1] = updateRecognitions.get(1);
-            for (Recognition recognition : updateRecognitions) {
-                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL) || recognition.getConfidence() > 0.4) {
-                    if (recognition.getTop() < twoSmallestMinerals[0].getTop()) {
-                        temp = twoSmallestMinerals[0];
-                        twoSmallestMinerals[0] = recognition;
-                        twoSmallestMinerals[1] = temp;
-                    } else if (recognition.getTop() < twoSmallestMinerals[1].getTop())
-                        twoSmallestMinerals[1] = recognition;
+            if (updateRecognitions.size() >= 2) {
+                twoSmallestMinerals[1] = updateRecognitions.get(1);
+                for (Recognition recognition : updateRecognitions) {
+                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL) || recognition.getConfidence() > 0.4) {
+                        if (recognition.getTop() < twoSmallestMinerals[0].getTop()) {
+                            temp = twoSmallestMinerals[0];
+                            twoSmallestMinerals[0] = recognition;
+                            twoSmallestMinerals[1] = temp;
+                        } else if (recognition.getTop() < twoSmallestMinerals[1].getTop())
+                            twoSmallestMinerals[1] = recognition;
+                    }
                 }
             }
         }
-
         return twoSmallestMinerals;
     }
+
 
     public GOLD_MINERAL_POSITION goldPosition() {
         GOLD_MINERAL_POSITION cubePosition = GOLD_MINERAL_POSITION.NONE;
@@ -73,23 +80,39 @@ public class TensorflowUtils {
         if (tfod != null) {
             List<Recognition> updatetedRecognitions = tfod.getUpdatedRecognitions();
             Recognition[] samplingMinerals = getSampling(updatetedRecognitions);
-            Recognition temp;
-            if (samplingMinerals[0] != null && samplingMinerals[1] != null) {
-                if (samplingMinerals[0].getLeft() < samplingMinerals[1].getLeft()) {
-                    temp = samplingMinerals[0];
-                    samplingMinerals[0] = samplingMinerals[1];
-                    samplingMinerals[1] = temp;
+            if (samplingMinerals[0] != null) {
+                if (samplingMinerals[0].getLabel().equals(LABEL_GOLD_MINERAL)) {
+                    if (samplingMinerals[0].getLeft() < samplingMinerals[0].getRight())
+                        cubePosition = GOLD_MINERAL_POSITION.CENTER;
+                    else
+                        cubePosition = GOLD_MINERAL_POSITION.RIGHT;
                 }
-                if (samplingMinerals[0].getLabel().equals(LABEL_GOLD_MINERAL))
-                    cubePosition = GOLD_MINERAL_POSITION.CENTER;
-                else if (samplingMinerals[1].getLabel().equals(LABEL_GOLD_MINERAL))
-                    cubePosition = GOLD_MINERAL_POSITION.RIGHT;
-                else
-                    cubePosition = GOLD_MINERAL_POSITION.LEFT;
+
+                if (samplingMinerals[0].getLabel().equals(LABEL_SILVER_MINERAL))
+                    if (samplingMinerals[1] == null || (samplingMinerals[1] != null && samplingMinerals[1].getLabel().equals(LABEL_GOLD_MINERAL)))
+                        cubePosition = GOLD_MINERAL_POSITION.LEFT;
+                    else if (samplingMinerals[1].getLabel().equals(LABEL_GOLD_MINERAL)
+                            && mineralPosition(samplingMinerals[0]) == mineralPosition(samplingMinerals[1])) {
+                        cubePosition = GOLD_MINERAL_POSITION.LEFT;
+                    } else {
+                        if (samplingMinerals[1].getLeft() > samplingMinerals[1].getRight())
+                            cubePosition = GOLD_MINERAL_POSITION.RIGHT;
+                        else
+                            cubePosition = GOLD_MINERAL_POSITION.LEFT;
+                    }
 
             }
         }
+
+
         return cubePosition;
+    }
+
+    public MINERAL_HALF mineralPosition(Recognition samplingMineral) {
+        double center = 0.5 * (samplingMineral.getLeft() + samplingMineral.getRight());
+        if (samplingMineral.getLeft() - center > samplingMineral.getRight() - center)
+            return MINERAL_HALF.LEFT_HALF;
+        return MINERAL_HALF.RIGHT_HALF;
     }
 
     public TensorflowUtils(AutoMode currOpMode) {
@@ -132,7 +155,7 @@ public class TensorflowUtils {
             WebcamName webcamName = currOpMode.hardwareMap.get(WebcamName.class, "Webcam 1");
             if (webcamName.isAttached()) {
                 parameters.cameraName = webcamName;
-                isWebcamActivate=true;
+                isWebcamActivate = true;
             }
         }
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
@@ -141,7 +164,6 @@ public class TensorflowUtils {
         currOpMode.targetNav.vuforia = this.vuforia;
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
-
 
 
     public void rotateToCube(double power, int turnAngleRight, int turnAngleLeft, GOLD_MINERAL_POSITION goldMineralPosition) {

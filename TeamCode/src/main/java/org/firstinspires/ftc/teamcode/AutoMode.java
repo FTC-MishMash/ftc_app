@@ -46,7 +46,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * Created by user on 22/11/2018.
  */
 @Autonomous(name = "AutoMode")
-//@Disabled
+@Disabled
 public class AutoMode extends LinearOpMode {
     /**
      * A master autonomous class that initializes all of the objects that
@@ -104,9 +104,9 @@ public class AutoMode extends LinearOpMode {
         driveUtils = new DriveUtilities(this);
         tsSampling = new TensorflowUtils(this);
         tsSampling.initVuforia(true);
-//        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
 

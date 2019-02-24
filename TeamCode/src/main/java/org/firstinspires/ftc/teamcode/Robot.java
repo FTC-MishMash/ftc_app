@@ -26,7 +26,7 @@ public class Robot {
 
     public DigitalChannel magnetShaftOpen;
 
-    public int driveEncoderAfHanging = 12;
+    public int driveEncoderAfHanging = 9;
 
 
     BNO055IMU imu;
@@ -34,19 +34,19 @@ public class Robot {
     public double cubesTriggerCLOSEposition = 0.3;
     public double hangingOpenPosition = 0.7;
     public double hangingLockPosition = 0.2;
-    public double angleTurnToImage = 263;
+    public double angleTurnToImage = 264;
     public double newAngleTurnToImage = 70;
     public int SamplingAngleRight = 326;
 
-    public int driveEncoderSamplingForward = 40;
+    public int driveEncoderSamplingForward = 31;
     public int driveEncoderSamplingPositionSide = 30;
     public int driveEncoderSamplingPositionMiddle = 12;
     public int driveEncoderSamplingPositionSideBackward = -30;
     public int driveEncoderSamplingPositionMiddleBackward = -18;
-    public int driveEncoderSamplingBackward = -15;
-    public int SamplingAngleLeft = 30;
-    public int distToDepot = -90;
-    public int distToCrater = 150;
+    public int driveEncoderSamplingBackward = -7;
+    public int SamplingAngleLeft = 33;
+    public int distToDepot = 90;
+    public int distToImageBeforeCrater = -80;
     public double powerEncoder = 0.7;
 
     public int linearOpenPosition = -1500;
@@ -55,11 +55,11 @@ public class Robot {
 
     public int shaftEncoderPositionPARKING = -600;
     public int shaftEncoderPositionINTAKE = -250;
-    public int shaftEncoderPosition90deg = -2700;
+    public int shaftEncoderPosition90deg = -2400;
     public int shaftTargetPositionMarker = -300;
     public int shaftDownPosition = 100;
 //    int AngleToDepot = 135;
-    public int newAngleToDepot = 115;
+    public int newAngleToDepot = 180;
 
 
     public Robot(HardwareMap hardwareMap) {
@@ -96,9 +96,9 @@ public class Robot {
         driveTrain[1][0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         driveTrain[1][1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         shaft[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shaft[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

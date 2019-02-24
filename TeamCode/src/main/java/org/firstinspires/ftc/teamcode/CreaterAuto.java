@@ -59,7 +59,6 @@ public class CreaterAuto extends AutoMode {
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionSideBackward, robot.driveEncoderSamplingPositionSideBackward, -robot.powerEncoder, false);
             } else {
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddle, robot.driveEncoderSamplingPositionMiddle, robot.powerEncoder, false);
-
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddleBackward, robot.driveEncoderSamplingPositionMiddleBackward, -robot.powerEncoder, false);
             }
             if (tfod != null) {
@@ -71,20 +70,19 @@ public class CreaterAuto extends AutoMode {
             }
             telemetry.addLine("finished driving into cube");
             telemetry.update();
-            sleep(200);
 
 
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingBackward, robot.driveEncoderSamplingBackward, -robot.powerEncoder, false);
             telemetry.addLine("finished driving out of cube");
             telemetry.update();
 
-            sleep(200);
+//            sleep(200);
 
 
             driveUtils.Turn(robot.angleTurnToImage);
-            sleep(300);
+//            sleep(400);
             targetNav.startTracking();
-            sleep(500);
+            sleep(200);
 
             float[] pos = targetNav.getPositions();
             telemetry.addData("pos null: ", pos == null);
@@ -97,16 +95,25 @@ public class CreaterAuto extends AutoMode {
                 sleep(300);
                 targetNav.searchImage(cubePosition, -0.20);
             }
-
-            targetNav.driveToImage(-0.35);
-            sleep(500);
-            driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, -robot.powerEncoder, false);//to depot
+            pos = targetNav.getPositions();
+            if (pos != null) {
+                targetNav.driveToImage(-0.28);
+            } else {
+                telemetry.addLine("no image");
+                driveUtils.driveByEncoderRoverRuckus(-57, -57, -0.5, false);
+                telemetry.addLine("finished alt encoders");
+                driveUtils.Turn(127);
+                telemetry.addLine("finished turnong");
+                telemetry.update();
+            }
+            sleep(400);
+            driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, robot.powerEncoder, false);//to depot
             //TODO: להפוך את הנסיעות
 //            Marker(0.5, robot.shaftTargetPositionMarker);  //marker
             MarkerWithIntake(-1, 2000);
-            driveUtils.driveByEncoderRoverRuckus(robot.distToCrater, robot.distToCrater, -robot.powerEncoder, false);//to crater
-            driveUtils.Turn(robot.newAngleToDepot);//intake to carter
-//            driveUtils.driveByEncoderRoverRuckus(90, 90, -0.4, false);//to crater
+            driveUtils.driveByEncoderRoverRuckus(robot.distToImageBeforeCrater, robot.distToImageBeforeCrater, -robot.powerEncoder, false);//to crater
+            driveUtils.diffTurn(robot.newAngleToDepot);//intake to carter
+            driveUtils.driveByEncoderRoverRuckus(31, 31, 0.4, false);//to crater
             Parking(robot.shaftEncoderPositionPARKING, 0.4, robot.linearOpenPosition, 1);
         }
     }
