@@ -90,7 +90,8 @@ public class AutoMode extends LinearOpMode {
     ImageTargets targetNav;
     DriveUtilities driveUtils;
     TensorflowUtils tsSampling;
-    TensorflowUtils.GOLD_MINERAL_POSITION goldPos=TensorflowUtils.GOLD_MINERAL_POSITION.NONE;
+    TensorflowUtils.GOLD_MINERAL_POSITION goldPos = TensorflowUtils.GOLD_MINERAL_POSITION.NONE;
+
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
@@ -108,8 +109,6 @@ public class AutoMode extends LinearOpMode {
 //        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
-
-
 
 
 //    public boolean magneticShafts() {
@@ -247,10 +246,10 @@ public class AutoMode extends LinearOpMode {
 
 
     public void shaftGoDown(double shaftPower, int shaftDownPosition) {
-        DriveUtilities.setMotorPower(robot.driveTrain,new double[][]{{0.3, 0.3}, {0.3, 0.3}});
+        DriveUtilities.setMotorPower(robot.driveTrain, new double[][]{{0.3, 0.3}, {0.3, 0.3}});
 
         sleep(300);
-        DriveUtilities.setMotorPower(robot.driveTrain,new double[][]{{0, 0}, {0, 0}});
+        DriveUtilities.setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
 
 
         robot.shaft[0].setTargetPosition(shaftDownPosition);
@@ -320,12 +319,16 @@ public class AutoMode extends LinearOpMode {
     }
 
 
-
     public void setMotorSHAFTPower(double power) { //Stores the four drivetrain motors power in array
         for (int row = 0; opModeIsActive() && row < 2; row++)
             robot.shaft[row].setPower(power);
     }
 
+    public void MarkerWithIntake(double intakePower, int sleepTime) {
+        robot.inTake.setPower(intakePower);
+        sleep(sleepTime);
+        robot.inTake.setPower(0);
+    }
 
     public void Marker(double powerShaft, int shaftTargetPositionMarker) {
 //        driveByColor(color, sensorcColor, imu, hsvValue, heading, power);

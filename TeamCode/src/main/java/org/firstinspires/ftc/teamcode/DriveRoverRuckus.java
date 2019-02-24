@@ -70,8 +70,8 @@ public class DriveRoverRuckus extends OpMode {
         tankDriveTrainSetPower(speed);
 
 // SHAFT MANUAL MOVEMENT
-        if ((gamepad2.right_stick_y != 0 || robot.shaft[0].getCurrentPosition() > (-500) || robot.shaft[1].getCurrentPosition() > (-500))
-                && !gamepad2.a && !gamepad2.b && !gamepad2.x) {//hand mode shaft turn ON
+        if ((gamepad2.right_stick_y != 0 || robot.shaft[0].getCurrentPosition() > (-600) || robot.shaft[1].getCurrentPosition() > (-600))
+                && !gamepad2.a && !gamepad2.b && !gamepad2.x && !gamepad2.y) {//hand mode shaft turn ON
             shaft = true;
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -157,7 +157,7 @@ public class DriveRoverRuckus extends OpMode {
             robot.hanging.setPosition(robot.hangingLockPosition);
 
         }
-        if (gamepad2.y) {//reset encoders
+        if (gamepad2.y){//reset encoders
             DcMotor.RunMode currMode = robot.shaft[0].getMode();
             robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
