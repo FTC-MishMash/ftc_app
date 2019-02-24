@@ -132,7 +132,8 @@ public class DriveRoverRuckus extends OpMode {
 //                robot.inTake.setPower(1);
 //            }
 
-//        } else if (gamepad2.left_stick_y != 0) {
+//        }
+// else if (gamepad2.left_stick_y != 0) {
 //            shaft = true;
 //            shaftEncoder = robot.shaft[0].getCurrentPosition();
 //        } else if (gamepad2.right_stick_y != 0) {
