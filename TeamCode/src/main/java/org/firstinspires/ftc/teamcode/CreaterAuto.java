@@ -42,7 +42,7 @@ public class CreaterAuto extends AutoMode {
             // LandInAuto(robot.hangingLockPosition,0.5);
             //shaftGoDown(0.5, robot.shaftDownPosition);
 
-            TensorflowUtils.GOLD_MINERAL_POSITION cubePosition = TensorflowUtils.GOLD_MINERAL_POSITION.RIGHT;
+            TensorflowUtils.GOLD_MINERAL_POSITION cubePosition = TensorflowUtils.GOLD_MINERAL_POSITION.LEFT;
 
 
             telemetry.addData("Gold mineral position: ", cubePosition);
@@ -52,7 +52,6 @@ public class CreaterAuto extends AutoMode {
             tsSampling.rotateToCube(0.5, robot.SamplingAngleRight, robot.SamplingAngleLeft, cubePosition);
             telemetry.addLine("press a for driveEncoderSamplingForward");
             telemetry.update();
-//            while (!gamepad1.a);
 
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingForward, robot.driveEncoderSamplingForward, robot.powerEncoder, false);
             if (cubePosition != TensorflowUtils.GOLD_MINERAL_POSITION.CENTER) {
@@ -99,9 +98,10 @@ public class CreaterAuto extends AutoMode {
                 targetNav.searchImage(cubePosition, -0.20);
             }
 
-            targetNav.driveToImage(-0.3);
+            targetNav.driveToImage(-0.35);
             sleep(500);
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, -robot.powerEncoder, false);//to depot
+            //TODO: להפוך את הנסיעות
 //            Marker(0.5, robot.shaftTargetPositionMarker);  //marker
             MarkerWithIntake(-1, 2000);
             driveUtils.driveByEncoderRoverRuckus(robot.distToCrater, robot.distToCrater, -robot.powerEncoder, false);//to crater
