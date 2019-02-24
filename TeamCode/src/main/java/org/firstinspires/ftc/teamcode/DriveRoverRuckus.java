@@ -179,12 +179,12 @@ public class DriveRoverRuckus extends OpMode {
             robot.shaft[1].setPower(shaftPower);
         }
 
-        if (!linear) {//in progress when AUTO mode turn ON
+        if (gamepad2.a||gamepad2.b) {//in progress when AUTO mode turn ON
 
             robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.linear.setTargetPosition(linearEncoder);
-            robot.linear.setPower(0.7);
+            robot.linear.setPower(1);
 
         }
 
