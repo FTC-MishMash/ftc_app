@@ -46,6 +46,7 @@ public class DriveRoverRuckus extends OpMode {
     int shaftEncoder = 0;
     int linearEncoder = 0;
     double shaftPower = 0.5;
+
     /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
      */
@@ -69,7 +70,8 @@ public class DriveRoverRuckus extends OpMode {
         tankDriveTrainSetPower(speed);
 
 // SHAFT MANUAL MOVEMENT
-        if (gamepad2.right_stick_y != 0) {//hand mode shaft turn ON
+        if ((gamepad2.right_stick_y != 0 || robot.shaft[0].getCurrentPosition() > (-500) || robot.shaft[1].getCurrentPosition() > (-500))
+                && !gamepad2.a && !gamepad2.b && !gamepad2.x) {//hand mode shaft turn ON
             shaft = true;
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -80,10 +82,7 @@ public class DriveRoverRuckus extends OpMode {
             shaftEncoder = robot.shaft[1].getCurrentPosition();
         } else
             shaft = false;
-//        if (robot.shaft[0].getCurrentPosition()>(-500)||robot.shaft[1].getCurrentPosition()>(-500)
-//                &&!gamepad2.a&&!gamepad2.b&&!gamepad2.x){
-//            shaft = true;
-//        }
+
         if (gamepad2.x) {
             shaftEncoder = robot.shaftTargetPositionMarker;
             shaftPower = 1;
@@ -182,7 +181,7 @@ public class DriveRoverRuckus extends OpMode {
             robot.shaft[1].setPower(shaftPower);
         }
 
-        if (gamepad2.a||gamepad2.b) {//in progress when AUTO mode turn ON
+        if (gamepad2.a || gamepad2.b) {//in progress when AUTO mode turn ON
 
             robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
