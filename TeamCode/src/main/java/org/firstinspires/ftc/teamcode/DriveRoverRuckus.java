@@ -80,7 +80,10 @@ public class DriveRoverRuckus extends OpMode {
             shaftEncoder = robot.shaft[1].getCurrentPosition();
         } else
             shaft = false;
-
+//        if (robot.shaft[0].getCurrentPosition()>(-500)||robot.shaft[1].getCurrentPosition()>(-500)
+//                &&!gamepad2.a&&!gamepad2.b&&!gamepad2.x){
+//            shaft = true;
+//        }
         if (gamepad2.x) {
             shaftEncoder = robot.shaftTargetPositionMarker;
             shaftPower = 1;
@@ -126,7 +129,7 @@ public class DriveRoverRuckus extends OpMode {
             shaftEncoder = robot.shaftEncoderPositionINTAKE;
 
 //            if (robot.shaft[0].getCurrentPosition() <= robot.shaftMiddlePosition) {
-            linearEncoder = robot.linearOpenPosition;
+            linearEncoder = robot.linearMiddlePosition;
             robot.inTake.setPower(1);
 //            }
 

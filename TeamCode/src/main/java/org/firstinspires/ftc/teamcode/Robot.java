@@ -22,6 +22,7 @@ public class Robot {
     public DcMotor linear;
     public DcMotor inTake;
     public Servo hanging;
+    public Servo mineralHolder;
 
     public DigitalChannel magnetShaftOpen;
 
@@ -29,7 +30,8 @@ public class Robot {
 
 
     BNO055IMU imu;
-
+    public double cubesTriggerOPENposition = 0.8;
+    public double cubesTriggerCLOSEposition = 0.3;
     public double hangingOpenPosition = 0.7;
     public double hangingLockPosition = 0.2;
     public double angleTurnToImage = 263;
@@ -45,8 +47,11 @@ public class Robot {
     public int distToDepot = -120;
     public int distToCrater = 200;
     public double powerEncoder = 0.7;
-    public int linearOpenPosition = -900;
+
+    public int linearOpenPosition = -1500;
+    public int linearMiddlePosition = -800;
     public int linearClosePosition = -50;
+
     public int shaftEncoderPositionPARKING = -600;
     public int shaftEncoderPositionINTAKE = -250;
     public int shaftEncoderPosition90deg = -2700;
@@ -67,9 +72,8 @@ public class Robot {
 
         magnetShaftOpen = hardwareMap.get(DigitalChannel.class, "magnetShaftOpen");
         hanging = hardwareMap.get(Servo.class, "hanging");
-//        colorRightFront = hardwareMap.get(ColorSensor.class, "colorRightFront");
-//        colorLeftFront = hardwareMap.get(ColorSensor.class, "colorLeftFront");
-//        rangeSensor = hardwareMap.get(Rev2mDistanceSensor.class, "range");
+        mineralHolder = hardwareMap.get(Servo.class, "mineralHolder");
+
         driveTrain[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
         driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");
         driveTrain[0][1] = hardwareMap.get(DcMotor.class, "rightFront");
