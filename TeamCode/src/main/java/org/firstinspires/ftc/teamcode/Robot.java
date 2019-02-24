@@ -90,9 +90,9 @@ public class Robot {
         driveTrain[1][0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         driveTrain[1][1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-//        shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         shaft[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shaft[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

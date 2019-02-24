@@ -103,9 +103,9 @@ public class AutoMode extends LinearOpMode {
         driveUtils = new DriveUtilities(this);
         tsSampling = new TensorflowUtils(this);
         tsSampling.initVuforia(true);
-        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
 
