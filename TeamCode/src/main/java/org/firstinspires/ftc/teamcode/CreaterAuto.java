@@ -1,16 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 
 @Autonomous(name = "Creater")
 public class CreaterAuto extends AutoMode {
 
+
     @Override
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
-
+//        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             tsSampling.initTfod();
         } else {
@@ -26,11 +30,16 @@ public class CreaterAuto extends AutoMode {
         telemetry.addData("pos: ", goldPos);
         telemetry.update();
         while (!isStarted()) {
+            telemetry.addData("shaft[0]:  ", robot.shaft[0].getCurrentPosition());
+            telemetry.addData("shaft[1]:  ", robot.shaft[1].getCurrentPosition());
+            telemetry.addData("linear:  ", robot.linear.getCurrentPosition());
             TensorflowUtils.GOLD_MINERAL_POSITION result = tsSampling.goldPosition();
+            telemetry.update();
             if (result != TensorflowUtils.GOLD_MINERAL_POSITION.NONE) {
                 goldPos = result;
+
                 telemetry.addData("pos: ", goldPos);
-                telemetry.update();
+
             }
         }
         if (goldPos == TensorflowUtils.GOLD_MINERAL_POSITION.NONE)
@@ -39,7 +48,7 @@ public class CreaterAuto extends AutoMode {
         if (opModeIsActive()) {
             runTime.reset();
             runTime.startTime();
-            LandInAuto( 0.5);
+            LandInAuto(0.7);
             shaftGoDown(0.5, 0);
 
             TensorflowUtils.GOLD_MINERAL_POSITION cubePosition = TensorflowUtils.GOLD_MINERAL_POSITION.CENTER;

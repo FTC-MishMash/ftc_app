@@ -90,7 +90,7 @@ public class TensorflowUtils {
                 }
 
                 if (samplingMinerals[0].getLabel().equals(LABEL_SILVER_MINERAL))
-                    if (samplingMinerals[1] == null || (samplingMinerals[1] != null && samplingMinerals[1].getLabel().equals(LABEL_GOLD_MINERAL)))
+                    if (samplingMinerals[1] == null || (samplingMinerals[1] != null && samplingMinerals[1].getLabel().equals(LABEL_SILVER_MINERAL)))
                         cubePosition = GOLD_MINERAL_POSITION.LEFT;
                     else if (samplingMinerals[1].getLabel().equals(LABEL_GOLD_MINERAL)
                             && mineralPosition(samplingMinerals[0]) == mineralPosition(samplingMinerals[1])) {
@@ -111,7 +111,7 @@ public class TensorflowUtils {
 
     public MINERAL_HALF mineralPosition(Recognition samplingMineral) {
         double center = 0.5 * (samplingMineral.getLeft() + samplingMineral.getRight());
-        if (samplingMineral.getLeft() - center > samplingMineral.getRight() - center)
+        if (samplingMineral.getLeft() > 400)
             return MINERAL_HALF.LEFT_HALF;
         return MINERAL_HALF.RIGHT_HALF;
     }
