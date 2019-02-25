@@ -39,20 +39,21 @@ public class ImageTargets {
     public TFObjectDetector tfod;
     public ElapsedTime runTime = new ElapsedTime();
     final double SCALE_FACTOR = 255;
-    int distImage = 35;
-    static final int PitchtargetAngleMin = -5;
-    static final int PitchtargetAngleMax = 5;
-    static final int RolltargetAngleMin = -10;
-    static final int RolltargetAngleMax = 10;
+    int distImage = 35;//inbar change this
 
-
-    final double minAngleToTarget = 35;
-    static final int XtargetPosition = 63;
-    static final int YtargetPosition = 6;
-    static final int ZtargetPosition = -4;
-
-    static final int HeadingToSampling = 45;
-    static final int HeadingToTarget = 90;
+    //    static final int PitchtargetAngleMin = -5;
+//    static final int PitchtargetAngleMax = 5;
+//    static final int RolltargetAngleMin = -10;
+//    static final int RolltargetAngleMax = 10;
+//
+//
+//    final double minAngleToTarget = 35;
+//    static final int XtargetPosition = 63;
+//    static final int YtargetPosition = 6;
+//    static final int ZtargetPosition = -4;
+//
+//    static final int HeadingToSampling = 45;
+//    static final int HeadingToTarget = 90;
     DcMotor[][] motors;
     public static final float mmPerInch = 25.4f;
     public static final float mmFTCFieldWidth = (12 * 6) * mmPerInch;       // the width of the FTC field (from the center point to the outer panels)
@@ -253,7 +254,7 @@ public class ImageTargets {
         if (positions != null) {
             telemetry.addLine("On DriveToImage()");
             telemetry.update();
-            currOpmode.sleep(150);
+//            currOpmode.sleep(150);
             double time = currOpmode.getRuntime();
             telemetry.addLine("test image positions");
             telemetry.update();
@@ -268,7 +269,7 @@ public class ImageTargets {
             double headingTarget = -90 * Math.signum(positions[1]);
             float totalPassed = 1;
             float firstpos = Math.abs(positions[1]);
-            float ypos =53;
+            float ypos = 53;
             while (currOpmode.opModeIsActive() && (positions != null && Math.abs(positions[1]) <= ypos)) {
                 totalPassed = (ypos - firstpos) / (ypos - Math.abs(positions[1]));
                 positions = getPositions();
@@ -290,7 +291,7 @@ public class ImageTargets {
                 heading = positions[5];
                 telemetry.addData("got to heading: ", heading);
                 telemetry.update();
-                currOpmode.sleep(500);
+                currOpmode.sleep(400);
             }
 //            while (!currOpmode.gamepad1.a) {
 //                positions = getPositions();
@@ -302,12 +303,11 @@ public class ImageTargets {
             try {
 
                 currOpmode.driveUtils.diffTurn(headingTarget - heading);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 telemetry.addLine("Turn failed");
                 telemetry.update();
-                currOpmode.sleep(2000);
-              //  driveUtilities.Turn(210);
+//                currOpmode.sleep(2000);
+                //  driveUtilities.Turn(210);
             }
         }
     }
