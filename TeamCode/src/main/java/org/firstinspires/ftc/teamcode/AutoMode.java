@@ -155,8 +155,8 @@ public class AutoMode extends LinearOpMode {
         while (opModeIsActive() && getAngularOriention().thirdAngle <= 0) {
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 250);
-            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 250);
+            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 400);
+            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 400);
             robot.shaft[0].setPower(shaftPower);
             robot.shaft[1].setPower(shaftPower);
 
@@ -168,8 +168,8 @@ public class AutoMode extends LinearOpMode {
 //            sleep(60);
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 10);
-            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 10);
+            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 1);
+            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 1);
             robot.shaft[0].setPower(shaftPower);
             robot.shaft[1].setPower(shaftPower);
 

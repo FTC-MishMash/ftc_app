@@ -64,8 +64,9 @@ public class TensorflowUtils {
                             temp = twoSmallestMinerals[0];
                             twoSmallestMinerals[0] = recognition;
                             twoSmallestMinerals[1] = temp;
-                        } else if (recognition.getTop() < twoSmallestMinerals[1].getTop())
+                        } else if (updateRecognitions.indexOf(recognition)!=0&&recognition.getTop() < twoSmallestMinerals[1].getTop()) {
                             twoSmallestMinerals[1] = recognition;
+                        }
                     }
                 }
             }

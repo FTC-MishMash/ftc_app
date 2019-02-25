@@ -40,7 +40,7 @@ public class CreaterAuto extends AutoMode {
             runTime.reset();
             runTime.startTime();
             LandInAuto( 0.5);
-            shaftGoDown(0.5, robot.shaftDownPosition);
+            shaftGoDown(0.5, 0);
 
             TensorflowUtils.GOLD_MINERAL_POSITION cubePosition = TensorflowUtils.GOLD_MINERAL_POSITION.CENTER;
 
