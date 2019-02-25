@@ -119,7 +119,7 @@ public class AutoMode extends LinearOpMode {
         return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
 
-    public void LandInAuto(double servoOPENPosition, double shaftPower) {
+    public void LandInAuto(double shaftPower) {
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition());
@@ -129,7 +129,7 @@ public class AutoMode extends LinearOpMode {
         sleep(75);
         robot.hanging.setPosition(robot.hangingLockPosition);
 
-        robot.linear.setTargetPosition(-125);
+        robot.linear.setTargetPosition(robot.linearEncoderOutLock);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.linear.setPower(0.7);
 
@@ -382,7 +382,7 @@ public class AutoMode extends LinearOpMode {
 
     }
 
-    public void Parking(int targetShaftParkingPositionEncoder, double shaftPower, int linearTargetEncoder,int LinearoutFromLock, double linearPower) {
+    public void Parking(int targetShaftParkingPositionEncoder, double shaftPower, int linearTargetEncoder, int LinearoutFromLock, double linearPower) {
         robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);

@@ -39,8 +39,8 @@ public class CreaterAuto extends AutoMode {
         if (opModeIsActive()) {
             runTime.reset();
             runTime.startTime();
-            // LandInAuto(robot.hangingLockPosition,0.5);
-            //shaftGoDown(0.5, robot.shaftDownPosition);
+            LandInAuto( 0.5);
+            shaftGoDown(0.5, robot.shaftDownPosition);
 
             TensorflowUtils.GOLD_MINERAL_POSITION cubePosition = TensorflowUtils.GOLD_MINERAL_POSITION.CENTER;
 
@@ -97,7 +97,7 @@ public class CreaterAuto extends AutoMode {
             }
             pos = targetNav.getPositions();
             if (pos != null) {
-                targetNav.driveToImage(-0.7,56);//inbar change from 53 to 56
+                targetNav.driveToImage(-0.7, 56);//inbar change from 53 to 56
             } else {
                 telemetry.addLine("no image");
                 driveUtils.driveByEncoderRoverRuckus(robot.encoderBACKUPtoImage, robot.encoderBACKUPtoImage, -robot.powerEncoder, false);
@@ -114,7 +114,7 @@ public class CreaterAuto extends AutoMode {
             driveUtils.driveByEncoderRoverRuckus(robot.distToImageBeforeCrater, robot.distToImageBeforeCrater, -robot.powerEncoder, false);//to crater
             driveUtils.diffTurn(robot.newAngleToDepot);//intake to carter
             driveUtils.driveByEncoderRoverRuckus(robot.distFromImageToCrater, robot.distFromImageToCrater, robot.powerEncoder, false);//to crater
-            Parking(robot.shaftEncoderPositionPARKING, 0.4, robot.linearOpenPosition,robot.linearEncoderOutLock, 1);
+            Parking(robot.shaftEncoderPositionPARKING, 0.4, robot.linearOpenPosition, robot.linearEncoderOutLock, 1);
         }
     }
 }

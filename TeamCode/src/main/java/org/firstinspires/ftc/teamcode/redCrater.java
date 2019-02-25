@@ -39,7 +39,7 @@ public class redCrater extends AutoMode {
         telemetry.addLine("wait for start");
         telemetry.update();
         waitForStart();
-        LandInAuto(robot.hangingLockPosition,0.5);
+        LandInAuto(0.5);
         shaftGoDown(0.5, 2700);
 
 
@@ -99,7 +99,7 @@ public class redCrater extends AutoMode {
             }
 
 //            sleep(600);
-            targetNav.driveToImage(-0.3);
+            targetNav.driveToImage(-0.3,56);
 //            sleep(500);
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, robot.powerEncoder, false);//to depot
             Marker(0.5,robot.shaftTargetPositionMarker);  //marker
