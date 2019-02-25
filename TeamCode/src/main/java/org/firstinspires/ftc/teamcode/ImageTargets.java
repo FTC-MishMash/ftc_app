@@ -247,7 +247,7 @@ public class ImageTargets {
     }
 
 
-    public void driveToImage(double power) {
+    public void driveToImage(double power,float ypos) {
         //  Driving.Driving.setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
 
         float[] positions = getPositions();
@@ -269,7 +269,7 @@ public class ImageTargets {
             double headingTarget = -90 * Math.signum(positions[1]);
             float totalPassed = 1;
             float firstpos = Math.abs(positions[1]);
-            float ypos = 57;//inbar change from 53 to 57
+            //float ypos = 57;//inbar change from 53 to 57
             while (currOpmode.opModeIsActive() && (positions != null && Math.abs(positions[1]) <= ypos)) {
                 totalPassed = (ypos - firstpos) / (ypos - Math.abs(positions[1]));
                 positions = getPositions();
