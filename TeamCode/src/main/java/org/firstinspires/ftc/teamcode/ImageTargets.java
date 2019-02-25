@@ -269,7 +269,7 @@ public class ImageTargets {
             double headingTarget = -90 * Math.signum(positions[1]);
             float totalPassed = 1;
             float firstpos = Math.abs(positions[1]);
-            float ypos = 53;
+            float ypos = 57;//inbar change from 53 to 57
             while (currOpmode.opModeIsActive() && (positions != null && Math.abs(positions[1]) <= ypos)) {
                 totalPassed = (ypos - firstpos) / (ypos - Math.abs(positions[1]));
                 positions = getPositions();
