@@ -116,15 +116,12 @@ public class DriveUtilities {
                 setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
                 telemetry.addData("pos drive null: ", currOpmode.targetNav.currOpmode == null);
                 telemetry.update();
-                currOpmode.sleep(2000);
                 break;
             }
         }
         setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
 
-//        for (int i = 0; i < 2; i++)
-//            for (int j = 0; j < 2; j++)
-//                robot.driveTrain[i][j].setPower(0);
+
 
         telemetry.addLine("end move encoder");
         telemetry.update();

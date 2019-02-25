@@ -1,19 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.vuforia.PIXEL_FORMAT;
-import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
-
-import java.util.List;
 
 @Autonomous(name = "VuforiaCheck")
 //@Disabled
@@ -37,8 +26,8 @@ public class VuforiaCheck extends AutoMode {
         int posCube = -1;
         while (!isStarted()) {
 
-            TensorflowUtils.GOLD_MINERAL_POSITION goldPos = tsSampling.goldPosition();
-            if (goldPos != TensorflowUtils.GOLD_MINERAL_POSITION.NONE) {
+            TensorflowUtils.MINERAL_POSITION goldPos = tsSampling.goldPosition();
+            if (goldPos != TensorflowUtils.MINERAL_POSITION.NONE) {
                 telemetry.addData("pos: ", goldPos);
                 telemetry.update();
             }

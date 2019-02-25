@@ -1,21 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.vuforia.Vuforia;
-
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 public class TensorflowUtils {
@@ -32,16 +23,11 @@ public class TensorflowUtils {
     Telemetry telemetry;
     DriveUtilities driveUtilities;
 
-    public static enum GOLD_MINERAL_POSITION {
+    public static enum MINERAL_POSITION {
         LEFT,
         CENTER,
         RIGHT,
         NONE;
-    }
-
-    enum MINERAL_HALF {
-        RIGHT_HALF,
-        LEFT_HALF;
     }
 
     /**
@@ -59,62 +45,68 @@ public class TensorflowUtils {
             if (updateRecognitions.size() >= 2) {
                 twoSmallestMinerals[1] = updateRecognitions.get(1);
                 for (Recognition recognition : updateRecognitions) {
-                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL) || recognition.getConfidence() > 0.4) {
+                    if ((recognition.getLabel().equals(LABEL_GOLD_MINERAL) || recognition.getConfidence() > 0.5)) {
                         if (recognition.getTop() < twoSmallestMinerals[0].getTop()) {
                             temp = twoSmallestMinerals[0];
                             twoSmallestMinerals[0] = recognition;
                             twoSmallestMinerals[1] = temp;
-                        } else if (updateRecognitions.indexOf(recognition)!=0&&recognition.getTop() < twoSmallestMinerals[1].getTop()) {
+                        } else if (updateRecognitions.indexOf(recognition) != 0 && recognition.getTop() < twoSmallestMinerals[1].getTop()) {
                             twoSmallestMinerals[1] = recognition;
                         }
                     }
                 }
             }
         }
+        for (int i = 0; i < twoSmallestMinerals.length; i++) {
+            if (twoSmallestMinerals[i] != null && (
+                    twoSmallestMinerals[i].getWidth() < 75 || twoSmallestMinerals[i].getWidth() > 105
+                            || twoSmallestMinerals[i].getHeight() < 72 || twoSmallestMinerals[i].getHeight() > 100))
+                twoSmallestMinerals[i]=null;
+        }
         return twoSmallestMinerals;
     }
 
+    public static float getCenterX(Recognition recognition) {
+        return ((recognition.getRight() + recognition.getLeft()) / 2);
+    }
 
-    public GOLD_MINERAL_POSITION goldPosition() {
-        GOLD_MINERAL_POSITION cubePosition = GOLD_MINERAL_POSITION.NONE;
+    public static MINERAL_POSITION mineralPosition(Recognition recognition) {
+        if (recognition == null)
+            return MINERAL_POSITION.LEFT;
+        else if (getCenterX(recognition) < recognition.getImageWidth() / 2)
+            return MINERAL_POSITION.RIGHT;
+        else
+            return MINERAL_POSITION.CENTER;
+    }
 
+    public MINERAL_POSITION goldPosition() {
         if (tfod != null) {
             List<Recognition> updatetedRecognitions = tfod.getUpdatedRecognitions();
             Recognition[] samplingMinerals = getSampling(updatetedRecognitions);
             if (samplingMinerals[0] != null) {
                 if (samplingMinerals[0].getLabel().equals(LABEL_GOLD_MINERAL)) {
-                    if (samplingMinerals[0].getLeft() < samplingMinerals[0].getRight())
-                        cubePosition = GOLD_MINERAL_POSITION.CENTER;
-                    else
-                        cubePosition = GOLD_MINERAL_POSITION.RIGHT;
-                }
-
-                if (samplingMinerals[0].getLabel().equals(LABEL_SILVER_MINERAL))
+                    return mineralPosition(samplingMinerals[0]);
+                } else if (samplingMinerals[0].getLabel().equals(LABEL_SILVER_MINERAL))
                     if (samplingMinerals[1] == null || (samplingMinerals[1] != null && samplingMinerals[1].getLabel().equals(LABEL_SILVER_MINERAL)))
-                        cubePosition = GOLD_MINERAL_POSITION.LEFT;
+                        return MINERAL_POSITION.LEFT;
                     else if (samplingMinerals[1].getLabel().equals(LABEL_GOLD_MINERAL)
                             && mineralPosition(samplingMinerals[0]) == mineralPosition(samplingMinerals[1])) {
-                        cubePosition = GOLD_MINERAL_POSITION.LEFT;
-                    } else {
-                        if (samplingMinerals[1].getLeft() > samplingMinerals[1].getRight())
-                            cubePosition = GOLD_MINERAL_POSITION.RIGHT;
-                        else
-                            cubePosition = GOLD_MINERAL_POSITION.LEFT;
-                    }
-
+                        return MINERAL_POSITION.LEFT;
+                    } else
+                        return mineralPosition(samplingMinerals[1]);
             }
         }
 
-
-        return cubePosition;
+        // otherwise
+        return MINERAL_POSITION.NONE;
     }
 
-    public MINERAL_HALF mineralPosition(Recognition samplingMineral) {
-        double center = 0.5 * (samplingMineral.getLeft() + samplingMineral.getRight());
-        if (samplingMineral.getLeft() > 400)
-            return MINERAL_HALF.LEFT_HALF;
-        return MINERAL_HALF.RIGHT_HALF;
-    }
+//    public MINERAL_HALF mineralPosition(Recognition samplingMineral) {
+//        double center = 0.5 * (samplingMineral.getLeft() + samplingMineral.getRight());
+//        if (samplingMineral.getLeft() > 400)
+//            return MINERAL_HALF.LEFT_HALF;
+//        return MINERAL_HALF.RIGHT_HALF;
+//    }
 
     public TensorflowUtils(AutoMode currOpMode) {
         this.currOpMode = currOpMode;
@@ -167,14 +159,16 @@ public class TensorflowUtils {
     }
 
 
-    public void rotateToCube(double power, int turnAngleRight, int turnAngleLeft, GOLD_MINERAL_POSITION goldMineralPosition) {
+    public void rotateToCube(double power, int turnAngleRight, int turnAngleLeft, MINERAL_POSITION goldMineralPosition) {
 
 
         double runTime0 = currOpMode.getRuntime();
-        if (goldMineralPosition == GOLD_MINERAL_POSITION.LEFT)
+        if (goldMineralPosition == MINERAL_POSITION.LEFT)
             driveUtilities.Turn(turnAngleLeft);
-        else if (goldMineralPosition == GOLD_MINERAL_POSITION.RIGHT)
+        else if (goldMineralPosition == MINERAL_POSITION.RIGHT)
             driveUtilities.Turn(turnAngleRight);
+        else
+            driveUtilities.Turn(0);
 
     }
 

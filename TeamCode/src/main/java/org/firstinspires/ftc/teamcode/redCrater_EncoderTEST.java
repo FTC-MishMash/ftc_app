@@ -25,7 +25,7 @@ public class redCrater_EncoderTEST extends AutoMode {
         if (opModeIsActive()) {
             runTime.reset();
             runTime.startTime();
-            LandInAuto(0.5);
+            LandInAuto();
             shaftGoDown(0.4,-250);
 
             int cubePosition = 0;

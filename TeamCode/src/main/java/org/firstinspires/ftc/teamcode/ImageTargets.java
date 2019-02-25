@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -13,9 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +29,7 @@ public class ImageTargets {
     public VuforiaLocalizerEx vuforia;
     Telemetry telemetry;
     DriveUtilities driveUtilities;
-    float ypos=56;
+    float ypos=55.7f;
     /**
      * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
@@ -56,6 +53,7 @@ public class ImageTargets {
 //    static final int HeadingToSampling = 45;
 //    static final int HeadingToTarget = 90;
     DcMotor[][] motors;
+    int imageSearchDist=-25;
     public static final float mmPerInch = 25.4f;
     public static final float mmFTCFieldWidth = (12 * 6) * mmPerInch;       // the width of the FTC field (from the center point to the outer panels)
     public static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
@@ -172,35 +170,28 @@ public class ImageTargets {
         return null;
     }
 
-    public void searchImage(TensorflowUtils.GOLD_MINERAL_POSITION cubePos, double power) {
+    public void searchImage(TensorflowUtils.MINERAL_POSITION cubePos, double power) {
         this.driveUtilities = currOpmode.driveUtils;
         telemetry.addData("on search", currOpmode.targetNav == null);
         telemetry.update();
+
         switch (cubePos) {
             case RIGHT: {
                 telemetry.addLine("case1");
                 telemetry.update();
-                driveUtilities.driveByEncoderRoverRuckus(-65, -57, power, true);
-                if (getPositions() == null)
-                    driveUtilities.driveByEncoderRoverRuckus(-58, -38, power, true);
-
+                driveUtilities.driveByEncoderRoverRuckus(imageSearchDist-30, imageSearchDist-30, power, true);
                 break;
             }
             case CENTER: {
                 telemetry.addLine("case2");
                 telemetry.update();
                 driveUtilities.driveByEncoderRoverRuckus(-48, -37, power, true);
-                if (getPositions() == null)
-                    driveUtilities.driveByEncoderRoverRuckus(-32, -26, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(imageSearchDist-15, imageSearchDist-15, power, true);
 
                 break;
             }
             case LEFT: {
-                telemetry.addLine("case3");
-                telemetry.update();
-                driveUtilities.driveByEncoderRoverRuckus(-25, -19, power, true);
-                if (getPositions() == null)
-                    driveUtilities.driveByEncoderRoverRuckus(-10, -5, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(imageSearchDist, imageSearchDist, power, true);
             }
         }
 //
@@ -303,7 +294,7 @@ public class ImageTargets {
             //   driveUtilities.TurnWithEncoder(310,0.4);
             try {
 
-                currOpmode.driveUtils.diffTurn(headingTarget - heading);
+                currOpmode.driveUtils.diffTurn(2+headingTarget - heading);
             } catch (Exception e) {
                 telemetry.addLine("Turn failed");
                 telemetry.update();

@@ -76,8 +76,8 @@ public class DriveRoverRuckus extends OpMode {
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-            robot.shaft[0].setPower((gamepad2.right_stick_y) * (0.5));
-            robot.shaft[1].setPower((gamepad2.right_stick_y) * (0.5));
+            robot.shaft[0].setPower((gamepad2.right_stick_y) * (0.65));
+            robot.shaft[1].setPower((gamepad2.right_stick_y) * (0.65));
 
             shaftEncoder = robot.shaft[1].getCurrentPosition();
         } else

@@ -113,6 +113,18 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
+                        if(!updatedRecognitions.isEmpty()) {
+
+                            telemetry.addData("top: ", updatedRecognitions.get(0).getTop());
+                            telemetry.addData("buttom: ", updatedRecognitions.get(0).getBottom());
+                            telemetry.addData("Label: ",updatedRecognitions.get(0).getLabel());
+                            telemetry.addData("left: ", updatedRecognitions.get(0).getLeft());
+                            telemetry.addData("height: ", updatedRecognitions.get(0).getHeight());
+                            telemetry.addData("width: ", updatedRecognitions.get(0).getWidth());
+                            telemetry.addData("right: ", updatedRecognitions.get(0).getRight());
+
+                            telemetry.addData("confidence: ", updatedRecognitions.get(0).getConfidence());
+                        }
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
                         if (updatedRecognitions.size() == 3) {
                             int goldMineralX = -1;

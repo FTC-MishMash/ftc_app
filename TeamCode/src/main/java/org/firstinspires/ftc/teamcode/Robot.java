@@ -36,26 +36,27 @@ public class Robot {
     public double hangingLockPosition = 0.2;
     public double angleTurnToImage = 264;
     public double newAngleTurnToImage = 70;
-    public int SamplingAngleRight = 326;
 
+    public int SamplingAngleRight = 322;
+    public int SamplingAngleLeft = 37;
+    public int rightSamplingBackward = 10;
     public int driveEncoderSamplingForward = 31;
     public int driveEncoderSamplingPositionSide = 30;
     public int driveEncoderSamplingPositionMiddle = 15;
     public int driveEncoderSamplingPositionSideBackward = -30;
     public int driveEncoderSamplingPositionMiddleBackward = -18;
     public int driveEncoderSamplingBackward = -7;
-    public int SamplingAngleLeft = 33;
-    public int distToDepot = 90;
+    public int distToDepot = 82;
     public int distToImageBeforeCrater = -70;
-    public int distFromImageToCrater = 35;
-    public double powerEncoder = 0.8;
+    public int distFromImageToCrater = 15;
+    public double powerEncoder = 0.9;
 
-    public int encoderBACKUPtoImage = -67;
+    public int encoderBACKUPtoImage = -55;
 
-    public int linearOpenPosition = -2000;
+    public int linearOpenPosition = -2400;
     public int linearMiddlePosition = -800;
     public int linearClosePosition = -50;
-    public int linearEncoderOutLock = -300;
+    public int linearEncoderOutLock = -500;
 
     public int shaftEncoderPositionPARKING = -800;
     public int shaftEncoderPositionINTAKE = -250;

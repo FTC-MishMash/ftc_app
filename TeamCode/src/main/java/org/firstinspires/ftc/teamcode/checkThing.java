@@ -42,17 +42,17 @@ public class checkThing extends AutoMode {
         waitForStart();
         while (opModeIsActive()) {
 
-//            telemetry.addData("left front motor CM", robot.driveTrain[0][0].getCurrentPosition() * 27 / 600);
-//            telemetry.addData("left back motor CM", robot.driveTrain[1][0].getCurrentPosition() * 27 / 600);
-//            telemetry.addData("right fornt motor CM", robot.driveTrain[0][1].getCurrentPosition() * 27 / 600);
-//            telemetry.addData("right back motor CM", robot.driveTrain[1][1].getCurrentPosition() * 27 / 600);
-//
-//
-//            telemetry.addData("left front motor encoder", robot.driveTrain[0][0].getCurrentPosition());
-//            telemetry.addData("left back motor encoder", robot.driveTrain[1][0].getCurrentPosition());
-//            telemetry.addData("right fornt motor encoder", robot.driveTrain[0][1].getCurrentPosition());
-//            telemetry.addData("right back motor encoder", robot.driveTrain[1][1].getCurrentPosition());
-            telemetry.addData("angle: ", angle);
+            telemetry.addData("left front motor CM", robot.driveTrain[0][0].getCurrentPosition() * 27 / 600);
+            telemetry.addData("left back motor CM", robot.driveTrain[1][0].getCurrentPosition() * 27 / 600);
+            telemetry.addData("right fornt motor CM", robot.driveTrain[0][1].getCurrentPosition() * 27 / 600);
+            telemetry.addData("right back motor CM", robot.driveTrain[1][1].getCurrentPosition() * 27 / 600);
+
+
+            telemetry.addData("left front motor encoder", robot.driveTrain[0][0].getCurrentPosition());
+            telemetry.addData("left back motor encoder", robot.driveTrain[1][0].getCurrentPosition());
+            telemetry.addData("right fornt motor encoder", robot.driveTrain[0][1].getCurrentPosition());
+            telemetry.addData("right back motor encoder", robot.driveTrain[1][1].getCurrentPosition());
+//            telemetry.addData("angle: ", angle);
             telemetry.addData("power: ", power);
             float[] pos = targetNav.getPositions();
             if (pos != null) {
@@ -66,12 +66,12 @@ public class checkThing extends AutoMode {
 
             telemetry.addData("imu angle", DriveUtilities.normalizedAngle(DriveUtilities.getAngularOriention(robot.imu).firstAngle));
 //////
-//            telemetry.addData("shaft right CM", robot.shaft[0].getCurrentPosition()*27/600);
-//            telemetry.addData("shaft left CM", robot.shaft[1].getCurrentPosition()*27/600);
-//            telemetry.addData("shaft right encoder", robot.shaft[0].getCurrentPosition());
-//            telemetry.addData("shaft left encoder", robot.shaft[1].getCurrentPosition());
-//            telemetry.addData("linear CM", robot.linear.getCurrentPosition()*27/600);
-//            telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
+            telemetry.addData("shaft right CM", robot.shaft[0].getCurrentPosition()*27/600);
+            telemetry.addData("shaft left CM", robot.shaft[1].getCurrentPosition()*27/600);
+            telemetry.addData("shaft right encoder", robot.shaft[0].getCurrentPosition());
+            telemetry.addData("shaft left encoder", robot.shaft[1].getCurrentPosition());
+            telemetry.addData("linear CM", robot.linear.getCurrentPosition()*27/600);
+            telemetry.addData("linear encoder", robot.linear.getCurrentPosition());
             telemetry.update();
 
             if (gamepad1.dpad_up) {

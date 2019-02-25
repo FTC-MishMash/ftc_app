@@ -5,40 +5,20 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.sun.tools.javac.code.Attribute;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.robotcore.internal.system.ClassFactoryImpl;
-import org.firstinspires.ftc.robotcore.internal.tfod.TFObjectDetectorImpl;
-import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaLocalizerImpl;
 
-import android.graphics.Color;
-
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 
 
@@ -90,7 +70,7 @@ public class AutoMode extends LinearOpMode {
     ImageTargets targetNav;
     DriveUtilities driveUtils;
     TensorflowUtils tsSampling;
-    TensorflowUtils.GOLD_MINERAL_POSITION goldPos = TensorflowUtils.GOLD_MINERAL_POSITION.NONE;
+    TensorflowUtils.MINERAL_POSITION goldPos = TensorflowUtils.MINERAL_POSITION.NONE;
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -119,7 +99,7 @@ public class AutoMode extends LinearOpMode {
         return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
 
-    public void LandInAuto(double shaftPower) {
+    public void LandInAuto() {
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition());
@@ -129,9 +109,10 @@ public class AutoMode extends LinearOpMode {
 
         robot.hanging.setPosition(robot.hangingLockPosition);
         sleep(75);
-        robot.linear.setTargetPosition(robot.linearEncoderOutLock);
+        robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.linear.setPower(1);
+        robot.linear.setTargetPosition(robot.linearEncoderOutLock);
+        robot.linear.setPower(0.7);
 
 //        robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //        robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -142,25 +123,24 @@ public class AutoMode extends LinearOpMode {
         telemetry.update();
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        while (opModeIsActive() && getAngularOriention().thirdAngle <= -10) {
-            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while (opModeIsActive() && getAngularOriention().thirdAngle <= -7) {
+
             robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() - 400);
             robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 400);
-            robot.shaft[0].setPower(shaftPower);
-            robot.shaft[1].setPower(shaftPower);
-
-            sleep(60);
-            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 10);
-            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 10);
-            robot.shaft[0].setPower(0.6);
-            robot.shaft[1].setPower(0.6);
+            robot.shaft[0].setPower(0.5);
+            robot.shaft[1].setPower(0.5);
+            while (robot.shaft[0].isBusy() && robot.shaft[1].isBusy());
+//            sleep(80);
+//            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 1);
+//            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 1);
+//            robot.shaft[0].setPower(0.1);
+//            robot.shaft[1].setPower(0.1);
 
 
-            telemetry.addData("pitch", getAngularOriention().thirdAngle);
+                telemetry.addData("pitch", getAngularOriention().thirdAngle);
             telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
             telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
 
@@ -238,9 +218,8 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setTargetPosition(shaftDownPosition);
-        robot.shaft[1].setTargetPosition(shaftDownPosition);
-
+        robot.shaft[0].setTargetPosition(0);
+        robot.shaft[1].setTargetPosition(0);
 
 
 //        sleep(400);

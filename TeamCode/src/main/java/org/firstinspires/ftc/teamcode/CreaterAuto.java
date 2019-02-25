@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 
@@ -30,42 +29,41 @@ public class CreaterAuto extends AutoMode {
         telemetry.addData("pos: ", goldPos);
         telemetry.update();
         while (!isStarted()) {
-            telemetry.addData("shaft[0]:  ", robot.shaft[0].getCurrentPosition());
-            telemetry.addData("shaft[1]:  ", robot.shaft[1].getCurrentPosition());
-            telemetry.addData("linear:  ", robot.linear.getCurrentPosition());
-            TensorflowUtils.GOLD_MINERAL_POSITION result = tsSampling.goldPosition();
-            telemetry.update();
-            if (result != TensorflowUtils.GOLD_MINERAL_POSITION.NONE) {
+
+            TensorflowUtils.MINERAL_POSITION result = tsSampling.goldPosition();
+
+            if (result != TensorflowUtils.MINERAL_POSITION.NONE) {
                 goldPos = result;
 
                 telemetry.addData("pos: ", goldPos);
-
+                telemetry.update();
             }
         }
-        if (goldPos == TensorflowUtils.GOLD_MINERAL_POSITION.NONE)
-            goldPos = TensorflowUtils.GOLD_MINERAL_POSITION.LEFT;
+        if (goldPos == TensorflowUtils.MINERAL_POSITION.NONE)
+            goldPos = TensorflowUtils.MINERAL_POSITION.LEFT;
         waitForStart();
         if (opModeIsActive()) {
             runTime.reset();
             runTime.startTime();
-            LandInAuto(0.7);
-            shaftGoDown(0.5, 0);
-
-            TensorflowUtils.GOLD_MINERAL_POSITION cubePosition = TensorflowUtils.GOLD_MINERAL_POSITION.CENTER;
+            LandInAuto();
+            shaftGoDown(0.8, 0);
 
 
-            telemetry.addData("Gold mineral position: ", cubePosition);
+
+            telemetry.addData("Gold mineral position: ", goldPos);
             telemetry.update();
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderAfHanging, robot.driveEncoderAfHanging, robot.powerEncoder, false);
 
-            tsSampling.rotateToCube(0.5, robot.SamplingAngleRight, robot.SamplingAngleLeft, cubePosition);
+            tsSampling.rotateToCube(0.5, robot.SamplingAngleRight, robot.SamplingAngleLeft, goldPos);
             telemetry.addLine("press a for driveEncoderSamplingForward");
             telemetry.update();
 
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingForward, robot.driveEncoderSamplingForward, robot.powerEncoder, false);
-            if (cubePosition != TensorflowUtils.GOLD_MINERAL_POSITION.CENTER) {
+            if (goldPos != TensorflowUtils.MINERAL_POSITION.CENTER) {
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionSide, robot.driveEncoderSamplingPositionSide, robot.powerEncoder, false);
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionSideBackward, robot.driveEncoderSamplingPositionSideBackward, -robot.powerEncoder, false);
+            if(goldPos==TensorflowUtils.MINERAL_POSITION.RIGHT)
+                driveUtils.driveByEncoderRoverRuckus(robot.rightSamplingBackward, robot.rightSamplingBackward, -robot.powerEncoder, false);
             } else {
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddle, robot.driveEncoderSamplingPositionMiddle, robot.powerEncoder, false);
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddleBackward, robot.driveEncoderSamplingPositionMiddleBackward, -robot.powerEncoder, false);
@@ -87,7 +85,6 @@ public class CreaterAuto extends AutoMode {
 
 //            sleep(200);
 
-
             driveUtils.Turn(robot.angleTurnToImage);
 //            sleep(400);
             targetNav.startTracking();
@@ -99,19 +96,16 @@ public class CreaterAuto extends AutoMode {
 //            sleep(200);
             if (pos == null) {
 
-//                telemetry.addData("start searching wait for click", cubePosition);
-//                telemetry.update();
-//                sleep(300);
-                targetNav.searchImage(cubePosition, -0.20);
+                targetNav.searchImage(goldPos, -0.35);
             }
             pos = targetNav.getPositions();
             if (pos != null) {
-                targetNav.driveToImage(-0.7);//inbar change from 53 to 56
+                targetNav.driveToImage(-robot.powerEncoder);//inbar change from 53 to 56
             } else {
                 telemetry.addLine("no image");
-                driveUtils.driveByEncoderRoverRuckus(robot.encoderBACKUPtoImage, robot.encoderBACKUPtoImage, -robot.powerEncoder, false);
+                driveUtils.driveByEncoderRoverRuckus(robot.encoderBACKUPtoImage, robot.encoderBACKUPtoImage, -robot.powerEncoder-0.15, false);
                 telemetry.addLine("finished alt encoders");
-                driveUtils.Turn(127);
+                driveUtils.Turn(128);
                 telemetry.addLine("finished turnong");
                 telemetry.update();
             }
@@ -123,7 +117,7 @@ public class CreaterAuto extends AutoMode {
             driveUtils.driveByEncoderRoverRuckus(robot.distToImageBeforeCrater, robot.distToImageBeforeCrater, -robot.powerEncoder, false);//to crater
             driveUtils.diffTurn(robot.newAngleToDepot);//intake to carter
             driveUtils.driveByEncoderRoverRuckus(robot.distFromImageToCrater, robot.distFromImageToCrater, robot.powerEncoder, false);//to crater
-            Parking(robot.shaftEncoderPositionPARKING, 0.4, robot.linearOpenPosition, robot.linearEncoderOutLock, 1);
+            Parking(robot.shaftEncoderPositionPARKING, 1, robot.linearOpenPosition, robot.linearEncoderOutLock, 1);
         }
     }
 }
