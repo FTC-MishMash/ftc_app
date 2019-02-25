@@ -32,8 +32,8 @@ public class Robot {
     BNO055IMU imu;
     public double cubesTriggerOPENposition = 0.8;
     public double cubesTriggerCLOSEposition = 0.3;
-    public double hangingOpenPosition = 0.7;
-    public double hangingLockPosition = 0.2;
+    public double hangingOpenPosition = 0.5;
+    public double hangingLockPosition = 0;
     public double angleTurnToImage = 264;
     public double newAngleTurnToImage = 70;
 
