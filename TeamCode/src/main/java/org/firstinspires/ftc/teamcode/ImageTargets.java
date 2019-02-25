@@ -32,6 +32,7 @@ public class ImageTargets {
     public VuforiaLocalizerEx vuforia;
     Telemetry telemetry;
     DriveUtilities driveUtilities;
+    float ypos=56;
     /**
      * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
@@ -247,7 +248,7 @@ public class ImageTargets {
     }
 
 
-    public void driveToImage(double power,float ypos) {
+    public void driveToImage(double power) {
         //  Driving.Driving.setMotorPower(motors, new double[][]{{0.23, 0.23}, {0.23, 0.23}});
 
         float[] positions = getPositions();

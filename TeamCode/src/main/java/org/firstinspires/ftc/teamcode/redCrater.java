@@ -99,7 +99,7 @@ public class redCrater extends AutoMode {
             }
 
 //            sleep(600);
-            targetNav.driveToImage(-0.3,56);
+            targetNav.driveToImage(-0.3);
 //            sleep(500);
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, robot.powerEncoder, false);//to depot
             Marker(0.5,robot.shaftTargetPositionMarker);  //marker

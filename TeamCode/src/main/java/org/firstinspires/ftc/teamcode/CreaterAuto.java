@@ -97,7 +97,7 @@ public class CreaterAuto extends AutoMode {
             }
             pos = targetNav.getPositions();
             if (pos != null) {
-                targetNav.driveToImage(-0.7, 56);//inbar change from 53 to 56
+                targetNav.driveToImage(-0.7);//inbar change from 53 to 56
             } else {
                 telemetry.addLine("no image");
                 driveUtils.driveByEncoderRoverRuckus(robot.encoderBACKUPtoImage, robot.encoderBACKUPtoImage, -robot.powerEncoder, false);
