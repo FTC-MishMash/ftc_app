@@ -172,7 +172,7 @@ public class DriveUtilities {
 //                0.0001178 * diffAngleAbs * diffAngleAbs + 0.0030 * diffAngleAbs;
             double speedSuggested = 0.0000000000725482341 * diffAngleAbs * diffAngleAbs * diffAngleAbs * diffAngleAbs + 0.0000007 * diffAngleAbs * diffAngleAbs * diffAngleAbs +
                     0.0001178 * diffAngleAbs * diffAngleAbs + 0.02 * diffAngleAbs;
-            double minSpeed = 0.2;
+            double minSpeed = 0.23;
 
 
             double speed = Math.signum(diffAngle) * Math.min(Math.max(minSpeed, speedSuggested), maxPower);

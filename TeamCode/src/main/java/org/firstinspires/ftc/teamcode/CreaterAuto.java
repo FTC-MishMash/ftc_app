@@ -103,7 +103,7 @@ public class CreaterAuto extends AutoMode {
                 telemetry.addLine("no image");
                 driveUtils.driveByEncoderRoverRuckus(robot.encoderBACKUPtoImage, robot.encoderBACKUPtoImage, -robot.powerEncoder-0.15, false);
                 telemetry.addLine("finished alt encoders");
-                driveUtils.Turn(128);
+                driveUtils.Turn(robot.depotAngle);
                 telemetry.addLine("finished turnong");
                 telemetry.update();
             }

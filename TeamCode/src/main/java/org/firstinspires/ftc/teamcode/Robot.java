@@ -22,7 +22,9 @@ public class Robot {
     public DcMotor linear;
     public DcMotor inTake;
     public Servo hanging;
-    public Servo mineralHolder;
+    //    public Servo mineralHolder;
+    public Servo dumperUp;
+    public Servo dumperDown;
 
     public DigitalChannel magnetShaftOpen;
 
@@ -32,7 +34,11 @@ public class Robot {
     BNO055IMU imu;
     public double cubesTriggerOPENposition = 0.8;
     public double cubesTriggerCLOSEposition = 0.3;
-    public double hangingOpenPosition = 0.5;
+    public double dumperOpen = 0;
+    public double dumperLock = 0.5;
+    public double dumperDownOpen = 0.318;
+    public double dumperDownLock = 0.1;
+    public double hangingOpenPosition = 0.35;
     public double hangingLockPosition = 0;
     public double angleTurnToImage = 264;
     public double newAngleTurnToImage = 70;
@@ -51,15 +57,16 @@ public class Robot {
     public int distFromImageToCrater = 15;
     public int distFromSamplingToDepot = 20;
     public int distFromDepotToWall = 10;
+   public int  RightDist_Depot = 18;
 
     public double powerEncoder = 0.9;
 
     public int encoderBACKUPtoImage = -55;
 
-    public int linearOpenPosition = -2400;
+    public int linearOpenPosition = -2500;
     public int linearMiddlePosition = -800;
     public int linearClosePosition = -50;
-    public int linearEncoderOutLock = -380;
+    public int linearEncoderOutLock = -500;
 
     public int shaftEncoderPositionPARKING = -800;
     public int shaftEncoderPositionINTAKE = -250;
@@ -67,8 +74,11 @@ public class Robot {
     public int shaftTargetPositionMarker = -300;
     public int shaftDownPosition = 100;
     //    int AngleToDepot = 135;
-    public int newAngleToDepot = 195;
+    public int newAngleToDepot = 190;
+    public int depotAngle = 130;
+    public int angleDepotToCrater = 130;
 
+    public int linearPowerOutLock = 1;
 
     public Robot(HardwareMap hardwareMap) {
 
@@ -78,11 +88,12 @@ public class Robot {
         linear = hardwareMap.get(DcMotor.class, "linearLeft");
         shaft[0] = hardwareMap.get(DcMotor.class, "shaftRight");
         shaft[1] = hardwareMap.get(DcMotor.class, "shaftLeft");
-
+        dumperDown = hardwareMap.get(Servo.class, "dumperDown");
+        dumperUp = hardwareMap.get(Servo.class, "dumperUp");
 
         magnetShaftOpen = hardwareMap.get(DigitalChannel.class, "magnetShaftOpen");
         hanging = hardwareMap.get(Servo.class, "hanging");
-        mineralHolder = hardwareMap.get(Servo.class, "mineralHolder");
+//        mineralHolder = hardwareMap.get(Servo.class, "mineralHolder");
 
         driveTrain[0][0] = hardwareMap.get(DcMotor.class, "leftFront");
         driveTrain[1][0] = hardwareMap.get(DcMotor.class, "leftBack");

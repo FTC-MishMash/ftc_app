@@ -65,16 +65,14 @@ public class DepotAuto extends AutoMode {
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddle, robot.driveEncoderSamplingPositionMiddle, robot.powerEncoder, false);
             }
             driveUtils.rotateToDepot(37, 322, goldPos);
-            driveUtils.driveByEncoderRoverRuckus(robot.distFromSamplingToDepot,robot.distFromSamplingToDepot, -robot.powerEncoder, false);
-            MarkerWithIntake(1, 2000);
-            if (goldPos == TensorflowUtils.MINERAL_POSITION.RIGHT){
-                driveUtils.driveByEncoderRoverRuckus(robot.distFromDepotToWall,robot.distFromDepotToWall , -robot.powerEncoder, false);
-                driveUtils.Turn();
-            }
-                driveUtils.driveByEncoderRoverRuckus(robot.distToImageBeforeCrater, robot.distToImageBeforeCrater, -robot.powerEncoder, false);//to crater
-            driveUtils.diffTurn(robot.newAngleToDepot);//intake to carter
-            driveUtils.driveByEncoderRoverRuckus(robot.distFromImageToCrater, robot.distFromImageToCrater, robot.powerEncoder, false);//to crater
-            Parking(robot.shaftEncoderPositionPARKING, 1, robot.linearOpenPosition, robot.linearEncoderOutLock, 1);
+            driveUtils.driveByEncoderRoverRuckus(robot.distFromSamplingToDepot, robot.distFromSamplingToDepot, -robot.powerEncoder, false);
+            driveUtils.Turn(robot.angleDepotToCrater);
+            driveUtils.driveByEncoderRoverRuckus(robot.RightDist_Depot, robot.RightDist_Depot, robot.powerEncoder, false);
+
         }
+        driveUtils.driveByEncoderRoverRuckus(robot.distToImageBeforeCrater, robot.distToImageBeforeCrater, -robot.powerEncoder, false);//to crater
+        driveUtils.diffTurn(robot.newAngleToDepot);//intake to carter
+        driveUtils.driveByEncoderRoverRuckus(robot.distFromImageToCrater, robot.distFromImageToCrater, robot.powerEncoder, false);//to crater
+        Parking(robot.shaftEncoderPositionPARKING, 1, robot.linearOpenPosition, robot.linearEncoderOutLock, 1);
     }
 }

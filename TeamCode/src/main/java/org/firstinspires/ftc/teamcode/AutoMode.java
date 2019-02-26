@@ -97,7 +97,6 @@ public class AutoMode extends LinearOpMode {
     public Orientation getAngularOriention() {
         return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
-
     public void LandInAuto() {
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -111,7 +110,7 @@ public class AutoMode extends LinearOpMode {
         robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.linear.setTargetPosition(robot.linearEncoderOutLock);
-        robot.linear.setPower(0.7);
+        robot.linear.setPower(robot.linearPowerOutLock);
 
 //        robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 //        robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -133,10 +132,10 @@ public class AutoMode extends LinearOpMode {
             robot.shaft[1].setPower(0.5);
             while (robot.shaft[0].isBusy() && robot.shaft[1].isBusy());
 //            sleep(80);
-//            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 1);
-//            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 1);
-//            robot.shaft[0].setPower(0.1);
-//            robot.shaft[1].setPower(0.1);
+            robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 10);
+            robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 10);
+            robot.shaft[0].setPower(1);
+            robot.shaft[1].setPower(1);
 
 
                 telemetry.addData("pitch", getAngularOriention().thirdAngle);

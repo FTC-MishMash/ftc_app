@@ -29,7 +29,7 @@ public class ImageTargets {
     public VuforiaLocalizerEx vuforia;
     Telemetry telemetry;
     DriveUtilities driveUtilities;
-    float ypos=55.7f;
+    float ypos=56.2f;
     /**
      * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
