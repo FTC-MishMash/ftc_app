@@ -49,6 +49,9 @@ public class Robot {
     public int distToDepot = 82;
     public int distToImageBeforeCrater = -70;
     public int distFromImageToCrater = 15;
+    public int distFromSamplingToDepot = 20;
+    public int distFromDepotToWall = 10;
+
     public double powerEncoder = 0.9;
 
     public int encoderBACKUPtoImage = -55;
@@ -56,7 +59,7 @@ public class Robot {
     public int linearOpenPosition = -2400;
     public int linearMiddlePosition = -800;
     public int linearClosePosition = -50;
-    public int linearEncoderOutLock = -500;
+    public int linearEncoderOutLock = -380;
 
     public int shaftEncoderPositionPARKING = -800;
     public int shaftEncoderPositionINTAKE = -250;
