@@ -11,9 +11,7 @@ public class CreaterAuto extends AutoMode {
     @Override
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
-//        robot.shaft[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.shaft[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.linear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             tsSampling.initTfod();
         } else {
@@ -54,7 +52,7 @@ public class CreaterAuto extends AutoMode {
             telemetry.update();
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderAfHanging, robot.driveEncoderAfHanging, robot.powerEncoder, false);
 
-            tsSampling.rotateToCube(0.5, robot.SamplingAngleRight, robot.SamplingAngleLeft, goldPos);
+            tsSampling.rotateToCube( robot.SamplingAngleRight, robot.SamplingAngleLeft, goldPos);
             telemetry.addLine("press a for driveEncoderSamplingForward");
             telemetry.update();
 
@@ -111,7 +109,7 @@ public class CreaterAuto extends AutoMode {
             }
 //            sleep(400);
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, robot.powerEncoder, false);//to depot
-            //TODO: להפוך את הנסיעות
+
 //            Marker(0.5, robot.shaftTargetPositionMarker);  //marker
             MarkerWithIntake(1, 2000);
             driveUtils.driveByEncoderRoverRuckus(robot.distToImageBeforeCrater, robot.distToImageBeforeCrater, -robot.powerEncoder, false);//to crater

@@ -121,7 +121,9 @@ public class DriveUtilities {
         }
         setMotorPower(robot.driveTrain, new double[][]{{0, 0}, {0, 0}});
 
-
+//        for (int i = 0; i < 2; i++)
+//            for (int j = 0; j < 2; j++)
+//                robot.driveTrain[i][j].setPower(0);
 
         telemetry.addLine("end move encoder");
         telemetry.update();
@@ -251,9 +253,19 @@ public class DriveUtilities {
 
         }
     }
-//        setMotorPower(motors, new double[][]{{0, 0}, {0, 0}});  //stop drivetrain motors
-//        if (rangeSensor.getDistance(DistanceUnit.CM) == 0) { //In case the range sensor is detached.
-//            range0 = false;
+
+    public void rotateToDepot(int turnAngleFROMRight, int turnAngleFROMLeft, TensorflowUtils.MINERAL_POSITION goldMineralPosition) {
+
+
+        if (goldMineralPosition == TensorflowUtils.MINERAL_POSITION.LEFT)
+            Turn(turnAngleFROMLeft);
+        else if (goldMineralPosition == TensorflowUtils.MINERAL_POSITION.RIGHT)
+            Turn(turnAngleFROMRight);
+        else
+            Turn(0);
+
+    }
+
 
 }
 

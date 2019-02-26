@@ -39,19 +39,7 @@ public class ImageTargets {
     final double SCALE_FACTOR = 255;
     int distImage = 35;//inbar change this
 
-    //    static final int PitchtargetAngleMin = -5;
-//    static final int PitchtargetAngleMax = 5;
-//    static final int RolltargetAngleMin = -10;
-//    static final int RolltargetAngleMax = 10;
-//
-//
-//    final double minAngleToTarget = 35;
-//    static final int XtargetPosition = 63;
-//    static final int YtargetPosition = 6;
-//    static final int ZtargetPosition = -4;
-//
-//    static final int HeadingToSampling = 45;
-//    static final int HeadingToTarget = 90;
+
     DcMotor[][] motors;
     int imageSearchDist=-25;
     public static final float mmPerInch = 25.4f;

@@ -159,7 +159,7 @@ public class TensorflowUtils {
     }
 
 
-    public void rotateToCube(double power, int turnAngleRight, int turnAngleLeft, MINERAL_POSITION goldMineralPosition) {
+    public void rotateToCube( int turnAngleRight, int turnAngleLeft, MINERAL_POSITION goldMineralPosition) {
 
 
         double runTime0 = currOpMode.getRuntime();
