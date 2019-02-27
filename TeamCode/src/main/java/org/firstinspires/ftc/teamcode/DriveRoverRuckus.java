@@ -43,10 +43,7 @@ public class DriveRoverRuckus extends OpMode {
 
     boolean shaft = false;
     boolean linear = false;
-    boolean dumperUp = false;
-    boolean dumperUpDiff = false;
-    boolean dumperDownDiff = false;
-    boolean dumperDown = false;
+
     int shaftEncoder = 0;
     int linearEncoder = 0;
     double shaftPower = 0.5;
@@ -118,14 +115,7 @@ public class DriveRoverRuckus extends OpMode {
                 robot.linear.setPower(0);
 
         }
-//        robot.linear.setPower((gamepad2.left_stick_y));
 
-//        else if (gamepad2.right_stick_y < 0) {//hand - linear
-//            linear = true;
-//            robot.linear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//            robot.linear.setPower(-1);
-//            linearEncoder = robot.linear.getCurrentPosition();
-//        }
 
 
         if (gamepad2.a) {//90 deg shaft. go to lander
@@ -137,24 +127,13 @@ public class DriveRoverRuckus extends OpMode {
 
             shaftEncoder = robot.shaftEncoderPositionINTAKE;
 
-//            if (robot.shaft[0].getCurrentPosition() <= robot.shaftMiddlePosition) {
             linearEncoder = robot.linearMiddlePosition;
             robot.inTake.setPower(1);
-//            }
-
         }
         if (gamepad2.dpad_up)
             robot.mineralHolder.setPosition(robot.minaralHolderOpen);
         else if (gamepad2.dpad_down)
             robot.mineralHolder.setPosition(robot.mineralHolderClose);
-
-// else if (gamepad2.left_stick_y != 0) {
-//            shaft = true;
-//            shaftEncoder = robot.shaft[0].getCurrentPosition();
-//        } else if (gamepad2.right_stick_y != 0) {
-//            linear = true;
-//            linearEncoder = robot.linear.getCurrentPosition();
-
 
         if (gamepad2.right_bumper)
 
@@ -208,7 +187,7 @@ public class DriveRoverRuckus extends OpMode {
             robot.shaft[1].setPower(shaftPower);
         }
 
-        if (!linear && (gamepad2.a || gamepad2.b))
+        if (!linear )
 
         {//in progress when AUTO mode turn ON
 

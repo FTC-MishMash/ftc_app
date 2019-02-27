@@ -83,10 +83,11 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/shaders" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/build/generated/not_namespaced_r_class_sources" />
+      <excludeFolder url="file://$MODULE_DIR$/build/generated/source/r" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/aapt_friendly_merged_manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/annotation_processor_list" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/annotations_typedef_file" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/annotations_zip" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/check_manifest_result" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/compile_only_not_namespaced_r_class_jar" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/full_jar" />
@@ -94,9 +95,9 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/intermediate-jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javac" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/library_and_local_jars_jni" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/library_assets" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/library_manifest" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/lint_jar" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/merged_manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/packaged-classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/packaged_res" />
@@ -112,11 +113,11 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 28 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Gradle: FtcCommon-release:@aar" level="project" />
-    <orderEntry type="library" name="Gradle: Blocks-release:@aar" level="project" />
-    <orderEntry type="library" name="Gradle: RobotCore-release:@aar" level="project" />
-    <orderEntry type="library" name="Gradle: Inspection-release:@aar" level="project" />
-    <orderEntry type="library" name="Gradle: WirelessP2p-release:@aar" level="project" />
-    <orderEntry type="library" name="Gradle: Hardware-release:@aar" level="project" />
+    <orderEntry type="library" name="Gradle: :RobotCore-release:@aar" level="project" />
+    <orderEntry type="library" name="Gradle: :Blocks-release:@aar" level="project" />
+    <orderEntry type="library" name="Gradle: :Inspection-release:@aar" level="project" />
+    <orderEntry type="library" name="Gradle: :Hardware-release:@aar" level="project" />
+    <orderEntry type="library" name="Gradle: :WirelessP2p-release:@aar" level="project" />
+    <orderEntry type="library" name="Gradle: :FtcCommon-release:@aar" level="project" />
   </component>
 </module>
