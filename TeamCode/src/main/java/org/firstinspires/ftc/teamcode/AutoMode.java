@@ -97,6 +97,7 @@ public class AutoMode extends LinearOpMode {
     public Orientation getAngularOriention() {
         return robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
+
     public void LandInAuto() {
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -130,7 +131,7 @@ public class AutoMode extends LinearOpMode {
             robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() - 400);
             robot.shaft[0].setPower(0.5);
             robot.shaft[1].setPower(0.5);
-            while (robot.shaft[0].isBusy() && robot.shaft[1].isBusy());
+            while (robot.shaft[0].isBusy() && robot.shaft[1].isBusy()) ;
 //            sleep(80);
             robot.shaft[0].setTargetPosition(robot.shaft[0].getCurrentPosition() + 10);
             robot.shaft[1].setTargetPosition(robot.shaft[1].getCurrentPosition() + 10);
@@ -138,7 +139,7 @@ public class AutoMode extends LinearOpMode {
             robot.shaft[1].setPower(1);
 
 
-                telemetry.addData("pitch", getAngularOriention().thirdAngle);
+            telemetry.addData("pitch", getAngularOriention().thirdAngle);
             telemetry.addData("shaft[0] encoder", robot.shaft[0].getCurrentPosition());
             telemetry.addData("shaft[1] encoder", robot.shaft[1].getCurrentPosition());
 
@@ -202,66 +203,98 @@ public class AutoMode extends LinearOpMode {
     }
 
 
-
-
-
     public void MarkerWithIntake(double intakePower, int sleepTime) {
         robot.inTake.setPower(intakePower);
         sleep(sleepTime);
         robot.inTake.setPower(0);
     }
 
-    public void Marker(double powerShaft, int shaftTargetPositionMarker) {
-//        driveByColor(color, sensorcColor, imu, hsvValue, heading, power);
-//        driveByEncoderRoverRuckus(75, 75, 0.5);
-        robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //open shaft
-        robot.shaft[0].setTargetPosition(shaftTargetPositionMarker);
-        robot.shaft[1].setTargetPosition(shaftTargetPositionMarker);
+    //    public void Marker(double powerShaft, int shaftTargetPositionMarker) {
+////        driveByColor(color, sensorcColor, imu, hsvValue, heading, power);
+////        driveByEncoderRoverRuckus(75, 75, 0.5);
+//        robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        //open shaft
+//        robot.shaft[0].setTargetPosition(shaftTargetPositionMarker);
+//        robot.shaft[1].setTargetPosition(shaftTargetPositionMarker);
+//        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.shaft[0].setPower(powerShaft);
+//        robot.shaft[1].setPower(powerShaft);
+////        if (!magneticShafts()) {
+////            robot.shaft[0].setPower(0);
+////            robot.shaft[1].setPower(0);
+////        }
+//        while (opModeIsActive() &&
+//                robot.shaft[0].isBusy() &&
+//                robot.shaft[1].isBusy()) {
+//            telemetry.addData("shaft move  ", robot.shaft[0].isBusy());
+//            telemetry.update();
+//        }
+//        robot.inTake.setPower(1);
+//        sleep(800);
+//        robot.inTake.setPower(0);
+//        //marker
+//        robot.shaft[0].setTargetPosition(0);
+//        robot.shaft[1].setTargetPosition(0);
+//        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.shaft[0].setPower(powerShaft);
+//        robot.shaft[1].setPower(powerShaft);
+//        while (opModeIsActive() &&
+//                robot.shaft[0].isBusy() &&
+//                robot.shaft[1].isBusy()) {
+//            telemetry.addData("shaft move 2 ", robot.shaft[0].isBusy());
+//            telemetry.update();
+//        }
+//        robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        robot.shaft[0].setPower(0);
+//        robot.shaft[1].setPower(0);
+////        if (!magneticShafts()) {
+////            robot.shaft[0].setPower(0);
+////            robot.shaft[1].setPower(0);
+////        }
+//        robot.linear.setTargetPosition(0);
+//        robot.linear.setPower(0.4);
+//        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//    }
+    public void Sampling_secondTime(TensorflowUtils.MINERAL_POSITION goldPosition, int linearEncoderFIRST, int linearEncoderSecond,
+                                    int linearEncoderThird, int shaft90degreesPosition, int linearEncoderMoveIntake
+            , int LinearoutFromLock, double linearPower, double shaftPower) {
         robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setPower(powerShaft);
-        robot.shaft[1].setPower(powerShaft);
-//        if (!magneticShafts()) {
-//            robot.shaft[0].setPower(0);
-//            robot.shaft[1].setPower(0);
-//        }
-        while (opModeIsActive() &&
-                robot.shaft[0].isBusy() &&
-                robot.shaft[1].isBusy()) {
-            telemetry.addData("shaft move  ", robot.shaft[0].isBusy());
-            telemetry.update();
-        }
-        robot.inTake.setPower(1);
-        sleep(800);
-        robot.inTake.setPower(0);
-        //marker
-        robot.shaft[0].setTargetPosition(0);
-        robot.shaft[1].setTargetPosition(0);
-        robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.shaft[0].setPower(powerShaft);
-        robot.shaft[1].setPower(powerShaft);
-        while (opModeIsActive() &&
-                robot.shaft[0].isBusy() &&
-                robot.shaft[1].isBusy()) {
-            telemetry.addData("shaft move 2 ", robot.shaft[0].isBusy());
-            telemetry.update();
-        }
-        robot.shaft[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.shaft[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.shaft[0].setPower(0);
-        robot.shaft[1].setPower(0);
-//        if (!magneticShafts()) {
-//            robot.shaft[0].setPower(0);
-//            robot.shaft[1].setPower(0);
-//        }
-        robot.linear.setTargetPosition(0);
-        robot.linear.setPower(0.4);
+        robot.linear.setTargetPosition(LinearoutFromLock);
+        robot.linear.setPower(linearPower);
         robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        while (opModeIsActive() && robot.linear.isBusy()) ;
+        robot.linear.setPower(0);
+
+
+        robot.shaft[0].setTargetPosition(shaft90degreesPosition);//250
+        robot.shaft[1].setTargetPosition(shaft90degreesPosition);
+
+        robot.shaft[0].setPower(shaftPower);
+        robot.shaft[1].setPower(shaftPower);
+        while (opModeIsActive() && robot.shaft[0].isBusy() && robot.shaft[1].isBusy()) ;
+
+
+
+        if (goldPosition == TensorflowUtils.MINERAL_POSITION.LEFT) {
+            robot.linear.setTargetPosition(linearEncoderFIRST);
+        } else if (goldPosition == TensorflowUtils.MINERAL_POSITION.CENTER) {
+            robot.linear.setTargetPosition(linearEncoderSecond);
+        } else {
+            robot.linear.setTargetPosition(linearEncoderThird);
+        }
+        robot.linear.setPower(linearPower);
+        robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while (opModeIsActive() && robot.linear.isBusy()) ;
+
     }
+
 
     public void Parking(int targetShaftParkingPositionEncoder, double shaftPower, int linearTargetEncoder, int LinearoutFromLock, double linearPower) {
         robot.linear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -281,8 +314,6 @@ public class AutoMode extends LinearOpMode {
         robot.shaft[0].setTargetPosition(targetShaftParkingPositionEncoder);//250
         robot.shaft[1].setTargetPosition(targetShaftParkingPositionEncoder);
 
-//        robot.shaft[0].setTargetPosition(-750);
-//        robot.shaft[1].setTargetPosition(-750);
         robot.shaft[0].setPower(shaftPower);
         robot.shaft[1].setPower(shaftPower);
         while (opModeIsActive() && robot.shaft[0].isBusy() && robot.shaft[1].isBusy()) ;

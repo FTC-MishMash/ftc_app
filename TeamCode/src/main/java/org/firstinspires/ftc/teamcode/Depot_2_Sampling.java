@@ -26,14 +26,14 @@ public class Depot_2_Sampling extends AutoMode {
 
         telemetry.addData("pos: ", goldPos);
         telemetry.update();
-        telemetry.addData("Marker!!   ","niv the boss");
+        telemetry.addData("Marker!!   ", "niv the boss");
         while (!isStarted()) {
 
             TensorflowUtils.MINERAL_POSITION result = tsSampling.goldPosition();
 
             if (result != TensorflowUtils.MINERAL_POSITION.NONE) {
                 goldPos = result;
-                telemetry.addData("Marker!!   ","niv the boss");
+                telemetry.addData("Marker!!   ", "niv the boss");
                 telemetry.addData("pos: ", goldPos);
                 telemetry.update();
             }
@@ -69,24 +69,26 @@ public class Depot_2_Sampling extends AutoMode {
             driveUtils.driveByEncoderRoverRuckus(robot.distFromSamplingToDepot, robot.distFromSamplingToDepot, robot.powerEncoder, false);
             MarkerWithIntake(robot.markerIntakePower, 2000);
 //            driveUtils.driveByEncoderRoverRuckus(robot.distAfterMarkerToWall, robot.distAfterMarkerToWall, robot.powerEncoder, false);
-            driveUtils.Turn(robot.angleAfterMarkerToWallDepot);
-            if (goldPos == TensorflowUtils.MINERAL_POSITION.RIGHT)
+            driveUtils.Turn(robot.angleAfterMarkerToWallDepot_2SAM);
+            if (goldPos == TensorflowUtils.MINERAL_POSITION.LEFT)
                 driveUtils.driveByEncoderRoverRuckus(robot.RIGHTdistAfterMarker_toWall_crater, robot.RIGHTdistAfterMarker_toWall_crater, robot.powerEncoder, false);
             else if (goldPos == TensorflowUtils.MINERAL_POSITION.CENTER)
                 driveUtils.driveByEncoderRoverRuckus(robot.CENTERdistAfterMarker_toWall_crater, robot.CENTERdistAfterMarker_toWall_crater, robot.powerEncoder, false);
             else
                 driveUtils.driveByEncoderRoverRuckus(robot.LeftdistAfterMarker_toWall_crater, robot.LeftdistAfterMarker_toWall_crater, robot.powerEncoder, false);
 
-            driveUtils.Turn(robot.angleDepotToCrater);
+            driveUtils.Turn(robot.angleDepotToCrater_2SAM);
 
-            if (goldPos == TensorflowUtils.MINERAL_POSITION.RIGHT)
+            if (goldPos == TensorflowUtils.MINERAL_POSITION.LEFT)
                 driveUtils.driveByEncoderRoverRuckus(robot.RightDist_afterSampling_Depot, robot.RightDist_afterSampling_Depot, robot.powerEncoder, false);
             else if (goldPos == TensorflowUtils.MINERAL_POSITION.CENTER)
                 driveUtils.driveByEncoderRoverRuckus(robot.CenterDist_afterSampling_Depot, robot.CenterDist_afterSampling_Depot, robot.powerEncoder, false);
 
             driveUtils.driveByEncoderRoverRuckus(robot.distFromDepotToCrater, robot.distFromDepotToCrater, robot.powerEncoder, false);//to crater
-
-            Parking(robot.shaftEncoderPositionPARKING, 1, robot.linearOpenPosition, robot.linearEncoderOutLock, 1);
+            Sampling_secondTime(goldPos,robot.linearEncoderFirst,robot.linearEncoderSecond,robot.linearEncoderThird,
+                    robot.shaftEncoderPosition90deg,robot.linearEncoderMOVE_intake,robot.linearEncoderOutLock,1,0.6);
+            driveUtils.Turn(robot.angleToCrater_2SAM);
+//            Parking(robot.shaftEncoderPositionPARKING, 1, robot.linearOpenPosition, robot.linearEncoderOutLock, 1);
         }
 
     }

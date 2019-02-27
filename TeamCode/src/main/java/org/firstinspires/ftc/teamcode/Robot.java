@@ -68,7 +68,7 @@ public class Robot {
 
 
     public double powerEncoder = 0.9;
-    public double markerIntakePower =0.8;
+    public double markerIntakePower = 0.8;
 
     public int encoderBACKUPtoImage = -55;
 
@@ -91,6 +91,13 @@ public class Robot {
 
 
     //2 Sampling DEPOT
+    public int angleAfterMarkerToWallDepot_2SAM = 270;
+    public int angleDepotToCrater_2SAM = 310;
+    public int linearEncoderMOVE_intake = 400;
+    public int linearEncoderFirst = 300;
+    public int linearEncoderSecond = 300;
+    public int linearEncoderThird = 300;
+    public int angleToCrater_2SAM = 330;
 
     public Robot(HardwareMap hardwareMap) {
 
