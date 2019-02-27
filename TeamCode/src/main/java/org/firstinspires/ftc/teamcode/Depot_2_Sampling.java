@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 
-@Autonomous(name = "Depot")
-public class DepotAuto extends AutoMode {
+@Autonomous(name = "Depot 2 Sampling")
+public class Depot_2_Sampling extends AutoMode {
 
 
     @Override
@@ -34,7 +34,6 @@ public class DepotAuto extends AutoMode {
             if (result != TensorflowUtils.MINERAL_POSITION.NONE) {
                 goldPos = result;
                 telemetry.addData("Marker!!   ","niv the boss");
-
                 telemetry.addData("pos: ", goldPos);
                 telemetry.update();
             }

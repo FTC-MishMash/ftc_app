@@ -33,6 +33,7 @@ public class CreaterAuto extends AutoMode {
 
             if (result != TensorflowUtils.MINERAL_POSITION.NONE) {
                 goldPos = result;
+                telemetry.addData("Marker!!   ","niv the boss");
 
                 telemetry.addData("pos: ", goldPos);
                 telemetry.update();
@@ -112,7 +113,7 @@ public class CreaterAuto extends AutoMode {
             }
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, robot.powerEncoder, false);//to depot
 
-            MarkerWithIntake(1, 2000);
+            MarkerWithIntake(robot.markerIntakePower, 2000);
             driveUtils.driveByEncoderRoverRuckus(robot.distToImageBeforeCrater, robot.distToImageBeforeCrater, -robot.powerEncoder, false);//to crater
             driveUtils.diffTurn(robot.newAngleToDepot);//intake to carter
             driveUtils.driveByEncoderRoverRuckus(robot.distFromImageToCrater, robot.distFromImageToCrater, robot.powerEncoder, false);//to crater

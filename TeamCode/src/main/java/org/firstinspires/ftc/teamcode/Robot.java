@@ -33,8 +33,7 @@ public class Robot {
 
 
     BNO055IMU imu;
-    public double cubesTriggerOPENposition = 0.8;
-    public double cubesTriggerCLOSEposition = 0.3;
+
     public double mineralHolderClose = 0.97;
     public double minaralHolderOpen = 0.7;
 
@@ -69,6 +68,7 @@ public class Robot {
 
 
     public double powerEncoder = 0.9;
+    public double markerIntakePower =0.8;
 
     public int encoderBACKUPtoImage = -55;
 
@@ -88,6 +88,9 @@ public class Robot {
     public int angleDepotToCrater = 130;
 
     public int linearPowerOutLock = 1;
+
+
+    //2 Sampling DEPOT
 
     public Robot(HardwareMap hardwareMap) {
 
