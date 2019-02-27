@@ -26,14 +26,14 @@ public class CreaterAuto extends AutoMode {
 
         telemetry.addData("pos: ", goldPos);
         telemetry.update();
-        telemetry.addData("Marker!!   ","niv the boss");
+        telemetry.addData("Marker!!   ", "niv the boss");
         while (!isStarted()) {
 
             TensorflowUtils.MINERAL_POSITION result = tsSampling.goldPosition();
 
             if (result != TensorflowUtils.MINERAL_POSITION.NONE) {
                 goldPos = result;
-                telemetry.addData("Marker!!   ","niv the boss");
+                telemetry.addData("Marker!!   ", "niv the boss");
 
                 telemetry.addData("pos: ", goldPos);
                 telemetry.update();
@@ -49,12 +49,11 @@ public class CreaterAuto extends AutoMode {
             shaftGoDown(0.8, 0);
 
 
-
             telemetry.addData("Gold mineral position: ", goldPos);
             telemetry.update();
             driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderAfHanging, robot.driveEncoderAfHanging, robot.powerEncoder, false);
 
-            tsSampling.rotateToCube( robot.SamplingAngleRight, robot.SamplingAngleLeft, goldPos);
+            tsSampling.rotateToCube(robot.SamplingAngleRight, robot.SamplingAngleLeft, goldPos);
             telemetry.addLine("press a for driveEncoderSamplingForward");
             telemetry.update();
 
@@ -62,8 +61,8 @@ public class CreaterAuto extends AutoMode {
             if (goldPos != TensorflowUtils.MINERAL_POSITION.CENTER) {
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionSide, robot.driveEncoderSamplingPositionSide, robot.powerEncoder, false);
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionSideBackward, robot.driveEncoderSamplingPositionSideBackward, -robot.powerEncoder, false);
-            if(goldPos==TensorflowUtils.MINERAL_POSITION.RIGHT)
-                driveUtils.driveByEncoderRoverRuckus(robot.rightSamplingBackward, robot.rightSamplingBackward, -robot.powerEncoder, false);
+                if (goldPos == TensorflowUtils.MINERAL_POSITION.RIGHT)
+                    driveUtils.driveByEncoderRoverRuckus(robot.rightSamplingBackward, robot.rightSamplingBackward, -robot.powerEncoder, false);
             } else {
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddle, robot.driveEncoderSamplingPositionMiddle, robot.powerEncoder, false);
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddleBackward, robot.driveEncoderSamplingPositionMiddleBackward, -robot.powerEncoder, false);
@@ -104,16 +103,17 @@ public class CreaterAuto extends AutoMode {
             } else {
                 telemetry.addLine("no image");
                 telemetry.update();
-                driveUtils.driveByEncoderRoverRuckus(robot.encoderBACKUPtoImage, robot.encoderBACKUPtoImage, -robot.powerEncoder-0.15, false);
+                driveUtils.driveByEncoderRoverRuckus(robot.encoderBACKUPtoImage, robot.encoderBACKUPtoImage, -robot.powerEncoder - 0.15, false);
                 telemetry.addLine("finished alt encoders");
                 telemetry.update();
                 driveUtils.Turn(robot.depotAngle);
-                telemetry.addLine("finished turnong");
+                telemetry.addLine("finished turnng");
                 telemetry.update();
             }
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, robot.powerEncoder, false);//to depot
 
             MarkerWithIntake(robot.markerIntakePower, 2000);
+            driveUtils.Turn(robot.angleNextToWall+2);
             driveUtils.driveByEncoderRoverRuckus(robot.distToImageBeforeCrater, robot.distToImageBeforeCrater, -robot.powerEncoder, false);//to crater
             driveUtils.diffTurn(robot.newAngleToDepot);//intake to carter
             driveUtils.driveByEncoderRoverRuckus(robot.distFromImageToCrater, robot.distFromImageToCrater, robot.powerEncoder, false);//to crater

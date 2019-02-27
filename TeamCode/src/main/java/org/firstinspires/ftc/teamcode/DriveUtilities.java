@@ -153,7 +153,7 @@ public class DriveUtilities {
         double lastDiffAngle = diffAngle;
         //final double direction = Math.signum(diffAngle);
         telemetry.clear();
-        while (currOpmode.opModeIsActive() && Math.abs(diffAngle) > 0.1 /*&& direction == Math.signum(diffAngle)*/) {
+        while (currOpmode.opModeIsActive() && Math.abs(diffAngle) > 0.2 /*&& direction == Math.signum(diffAngle)*/) {
             currentAngle = normalizedAngle(getAngularOriention(robot.imu).firstAngle);
             double currentTime = currOpmode.getRuntime();
             diffAngle = normalizedAngle(goalAngle - currentAngle);
@@ -214,6 +214,7 @@ public class DriveUtilities {
         double currAngle = robot.imu.getAngularOrientation(AxesReference.INTRINSIC,
                 AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         double goalAngle = normalizedAngle(diffAngle + currAngle);
+        robot.angleNextToWall=goalAngle;
         Turn(goalAngle);
 
     }

@@ -44,12 +44,12 @@ public class Robot {
     public double newAngleTurnToImage = 70;
     public int SamplingAngleRight = 322;
     public int SamplingAngleLeft = 37;
-    public int rightSamplingBackward = 10;
+    public int rightSamplingBackward = -10;
     public int driveEncoderSamplingForward = 31;
     public int driveEncoderSamplingPositionSide = 30;
     public int driveEncoderSamplingPositionMiddle = 15;
     public int driveEncoderSamplingPositionSideBackward = -30;
-    public int driveEncoderSamplingPositionMiddleBackward = -18;
+    public int driveEncoderSamplingPositionMiddleBackward = -21;
     public int driveEncoderSamplingBackward = -7;
     public int distToDepot = 82;
     public int distToImageBeforeCrater = -70;
@@ -68,17 +68,17 @@ public class Robot {
 
 
     public double powerEncoder = 0.9;
-    public double markerIntakePower = 0.8;
+    public double markerIntakePower = 1;
 
     public int encoderBACKUPtoImage = -55;
 
     public int linearOpenPosition = -2500;
     public int linearMiddlePosition = -800;
-    public int linearClosePosition = -50;
+    public int linearLanderPosition = -250;
     public int linearEncoderOutLock = -500;
 
     public int shaftEncoderPositionPARKING = -800;
-    public int shaftEncoderPositionINTAKE = -250;
+    public int shaftEncoderPositionINTAKE = -300;
     public int shaftEncoderPosition90deg = -2400;
     public int shaftTargetPositionMarker = -300;
     public int shaftDownPosition = 100;
@@ -88,16 +88,17 @@ public class Robot {
     public int angleDepotToCrater = 130;
 
     public int linearPowerOutLock = 1;
-
+    public double angleNextToWall = 130;
 
     //2 Sampling DEPOT
     public int angleAfterMarkerToWallDepot_2SAM = 270;
-    public int angleDepotToCrater_2SAM = 310;
+    public int angleDepotToCrater_2SAM = 230;
     public int linearEncoderMOVE_intake = 400;
     public int linearEncoderFirst = 300;
     public int linearEncoderSecond = 300;
     public int linearEncoderThird = 300;
     public int angleToCrater_2SAM = 330;
+    public int shaftEncoderSampling_2SAM = -800;
 
     public Robot(HardwareMap hardwareMap) {
 

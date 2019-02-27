@@ -29,7 +29,7 @@ public class ImageTargets {
     public VuforiaLocalizerEx vuforia;
     Telemetry telemetry;
     DriveUtilities driveUtilities;
-    float ypos=56.2f;
+    float ypos = 56.2f;
     /**
      * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
@@ -41,7 +41,7 @@ public class ImageTargets {
 
 
     DcMotor[][] motors;
-    int imageSearchDist=-25;
+    int imageSearchDist = -25;
     public static final float mmPerInch = 25.4f;
     public static final float mmFTCFieldWidth = (12 * 6) * mmPerInch;       // the width of the FTC field (from the center point to the outer panels)
     public static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
@@ -167,14 +167,14 @@ public class ImageTargets {
             case RIGHT: {
                 telemetry.addLine("case1");
                 telemetry.update();
-                driveUtilities.driveByEncoderRoverRuckus(imageSearchDist-30, imageSearchDist-30, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(imageSearchDist - 30, imageSearchDist - 30, power, true);
                 break;
             }
             case CENTER: {
                 telemetry.addLine("case2");
                 telemetry.update();
                 driveUtilities.driveByEncoderRoverRuckus(-48, -37, power, true);
-                driveUtilities.driveByEncoderRoverRuckus(imageSearchDist-15, imageSearchDist-15, power, true);
+                driveUtilities.driveByEncoderRoverRuckus(imageSearchDist - 15, imageSearchDist - 15, power, true);
 
                 break;
             }
@@ -280,15 +280,10 @@ public class ImageTargets {
 //                telemetry.update();
 //            }
             //   driveUtilities.TurnWithEncoder(310,0.4);
-            try {
 
-                currOpmode.driveUtils.diffTurn(2+headingTarget - heading);
-            } catch (Exception e) {
-                telemetry.addLine("Turn failed");
-                telemetry.update();
+            currOpmode.driveUtils.diffTurn(3.8+ headingTarget - heading);
 //                currOpmode.sleep(2000);
-                //  driveUtilities.Turn(210);
-            }
+            //  driveUtilities.Turn(210
         }
     }
 }

@@ -130,8 +130,8 @@ public class DriveRoverRuckus extends OpMode {
 
         if (gamepad2.a) {//90 deg shaft. go to lander
 
-            shaftEncoder = robot.shaftEncoderPosition90deg;
-            linearEncoder = robot.linearClosePosition;
+            shaftEncoder = robot.shaftEncoderPositionPARKING-400;
+            linearEncoder = robot.linearLanderPosition;
         }
         if (gamepad2.b) {//go to crater and intake minerals
 
@@ -218,7 +218,9 @@ public class DriveRoverRuckus extends OpMode {
             robot.linear.setPower(1);
 
         }
+        telemetry.addData("linear:  ", robot.linear.
 
+                getCurrentPosition());
         telemetry.addData("motor [0][0]:  ", robot.driveTrain[0][0].
 
                 getCurrentPosition());
