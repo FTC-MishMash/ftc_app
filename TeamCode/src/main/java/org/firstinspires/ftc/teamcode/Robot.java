@@ -40,9 +40,9 @@ public class Robot {
     public double dumperDownLock = 0.1;
     public double hangingOpenPosition = 0.35;
     public double hangingLockPosition = 0;
+
     public double angleTurnToImage = 264;
     public double newAngleTurnToImage = 70;
-
     public int SamplingAngleRight = 322;
     public int SamplingAngleLeft = 37;
     public int rightSamplingBackward = 10;
@@ -55,9 +55,13 @@ public class Robot {
     public int distToDepot = 82;
     public int distToImageBeforeCrater = -70;
     public int distFromImageToCrater = 15;
+
+    //DEPOT position
     public int distFromSamplingToDepot = 20;
     public int distFromDepotToWall = 10;
-   public int  RightDist_Depot = 18;
+    public int RightDist_afterSampling_Depot = 18;
+    public int CenterDist_afterSampling_Depot = 9;
+    public int distFromDepotToCrater = 120;
 
     public double powerEncoder = 0.9;
 

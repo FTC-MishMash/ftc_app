@@ -65,14 +65,18 @@ public class DepotAuto extends AutoMode {
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddle, robot.driveEncoderSamplingPositionMiddle, robot.powerEncoder, false);
             }
             driveUtils.rotateToDepot(37, 322, goldPos);
-            driveUtils.driveByEncoderRoverRuckus(robot.distFromSamplingToDepot, robot.distFromSamplingToDepot, -robot.powerEncoder, false);
+            driveUtils.driveByEncoderRoverRuckus(robot.distFromSamplingToDepot, robot.distFromSamplingToDepot, robot.powerEncoder, false);
+            MarkerWithIntake(1, 3000);
             driveUtils.Turn(robot.angleDepotToCrater);
-            driveUtils.driveByEncoderRoverRuckus(robot.RightDist_Depot, robot.RightDist_Depot, robot.powerEncoder, false);
+            if (goldPos == TensorflowUtils.MINERAL_POSITION.RIGHT)
+                driveUtils.driveByEncoderRoverRuckus(robot.RightDist_afterSampling_Depot, robot.RightDist_afterSampling_Depot, robot.powerEncoder, false);
+            else if (goldPos == TensorflowUtils.MINERAL_POSITION.CENTER)
+                driveUtils.driveByEncoderRoverRuckus(robot.CenterDist_afterSampling_Depot, robot.CenterDist_afterSampling_Depot, robot.powerEncoder, false);
 
+            driveUtils.driveByEncoderRoverRuckus(robot.distFromDepotToCrater, robot.distFromDepotToCrater, robot.powerEncoder, false);//to crater
+
+            Parking(robot.shaftEncoderPositionPARKING, 1, robot.linearOpenPosition, robot.linearEncoderOutLock, 1);
         }
-        driveUtils.driveByEncoderRoverRuckus(robot.distToImageBeforeCrater, robot.distToImageBeforeCrater, -robot.powerEncoder, false);//to crater
-        driveUtils.diffTurn(robot.newAngleToDepot);//intake to carter
-        driveUtils.driveByEncoderRoverRuckus(robot.distFromImageToCrater, robot.distFromImageToCrater, robot.powerEncoder, false);//to crater
-        Parking(robot.shaftEncoderPositionPARKING, 1, robot.linearOpenPosition, robot.linearEncoderOutLock, 1);
+
     }
 }

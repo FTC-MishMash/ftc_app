@@ -101,16 +101,16 @@ public class CreaterAuto extends AutoMode {
                 targetNav.driveToImage(-robot.powerEncoder);//inbar change from 53 to 56
             } else {
                 telemetry.addLine("no image");
+                telemetry.update();
                 driveUtils.driveByEncoderRoverRuckus(robot.encoderBACKUPtoImage, robot.encoderBACKUPtoImage, -robot.powerEncoder-0.15, false);
                 telemetry.addLine("finished alt encoders");
+                telemetry.update();
                 driveUtils.Turn(robot.depotAngle);
                 telemetry.addLine("finished turnong");
                 telemetry.update();
             }
-//            sleep(400);
             driveUtils.driveByEncoderRoverRuckus(robot.distToDepot, robot.distToDepot, robot.powerEncoder, false);//to depot
 
-//            Marker(0.5, robot.shaftTargetPositionMarker);  //marker
             MarkerWithIntake(1, 2000);
             driveUtils.driveByEncoderRoverRuckus(robot.distToImageBeforeCrater, robot.distToImageBeforeCrater, -robot.powerEncoder, false);//to crater
             driveUtils.diffTurn(robot.newAngleToDepot);//intake to carter
