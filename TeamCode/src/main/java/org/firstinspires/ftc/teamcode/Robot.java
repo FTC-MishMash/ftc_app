@@ -57,11 +57,16 @@ public class Robot {
     public int distFromImageToCrater = 15;
 
     //DEPOT position
-    public int distFromSamplingToDepot = 37;
+    public int distFromSamplingToDepot = 47;
     public int distAfterMarkerToWall = 30;
     public int RightDist_afterSampling_Depot = 18;
     public int CenterDist_afterSampling_Depot = 9;
     public int distFromDepotToCrater = 130;
+    public int angleAfterMarkerToWallDepot = 90;
+    public int RIGHTdistAfterMarker_toWall_crater = 60;
+    public int CENTERdistAfterMarker_toWall_crater = 40;
+    public int LeftdistAfterMarker_toWall_crater = 20;
+
 
     public double powerEncoder = 0.9;
 

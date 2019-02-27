@@ -67,7 +67,14 @@ public class DepotAuto extends AutoMode {
             driveUtils.rotateToDepot(37, 322, goldPos);
             driveUtils.driveByEncoderRoverRuckus(robot.distFromSamplingToDepot, robot.distFromSamplingToDepot, robot.powerEncoder, false);
             MarkerWithIntake(1, 2000);
-            driveUtils.driveByEncoderRoverRuckus(robot.distAfterMarkerToWall, robot.distAfterMarkerToWall, robot.powerEncoder, false);
+//            driveUtils.driveByEncoderRoverRuckus(robot.distAfterMarkerToWall, robot.distAfterMarkerToWall, robot.powerEncoder, false);
+            driveUtils.Turn(robot.angleAfterMarkerToWallDepot);
+            if (goldPos == TensorflowUtils.MINERAL_POSITION.RIGHT)
+                driveUtils.driveByEncoderRoverRuckus(robot.RIGHTdistAfterMarker_toWall_crater, robot.RIGHTdistAfterMarker_toWall_crater, robot.powerEncoder, false);
+            else if (goldPos == TensorflowUtils.MINERAL_POSITION.CENTER)
+                driveUtils.driveByEncoderRoverRuckus(robot.CENTERdistAfterMarker_toWall_crater, robot.CENTERdistAfterMarker_toWall_crater, robot.powerEncoder, false);
+            else
+                driveUtils.driveByEncoderRoverRuckus(robot.LeftdistAfterMarker_toWall_crater, robot.LeftdistAfterMarker_toWall_crater, robot.powerEncoder, false);
 
             driveUtils.Turn(robot.angleDepotToCrater);
 
