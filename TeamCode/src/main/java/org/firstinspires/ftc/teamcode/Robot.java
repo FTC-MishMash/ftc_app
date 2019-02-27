@@ -91,12 +91,12 @@ public class Robot {
     public double angleNextToWall = 130;
 
     //2 Sampling DEPOT
-    public int angleAfterMarkerToWallDepot_2SAM = 270;
+    public double angleAfterMarkerToWallDepot_2SAM = 271;
     public int angleDepotToCrater_2SAM = 230;
     public int linearEncoderMOVE_intake = 400;
-    public int linearEncoderFirst = 300;
-    public int linearEncoderSecond = 300;
-    public int linearEncoderThird = 300;
+    public int linearEncoderFirst = -300;
+    public int linearEncoderSecond = -300;
+    public int linearEncoderThird = -300;
     public int angleToCrater_2SAM = 330;
     public int shaftEncoderSampling_2SAM = -800;
 

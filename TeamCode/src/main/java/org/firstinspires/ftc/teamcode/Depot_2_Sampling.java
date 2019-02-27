@@ -87,7 +87,7 @@ public class Depot_2_Sampling extends AutoMode {
             driveUtils.driveByEncoderRoverRuckus(robot.distFromDepotToCrater, robot.distFromDepotToCrater, robot.powerEncoder, false);//to crater
             driveUtils.Turn(180);
             Sampling_secondTime(goldPos,robot.linearEncoderFirst,robot.linearEncoderSecond,robot.linearEncoderThird,
-                    robot.shaftEncoderSampling_2SAM,robot.linearEncoderMOVE_intake,robot.linearEncoderOutLock,1,0.6);
+                    robot.shaftEncoderSampling_2SAM,robot.linearEncoderMOVE_intake,robot.linearEncoderOutLock,1,1);
             driveUtils.Turn(robot.angleToCrater_2SAM);
 //            Parking(robot.shaftEncoderPositionPARKING, 1, robot.linearOpenPosition, robot.linearEncoderOutLock, 1);
         }
