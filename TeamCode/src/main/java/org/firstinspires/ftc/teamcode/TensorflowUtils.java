@@ -45,7 +45,9 @@ public class TensorflowUtils {
             if (updateRecognitions.size() >= 2) {
                 twoSmallestMinerals[1] = updateRecognitions.get(1);
                 for (Recognition recognition : updateRecognitions) {
-                    if ((recognition.getLabel().equals(LABEL_GOLD_MINERAL) || recognition.getConfidence() > 0.5)) {
+                    if ((recognition.getLabel().equals(LABEL_GOLD_MINERAL) || recognition.getConfidence() > 0.5) &&
+                            (recognition.getWidth() < 65 || recognition.getWidth() > 105
+                                    ||recognition.getHeight() < 65 ||recognition.getHeight() > 100)) {
                         if (recognition.getTop() < twoSmallestMinerals[0].getTop()) {
                             temp = twoSmallestMinerals[0];
                             twoSmallestMinerals[0] = recognition;
@@ -58,10 +60,7 @@ public class TensorflowUtils {
             }
         }
         for (int i = 0; i < twoSmallestMinerals.length; i++) {
-            if (twoSmallestMinerals[i] != null && (
-                    twoSmallestMinerals[i].getWidth() < 75 || twoSmallestMinerals[i].getWidth() > 105
-                            || twoSmallestMinerals[i].getHeight() < 72 || twoSmallestMinerals[i].getHeight() > 100))
-                twoSmallestMinerals[i]=null;
+
         }
         return twoSmallestMinerals;
     }

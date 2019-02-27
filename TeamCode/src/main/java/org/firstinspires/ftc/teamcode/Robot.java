@@ -95,10 +95,10 @@ public class Robot {
     public int angleDepotToCrater_2SAM = 230;
     public int linearEncoderMOVE_intake = 400;
     public int linearEncoderFirst = -300;
-    public int linearEncoderSecond = -300;
+    public int linearEncoderSecond = -900;
     public int linearEncoderThird = -300;
     public int angleToCrater_2SAM = 330;
-    public int shaftEncoderSampling_2SAM = -800;
+    public int shaftEncoderSampling_2SAM = -400;
 
     public Robot(HardwareMap hardwareMap) {
 

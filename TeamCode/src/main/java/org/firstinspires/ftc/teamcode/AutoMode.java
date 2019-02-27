@@ -272,7 +272,7 @@ public class AutoMode extends LinearOpMode {
             while (opModeIsActive() && robot.linear.isBusy()) ;
             robot.linear.setPower(0);
 
-            robot.shaft[0].setTargetPosition(shaft90degreesPosition);//250
+            robot.shaft[0].setTargetPosition(shaft90degreesPosition);
             robot.shaft[1].setTargetPosition(shaft90degreesPosition);
 
             robot.shaft[0].setPower(shaftPower);
@@ -280,26 +280,35 @@ public class AutoMode extends LinearOpMode {
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             while (opModeIsActive() && robot.shaft[0].isBusy() && robot.shaft[1].isBusy()) ;
-//        if (goldPosition == TensorflowUtils.MINERAL_POSITION.LEFT) {
-//            robot.linear.setTargetPosition(linearEncoderFIRST);
-            // /* } else */if (goldPosition == TensorflowUtils.MINERAL_POSITION.CENTER) {
+
             robot.linear.setTargetPosition(linearEncoderSecond);
-//        } else {
-//            robot.linear.setTargetPosition(linearEncoderThird);
-//        }
+
             robot.linear.setPower(linearPower);
             robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             telemetry.addLine("put shafts down");
             telemetry.update();
-            sleep(2000);
-            robot.shaft[0].setTargetPosition(robot.shaftEncoderPositionPARKING);//250
-            robot.shaft[1].setTargetPosition(robot.shaftEncoderPositionPARKING);
+
+            robot.shaft[0].setTargetPosition(robot.shaftEncoderSampling_2SAM);
+            robot.shaft[1].setTargetPosition(robot.shaftEncoderSampling_2SAM);
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[0].setPower(shaftPower);
             robot.shaft[1].setPower(shaftPower);
-            driveUtils.Turn(221);
+            while (opModeIsActive() && robot.shaft[0].isBusy() && robot.shaft[1].isBusy()) ;
+
+            robot.linear.setTargetPosition(linearEncoderSecond);
+
+            robot.linear.setPower(linearPower - 400);
+            robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             while (opModeIsActive() && robot.linear.isBusy()) ;
+            robot.shaft[0].setTargetPosition(robot.shaftEncoderPositionPARKING);
+            robot.shaft[1].setTargetPosition(robot.shaftEncoderPositionPARKING);
+
+            robot.shaft[0].setPower(shaftPower);
+            robot.shaft[1].setPower(shaftPower);
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            driveUtils.Turn(221);
         } else if (goldPosition == TensorflowUtils.MINERAL_POSITION.LEFT)
             driveUtils.driveByEncoderRoverRuckus(10, 10, robot.powerEncoder, false);
         Parking(robot.shaftEncoderPositionPARKING, 1, robot.linearOpenPosition, robot.linearEncoderOutLock, 1);
