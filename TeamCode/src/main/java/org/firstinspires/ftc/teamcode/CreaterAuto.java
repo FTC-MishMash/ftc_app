@@ -23,7 +23,7 @@ public class CreaterAuto extends AutoMode {
         robot.hanging.setPosition(robot.hangingLockPosition);
         telemetry.addLine("wait for start");
         telemetry.update();
-
+//
         telemetry.addData("pos: ", goldPos);
         telemetry.update();
         telemetry.addData("Marker!!   ", "niv the boss");
