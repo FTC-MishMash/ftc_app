@@ -60,7 +60,7 @@ public class Robot {
     public int distAfterMarkerToWall = 30;
     public int RightDist_afterSampling_Depot = 18;
     public int CenterDist_afterSampling_Depot = 9;
-    public int distFromDepotToCrater = 105;
+    public int distFromDepotToCrater = 115;
     public int angleAfterMarkerToWallDepot = 90;
     public int RIGHTdistAfterMarker_toWall_crater = 60;
     public int CENTERdistAfterMarker_toWall_crater = 40;
@@ -95,10 +95,11 @@ public class Robot {
     public int angleDepotToCrater_2SAM = 230;
     public int linearEncoderMOVE_intake = 400;
     public int linearEncoderFirst = -300;
-    public int linearEncoderSecond = -900;
+    public int linearEncoderSecond = -1300;
     public int linearEncoderThird = -300;
     public int angleToCrater_2SAM = 330;
     public int shaftEncoderSampling_2SAM = -400;
+    public double angleTurnToCreater=221;
 
     public Robot(HardwareMap hardwareMap) {
 

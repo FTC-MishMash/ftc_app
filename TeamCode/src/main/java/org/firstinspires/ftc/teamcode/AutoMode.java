@@ -55,7 +55,6 @@ public class AutoMode extends LinearOpMode {
     static final int RolltargetAngleMin = -10;
     static final int RolltargetAngleMax = 10;
 
-
     public static final float mmPerInch = 25.4f;
     public static final float mmFTCFieldWidth = (12 * 6) * mmPerInch;       // the width of the FTC field (from the center point to the outer panels)
     public static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
@@ -280,6 +279,8 @@ public class AutoMode extends LinearOpMode {
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             while (opModeIsActive() && robot.shaft[0].isBusy() && robot.shaft[1].isBusy()) ;
+            // only out from lock
+
 
             robot.linear.setTargetPosition(linearEncoderSecond);
 
@@ -295,12 +296,16 @@ public class AutoMode extends LinearOpMode {
             robot.shaft[0].setPower(shaftPower);
             robot.shaft[1].setPower(shaftPower);
             while (opModeIsActive() && robot.shaft[0].isBusy() && robot.shaft[1].isBusy()) ;
-
-            robot.linear.setTargetPosition(linearEncoderSecond);
-
-            robot.linear.setPower(linearPower - 400);
+            //for the robot will not rise up
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            robot.linear.setTargetPosition(linearEncoderSecond - 400);
+            robot.linear.setPower(linearPower);
             robot.linear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             while (opModeIsActive() && robot.linear.isBusy()) ;
+
+            robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[0].setTargetPosition(robot.shaftEncoderPositionPARKING);
             robot.shaft[1].setTargetPosition(robot.shaftEncoderPositionPARKING);
 
@@ -308,10 +313,12 @@ public class AutoMode extends LinearOpMode {
             robot.shaft[1].setPower(shaftPower);
             robot.shaft[0].setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.shaft[1].setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            driveUtils.Turn(221);
-        } else if (goldPosition == TensorflowUtils.MINERAL_POSITION.LEFT)
+            driveUtils.Turn(robot.angleTurnToCreater);
+        } else if (goldPosition == TensorflowUtils.MINERAL_POSITION.LEFT) {
             driveUtils.driveByEncoderRoverRuckus(10, 10, robot.powerEncoder, false);
-        Parking(robot.shaftEncoderPositionPARKING, 1, robot.linearOpenPosition, robot.linearEncoderOutLock, 1);
+            driveUtils.Turn(robot.angleToCrater_2SAM);
+        }
+//        Parking(robot.shaftEncoderPositionPARKING, 1, robot.linearOpenPosition, robot.linearEncoderOutLock, 1);
     }
 
 
