@@ -35,8 +35,8 @@ public class Robot {
     BNO055IMU imu;
     public double cubesTriggerOPENposition = 0.8;
     public double cubesTriggerCLOSEposition = 0.3;
-    public double mineralHolderClose = 0.3;
-    public double minaralHolderOpen = 0.8;
+    public double mineralHolderClose = 0.97;
+    public double minaralHolderOpen = 0.7;
 
     public double hangingOpenPosition = 0.35;
     public double hangingLockPosition = 0;
@@ -61,7 +61,7 @@ public class Robot {
     public int distAfterMarkerToWall = 30;
     public int RightDist_afterSampling_Depot = 18;
     public int CenterDist_afterSampling_Depot = 9;
-    public int distFromDepotToCrater = 130;
+    public int distFromDepotToCrater = 105;
     public int angleAfterMarkerToWallDepot = 90;
     public int RIGHTdistAfterMarker_toWall_crater = 60;
     public int CENTERdistAfterMarker_toWall_crater = 40;

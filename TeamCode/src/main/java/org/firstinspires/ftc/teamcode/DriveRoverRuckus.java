@@ -143,9 +143,9 @@ public class DriveRoverRuckus extends OpMode {
 //            }
 
         }
-        if (gamepad2.dpad_down)
+        if (gamepad2.dpad_up)
             robot.mineralHolder.setPosition(robot.minaralHolderOpen);
-        else if (gamepad2.dpad_up)
+        else if (gamepad2.dpad_down)
             robot.mineralHolder.setPosition(robot.mineralHolderClose);
 
 // else if (gamepad2.left_stick_y != 0) {

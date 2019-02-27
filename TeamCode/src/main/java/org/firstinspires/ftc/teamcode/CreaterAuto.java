@@ -26,6 +26,7 @@ public class CreaterAuto extends AutoMode {
 
         telemetry.addData("pos: ", goldPos);
         telemetry.update();
+        telemetry.addData("Marker!!   ","niv the boss");
         while (!isStarted()) {
 
             TensorflowUtils.MINERAL_POSITION result = tsSampling.goldPosition();

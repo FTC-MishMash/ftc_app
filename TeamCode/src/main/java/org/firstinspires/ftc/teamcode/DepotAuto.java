@@ -26,6 +26,7 @@ public class DepotAuto extends AutoMode {
 
         telemetry.addData("pos: ", goldPos);
         telemetry.update();
+        telemetry.addData("Marker!!   ","niv the boss");
         while (!isStarted()) {
 
             TensorflowUtils.MINERAL_POSITION result = tsSampling.goldPosition();
@@ -64,7 +65,7 @@ public class DepotAuto extends AutoMode {
             } else {
                 driveUtils.driveByEncoderRoverRuckus(robot.driveEncoderSamplingPositionMiddle, robot.driveEncoderSamplingPositionMiddle, robot.powerEncoder, false);
             }
-            driveUtils.rotateToDepot(37, 322, goldPos);
+            driveUtils.rotateToDepot(30, 335, goldPos);
             driveUtils.driveByEncoderRoverRuckus(robot.distFromSamplingToDepot, robot.distFromSamplingToDepot, robot.powerEncoder, false);
             MarkerWithIntake(1, 2000);
 //            driveUtils.driveByEncoderRoverRuckus(robot.distAfterMarkerToWall, robot.distAfterMarkerToWall, robot.powerEncoder, false);
