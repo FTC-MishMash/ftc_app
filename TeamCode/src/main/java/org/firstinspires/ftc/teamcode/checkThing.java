@@ -94,7 +94,7 @@ public class checkThing extends AutoMode {
                 sleep(700);
             }
             if (gamepad1.x) {
-                driveUtils.Turn(angle);
+                MarkerWithIntake(robot.markerIntakePower, 2000);
 
             } else if (gamepad1.right_stick_button)
                 driveUtils.diffTurn(angle);

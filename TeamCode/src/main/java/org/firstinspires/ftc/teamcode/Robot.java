@@ -68,7 +68,7 @@ public class Robot {
 
 
     public double powerEncoder = 0.9;
-    public double markerIntakePower = 1;
+    public double markerIntakePower = -1;
 
     public int encoderBACKUPtoImage = -55;
 
