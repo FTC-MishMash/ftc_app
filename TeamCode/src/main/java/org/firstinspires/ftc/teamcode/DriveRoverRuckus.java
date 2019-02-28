@@ -100,14 +100,14 @@ public class DriveRoverRuckus extends OpMode {
             linear = true;
             robot.linear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.linear.setPower(gamepad2.left_stick_y);
-//            linearEncoder = robot.linear.getCurrentPosition();
+            linearEncoder = robot.linear.getCurrentPosition();
 
         } else if (gamepad2.left_stick_y < 0) {
             linear = true;
 
             robot.linear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.linear.setPower(gamepad2.left_stick_y);
-//            linearEncoder = robot.linear.getCurrentPosition();
+            linearEncoder = robot.linear.getCurrentPosition();
 
         } else if (gamepad2.left_stick_y == 0) {//hand mode turn OFF
             linear = false;

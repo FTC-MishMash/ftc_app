@@ -46,7 +46,7 @@ public class TensorflowUtils {
                 twoSmallestMinerals[1] = updateRecognitions.get(1);
                 for (Recognition recognition : updateRecognitions) {
                     if ((recognition.getLabel().equals(LABEL_GOLD_MINERAL) || recognition.getConfidence() > 0.5) &&
-                            (recognition.getWidth() < 65 || recognition.getWidth() > 105
+                            (recognition.getWidth() < 58 || recognition.getWidth() > 105
                                     ||recognition.getHeight() < 65 ||recognition.getHeight() > 100)) {
                         if (recognition.getTop() < twoSmallestMinerals[0].getTop()) {
                             temp = twoSmallestMinerals[0];

@@ -43,7 +43,7 @@ public class Robot {
     public double angleTurnToImage = 264;
     public double newAngleTurnToImage = 70;
     public int SamplingAngleRight = 322;
-    public int SamplingAngleLeft = 37;
+    public int SamplingAngleLeft = 41;
     public int rightSamplingBackward = -10;
     public int driveEncoderSamplingForward = 31;
     public int driveEncoderSamplingPositionSide = 30;
@@ -60,7 +60,7 @@ public class Robot {
     public int distAfterMarkerToWall = 30;
     public int RightDist_afterSampling_Depot = 18;
     public int CenterDist_afterSampling_Depot = 9;
-    public int distFromDepotToCrater = 115;
+    public int distFromDepotToCrater = 90;
     public int angleAfterMarkerToWallDepot = 90;
     public int RIGHTdistAfterMarker_toWall_crater = 60;
     public int CENTERdistAfterMarker_toWall_crater = 40;
@@ -74,7 +74,7 @@ public class Robot {
 
     public int linearOpenPosition = -2500;
     public int linearMiddlePosition = -800;
-    public int linearLanderPosition = -250;
+    public int linearLanderPosition = -180;
     public int linearEncoderOutLock = -500;
 
     public int shaftEncoderPositionPARKING = -800;
@@ -99,7 +99,7 @@ public class Robot {
     public int linearEncoderThird = -300;
     public int angleToCrater_2SAM = 330;
     public int shaftEncoderSampling_2SAM = -400;
-    public double angleTurnToCreater=221;
+    public double angleTurnToCreater = 221;
 
     public Robot(HardwareMap hardwareMap) {
 

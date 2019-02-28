@@ -204,6 +204,8 @@ public class AutoMode extends LinearOpMode {
 
     public void MarkerWithIntake(double intakePower, int sleepTime) {
         robot.inTake.setPower(intakePower);
+        sleep(500);
+        robot.inTake.setPower(-intakePower);
         sleep(sleepTime);
         robot.inTake.setPower(0);
     }
